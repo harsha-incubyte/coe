@@ -7,6 +7,16 @@ interface WeatherData {
   condition: string;
 }
 
+const mapWeatherCode = (code: number) => {
+  const codes: Record<number, string> = {
+    0: 'Clear sky',
+    1: 'Mainly clear',
+    2: 'Partly cloudy',
+    3: 'Overcast',
+  };
+  return codes[code] || 'Cloudy';
+};
+
 export const Weather: React.FC = () => {
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -42,7 +52,7 @@ export const Weather: React.FC = () => {
       setWeather({
         city: cityName,
         temperature: weatherData.current_weather.temperature,
-        condition: 'Clear',
+        condition: mapWeatherCode(weatherData.current_weather.weathercode),
       });
     } catch (err) {
       setError('Error loading weather data');
@@ -78,6 +88,7 @@ export const Weather: React.FC = () => {
         <div className="weather-info">
           <h2>Weather in {weather.city}</h2>
           <p>Temperature: {weather.temperature}°C</p>
+          <p>Condition: {weather.condition}</p>
         </div>
       )}
     </div>

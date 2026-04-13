@@ -59,6 +59,7 @@ describe('Weather Component', () => {
 
     expect(await screen.findByText(/weather in London/i)).toBeInTheDocument();
     expect(screen.getByText(/15/i)).toBeInTheDocument();
+    expect(screen.getByText(/mainly clear/i)).toBeInTheDocument();
   });
 
   it('should show "City not found" for invalid cities', async () => {
