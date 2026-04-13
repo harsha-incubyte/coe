@@ -27,4 +27,18 @@ describe('Counter component TDD', () => {
     fireEvent.click(decrementButton);
     expect(screen.getByTestId('count-display')).toHaveTextContent('-1');
   });
+
+  it('resets the count to 0 when the reset button is clicked', () => {
+    render(<CounterUI />);
+    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    const resetButton = screen.getByRole('button', { name: /reset/i });
+
+    // First increment to make it non-zero
+    fireEvent.click(incrementButton);
+    expect(screen.getByTestId('count-display')).toHaveTextContent('1');
+
+    // Then reset
+    fireEvent.click(resetButton);
+    expect(screen.getByTestId('count-display')).toHaveTextContent('0');
+  });
 });
