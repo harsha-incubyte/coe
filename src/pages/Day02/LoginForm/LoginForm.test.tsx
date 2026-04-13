@@ -39,7 +39,7 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    await user.type(emailInput, 'user@example.com');
+    await user.type(emailInput, 'harsha@incubyte.co');
     await user.type(passwordInput, 'short');
     await user.click(submitButton);
 
@@ -57,12 +57,12 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    await user.type(emailInput, 'user@example.com');
+    await user.type(emailInput, 'harsha@incubyte.co');
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
     expect(onLogin).toHaveBeenCalledWith({
-      email: 'user@example.com',
+      email: 'harsha@incubyte.co',
       password: 'password123',
     });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -76,7 +76,7 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    await user.type(emailInput, 'user@example.com');
+    await user.type(emailInput, 'harsha@incubyte.co');
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
@@ -97,7 +97,7 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    await user.type(emailInput, 'user@example.com');
+    await user.type(emailInput, 'harsha@incubyte.co');
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
@@ -136,7 +136,7 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    await user.type(emailInput, 'user@example.com');
+    await user.type(emailInput, 'harsha@incubyte.co');
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
