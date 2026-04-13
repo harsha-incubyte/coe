@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import LoginForm from './LoginForm'
+import { Weather } from './Weather/Weather'
 
 const Day02 = () => {
   return (
@@ -8,7 +9,7 @@ const Day02 = () => {
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/weather" element={<div>Welcome to the Weather Dashboard!</div>} />
+        <Route path="/weather" element={<Weather />} />
       </Routes>
     </div>
   )
