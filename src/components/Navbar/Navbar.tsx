@@ -29,12 +29,7 @@ const Navbar: React.FC = () => {
         </li>
         <li className="nav-item-disabled">Day 03</li>
       </ul>
-      <div className="navbar-actions">
-        <div className="status-indicator">
-          <span className="status-dot"></span>
-          <span className="status-text">Live Dev</span>
-        </div>
-      </div>
+      <div className="navbar-actions"></div>
     </nav>
   );
 };
