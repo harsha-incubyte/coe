@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import LoginForm from './LoginForm'
-import { Weather } from './Weather/Weather'
+import Weather from './Weather'
 
 const Day02 = () => {
   return (
