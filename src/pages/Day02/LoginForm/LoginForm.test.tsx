@@ -109,5 +109,38 @@ describe('LoginForm', () => {
     expect(submitButton).not.toBeDisabled();
     expect(submitButton).toHaveTextContent(/login/i);
   });
+
+  it('should show error message when login fails with invalid credentials', async () => {
+    const user = userEvent.setup();
+    const onLogin = vitest.fn().mockRejectedValue(new Error('Unauthorized'));
+    render(<LoginForm onLogin={onLogin} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'wrong@example.com');
+    await user.type(passwordInput, 'wrongpassword');
+    await user.click(submitButton);
+
+    const errorMessage = await screen.findByRole('alert');
+    expect(errorMessage).toHaveTextContent(/invalid credentials/i);
+    expect(screen.queryByText(/login successful/i)).not.toBeInTheDocument();
+  });
+
+  it('should login successfully using integrated API (MSW)', async () => {
+    const user = userEvent.setup();
+    render(<LoginForm />); // No onLogin prop
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+  });
 });
 
