@@ -1,6 +1,6 @@
 import { http, HttpResponse, delay } from 'msw';
 
-export const handlers = [
+export const authHandlers = [
   http.post('/api/login', async ({ request }) => {
     const { email, password } = (await request.json()) as any;
 
@@ -13,13 +13,9 @@ export const handlers = [
 
     return new HttpResponse(null, { status: 401 });
   }),
-  http.get('/api/weather', () => {
-    return HttpResponse.json({
-      city: 'Pune',
-      temperature: 32,
-      condition: 'Sunny',
-    });
-  }),
+];
+
+export const weatherHandlers = [
   http.get('https://geocoding-api.open-meteo.com/v1/search', async ({ request }) => {
     await delay(100);
     const url = new URL(request.url);
@@ -59,3 +55,5 @@ export const handlers = [
     return new HttpResponse(null, { status: 404 });
   }),
 ];
+
+export const handlers = [...authHandlers, ...weatherHandlers];
