@@ -8,12 +8,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic email regex for the custom error message
-    // even though type="email" is used for browser-level accessibility
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Invalid email format');
@@ -26,12 +25,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     }
 
     setError('');
-    onLogin({ email, password });
+    await onLogin({ email, password });
+    setSuccess('Login successful');
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate>
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
+      {success && <p style={{ color: 'green' }}>{success}</p>}
       <div>
         <label htmlFor="email">Email</label>
         <input 
