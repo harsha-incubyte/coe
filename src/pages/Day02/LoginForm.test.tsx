@@ -44,4 +44,23 @@ describe('LoginForm', () => {
     expect(errorMessage).toHaveTextContent(/password must be at least 8 characters/i);
     expect(onLogin).not.toHaveBeenCalled();
   });
+
+  it('should call onLogin with valid credentials', async () => {
+    const onLogin = vitest.fn();
+    render(<LoginForm onLogin={onLogin} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    expect(onLogin).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      password: 'password123',
+    });
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
 });
