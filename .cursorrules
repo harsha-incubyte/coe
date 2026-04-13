@@ -1,0 +1,26 @@
+# Project Rules
+
+## Commit Message Conventions
+When generating commit messages, strictly follow this structure:
+`{Unicode} {Type} {DayXX}: {feature name} - {message}`
+
+### Rules:
+1. **Unicode & Type Mapping:**
+   - Failing Test (RED): 🔴 `test`
+   - Implementation (GREEN): 🟢 `feat`
+   - Refactoring: ♻️ `refactor`
+   - Maintenance/Build: ⚙️ `chore`
+
+2. **Variables:**
+   - **DayXX**: Identify the current project day from the file path or context (e.g., `Day02`).
+   - **feature name**: The component or feature currently being worked on (e.g., `LoginForm`, `ThemeFix`).
+   - **message**: Concise description of the change.
+
+3. **Example Format:**
+   - `🔴 test Day02: LoginForm - add test for invalid email format`
+   - `🟢 feat Day02: LoginForm - implement email format validation`
+   - `♻️ refactor Day02: LoginForm - simplify validation logic`
+   - `⚙️ chore Day02: Project - update vitest configuration`
+
+## Staging Rules
+- **NEVER use `git add .`**: Always stage files individually using `git add <file_path>` to ensure only intended changes are included.
