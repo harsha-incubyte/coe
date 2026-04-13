@@ -4,9 +4,19 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vitest } from 'vitest';
 import { LoginForm } from './LoginForm';
 
+const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
+  return render(
+    <Router initialEntries={[route]}>
+      <Routes>
+        <Route path="*" element={ui} />
+      </Routes>
+    </Router>
+  );
+};
+
 describe('LoginForm', () => {
   it('should render email and password inputs and a login button', () => {
-    render(<LoginForm onLogin={() => {}} />);
+    renderWithRouter(<LoginForm onLogin={() => {}} />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -16,7 +26,7 @@ describe('LoginForm', () => {
   it('should show error when email format is invalid', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    render(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
@@ -34,7 +44,7 @@ describe('LoginForm', () => {
   it('should show error when password is too short', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    render(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -52,7 +62,7 @@ describe('LoginForm', () => {
   it('should call onLogin with valid credentials', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    render(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -71,7 +81,7 @@ describe('LoginForm', () => {
 
   it('should show success message on successful login', async () => {
     const user = userEvent.setup();
-    render(<LoginForm onLogin={() => Promise.resolve()} />);
+    renderWithRouter(<LoginForm onLogin={() => Promise.resolve()} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -92,7 +102,7 @@ describe('LoginForm', () => {
       resolveLogin = resolve;
     });
     
-    render(<LoginForm onLogin={() => loginPromise} />);
+    renderWithRouter(<LoginForm onLogin={() => loginPromise} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -114,7 +124,7 @@ describe('LoginForm', () => {
   it('should show error message when login fails with invalid credentials', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn().mockRejectedValue(new Error('Unauthorized'));
-    render(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -131,7 +141,7 @@ describe('LoginForm', () => {
 
   it('should login successfully using integrated API (MSW)', async () => {
     const user = userEvent.setup();
-    render(<LoginForm />); // No onLogin prop
+    renderWithRouter(<LoginForm />); // No onLogin prop
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);

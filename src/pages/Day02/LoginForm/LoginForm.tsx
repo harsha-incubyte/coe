@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   onLogin?: (data: any) => Promise<void>;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -45,6 +47,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         }
       }
       setSuccess('Login successful');
+      setTimeout(() => {
+        navigate('/day-02/success');
+      }, 500);
     } catch (err) {
       setError('Invalid credentials');
     } finally {
