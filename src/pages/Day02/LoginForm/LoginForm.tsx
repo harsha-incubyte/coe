@@ -46,6 +46,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         if (!response.ok) {
           throw new Error('Unauthorized');
         }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
       }
       setSuccess('Login successful');
       setTimeout(() => {
