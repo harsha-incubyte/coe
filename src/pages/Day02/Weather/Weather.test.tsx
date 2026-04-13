@@ -20,4 +20,21 @@ describe('Weather Component', () => {
 
     expect(screen.getByText(/login page/i)).toBeInTheDocument();
   });
+
+  it('should show loading state and then display weather data', async () => {
+    localStorage.setItem('token', 'fake-token');
+    render(
+      <Router initialEntries={['/day-02/weather']}>
+        <Routes>
+          <Route path="/day-02/weather" element={<Weather />} />
+        </Routes>
+      </Router>
+    );
+
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+    expect(await screen.findByText(/pune/i)).toBeInTheDocument();
+    expect(screen.getByText(/32/i)).toBeInTheDocument();
+    expect(screen.getByText(/sunny/i)).toBeInTheDocument();
+  });
 });

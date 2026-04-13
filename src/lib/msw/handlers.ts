@@ -13,4 +13,11 @@ export const handlers = [
 
     return new HttpResponse(null, { status: 401 });
   }),
+  http.get('/api/weather', () => {
+    return HttpResponse.json({
+      city: 'Pune',
+      temperature: 32,
+      condition: 'Sunny',
+    });
+  }),
 ];
