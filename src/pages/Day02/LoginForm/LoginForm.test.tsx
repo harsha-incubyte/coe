@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vitest } from 'vitest';
 import { LoginForm } from './LoginForm';
@@ -141,6 +142,28 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+  });
+
+  it('should navigate to success page after successful login', async () => {
+    const user = userEvent.setup();
+    render(
+      <Router initialEntries={['/day-02/login']}>
+        <Routes>
+          <Route path="/day-02/login" element={<LoginForm />} />
+          <Route path="/day-02/success" element={<div>Success Page</div>} />
+        </Routes>
+      </Router>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'harsha@incubyte.co');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(await screen.findByText(/success page/i)).toBeInTheDocument();
   });
 });
 
