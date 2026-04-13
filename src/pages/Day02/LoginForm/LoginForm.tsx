@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 interface LoginFormProps {
-  onLogin: (data: any) => void;
+  onLogin?: (data: any) => Promise<void>;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -29,7 +29,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
     setIsLoading(true);
     try {
-      await onLogin({ email, password });
+      if (onLogin) {
+        await onLogin({ email, password });
+      } else {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Unauthorized');
+        }
+      }
       setSuccess('Login successful');
     } catch (err) {
       setError('Invalid credentials');
