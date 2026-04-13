@@ -20,6 +20,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       return;
     }
 
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
     setError('');
     onLogin({ email, password });
   };
