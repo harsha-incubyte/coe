@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './CounterUI.css';
+import '@/components/Counter/CounterUI.css';
 
 export default function CounterUI() {
   const [count, setCount] = useState(0);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { fizzBuzz } from './fizzbuzz';
-import './FizzBuzzUI.css';
+import { fizzBuzz } from '@/lib/fizzbuzz';
+import '@/components/FizzBuzz/FizzBuzzUI.css';
 
 const FizzBuzzUI: React.FC = () => {
   const [limit, setLimit] = useState<number | ''>('');

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import FizzBuzzUI from './FizzBuzzUI';
+import FizzBuzzUI from '@/components/FizzBuzz';
 
 describe('FizzBuzzUI Component', () => {
   it('renders a title, an input field and a result area', () => {

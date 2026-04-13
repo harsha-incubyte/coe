@@ -1,6 +1,6 @@
-import FizzBuzzUI from './pages/Day01/FizzBuzzUI'
-import CounterUI from './pages/Day01/CounterUI'
-import './App.css'
+import FizzBuzzUI from '@/components/FizzBuzz'
+import CounterUI from '@/components/Counter'
+import '@/App.css'
 
 function App() {
   return (

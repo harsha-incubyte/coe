@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import CounterUI from './CounterUI';
+import CounterUI from '@/components/Counter';
 
 describe('Counter component TDD', () => {
   it('renders Counter component with initial count of 0', () => {
