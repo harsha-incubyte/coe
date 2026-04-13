@@ -11,18 +11,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password: string) => password.length >= 8;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!validateEmail(email)) {
       setError('Invalid email format');
       return;
     }
 
-    if (password.length < 8) {
+    if (!validatePassword(password)) {
       setError('Password must be at least 8 characters');
       return;
     }
