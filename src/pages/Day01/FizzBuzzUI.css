@@ -1,0 +1,88 @@
+.fizzbuzz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(170, 59, 255, 0.05), rgba(192, 132, 252, 0.15));
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--accent-border);
+  margin: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fizzbuzz-container:hover {
+  transform: translateY(-5px);
+  box-shadow: rgba(0, 0, 0, 0.2) 0 20px 25px -5px, rgba(0, 0, 0, 0.1) 0 8px 10px -6px;
+}
+
+.fizzbuzz-title {
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: var(--heading);
+}
+
+.fizzbuzz-input {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+  font-family: var(--sans);
+}
+
+.fizzbuzz-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.fizzbuzz-sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.fizzbuzz-item {
+  padding: 0.5rem 1rem;
+  background: var(--code-bg);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-weight: bold;
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fizzbuzz-item.fizz {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.fizzbuzz-item.buzz {
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.fizzbuzz-item.fizzbuzz {
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-color: var(--accent-border);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
