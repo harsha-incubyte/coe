@@ -24,3 +24,7 @@ When generating commit messages, strictly follow this structure:
 
 ## Staging Rules
 - **NEVER use `git add .`**: Always stage files individually using `git add <file_path>` to ensure only intended changes are included.
+
+## TDD & Atomic Commits
+- **RED-GREEN-Refactor**: Always follow the strict TDD cycle (Red -> Green -> Refactor).
+- **Atomic Commits**: Each TDD step (Red, Green, Refactor) MUST be a separate, precise commit. Avoid bundling multiple changes.

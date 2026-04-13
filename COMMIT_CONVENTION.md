@@ -17,8 +17,14 @@ When drafting commit messages, use the following structure:
 - **feature name**: The component or feature currently being worked on (e.g., `LoginForm`).
 - **message**: Concise description of the change.
 
-### Staging Rules
-- **DO NOT use `git add .`**: Always stage files individually using `git add <file_path>` to maintain a clean and intentional commit history.
+- **NEVER use `git add .`**: Always stage files individually using `git add <file_path>` to maintain a clean and intentional commit history.
+
+## TDD & Atomic Commits
+- **RED-GREEN-Refactor**: Always follow the strict TDD cycle.
+  1. 🔴 **Red**: Write a failing test first.
+  2. 🟢 **Green**: Write the minimum code to pass the test.
+  3. ♻️ **Refactor**: Clean up the code while keeping tests passing.
+- **Atomic Commits**: Commit each step of the TDD cycle individually. Commits should be small, simple, and precise.
 
 ### Examples
 - `🔴 test Day02: LoginForm - add test for invalid email format`

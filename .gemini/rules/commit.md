@@ -19,3 +19,7 @@ When drafting commit messages, use the following structure:
 
 ### Staging Rules
 - **NEVER use `git add .`**: Always stage files individually.
+
+### TDD & Atomic Commits
+- Follow RED-GREEN-Refactor cycle.
+- Small, simple, and precise atomic commits for each step.
