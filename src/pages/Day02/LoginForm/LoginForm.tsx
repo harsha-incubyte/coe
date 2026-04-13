@@ -9,9 +9,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -24,9 +27,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       return;
     }
 
-    setError('');
-    await onLogin({ email, password });
-    setSuccess('Login successful');
+    setIsLoading(true);
+    try {
+      await onLogin({ email, password });
+      setSuccess('Login successful');
+    } catch (err) {
+      setError('Invalid credentials');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,7 +60,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)} 
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Logging in...' : 'Login'}
+      </button>
     </form>
   );
 };
