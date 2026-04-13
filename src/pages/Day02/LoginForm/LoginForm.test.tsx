@@ -154,13 +154,13 @@ describe('LoginForm', () => {
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
   });
 
-  it('should navigate to success page after successful login', async () => {
+  it('should navigate to weather page after successful login', async () => {
     const user = userEvent.setup();
     render(
       <Router initialEntries={['/day-02/login']}>
         <Routes>
           <Route path="/day-02/login" element={<LoginForm />} />
-          <Route path="/day-02/success" element={<div>Success Page</div>} />
+          <Route path="/day-02/weather" element={<div>Weather Page</div>} />
         </Routes>
       </Router>
     );
@@ -173,7 +173,7 @@ describe('LoginForm', () => {
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
-    expect(await screen.findByText(/success page/i)).toBeInTheDocument();
+    expect(await screen.findByText(/weather page/i)).toBeInTheDocument();
   });
 });
 
