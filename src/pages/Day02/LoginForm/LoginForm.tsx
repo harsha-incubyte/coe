@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './LoginForm.css';
 
 interface LoginFormProps {
   onLogin?: (data: any) => Promise<void>;
@@ -58,30 +59,43 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input 
-          id="email" 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input 
-          id="password" 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-        />
-      </div>
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Logging in...' : 'Login'}
-      </button>
-    </form>
+    <div className="login-box">
+      {error && (
+        <div className="message message-error" role="alert">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="message message-success">
+          {success}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="login-form" noValidate>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input 
+            id="email" 
+            type="email" 
+            placeholder="Enter your email"
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input 
+            id="password" 
+            type="password" 
+            placeholder="Enter your password"
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+        </div>
+        <button type="submit" className="login-submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+    </div>
   );
 };
+
