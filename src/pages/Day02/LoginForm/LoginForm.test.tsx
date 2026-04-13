@@ -67,5 +67,20 @@ describe('LoginForm', () => {
     });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
+
+  it('should show success message on successful login', async () => {
+    const user = userEvent.setup();
+    render(<LoginForm onLogin={() => Promise.resolve()} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+  });
 });
 
