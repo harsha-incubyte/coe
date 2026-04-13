@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../../lib/msw/server';
@@ -23,7 +24,7 @@ describe('Weather Component', () => {
     expect(screen.getByText(/login page/i)).toBeInTheDocument();
   });
 
-  it('should show loading state and then display weather data', async () => {
+  it('should render search input and "Get Weather" button', () => {
     localStorage.setItem('token', 'fake-token');
     render(
       <Router initialEntries={['/day-02/weather']}>
@@ -33,20 +34,12 @@ describe('Weather Component', () => {
       </Router>
     );
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
-
-    expect(await screen.findByText(/pune/i)).toBeInTheDocument();
-    expect(screen.getByText(/32/i)).toBeInTheDocument();
-    expect(screen.getByText(/sunny/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/enter city/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /get weather/i })).toBeInTheDocument();
   });
 
-  it('should show error message if the weather API fails', async () => {
-    server.use(
-      http.get('/api/weather', () => {
-        return new HttpResponse(null, { status: 500 });
-      })
-    );
-    
+  it('should search and display weather for London', async () => {
+    const user = userEvent.setup();
     localStorage.setItem('token', 'fake-token');
     render(
       <Router initialEntries={['/day-02/weather']}>
@@ -56,6 +49,35 @@ describe('Weather Component', () => {
       </Router>
     );
 
-    expect(await screen.findByText(/error loading weather data/i)).toBeInTheDocument();
+    const input = screen.getByPlaceholderText(/enter city/i);
+    const button = screen.getByRole('button', { name: /get weather/i });
+
+    await user.type(input, 'London');
+    await user.click(button);
+
+    expect(screen.getByText(/fetching weather/i)).toBeInTheDocument();
+
+    expect(await screen.findByText(/weather in London/i)).toBeInTheDocument();
+    expect(screen.getByText(/15/i)).toBeInTheDocument();
+  });
+
+  it('should show "City not found" for invalid cities', async () => {
+    const user = userEvent.setup();
+    localStorage.setItem('token', 'fake-token');
+    render(
+      <Router initialEntries={['/day-02/weather']}>
+        <Routes>
+          <Route path="/day-02/weather" element={<Weather />} />
+        </Routes>
+      </Router>
+    );
+
+    const input = screen.getByPlaceholderText(/enter city/i);
+    const button = screen.getByRole('button', { name: /get weather/i });
+
+    await user.type(input, 'Atlantis');
+    await user.click(button);
+
+    expect(await screen.findByText(/city not found/i)).toBeInTheDocument();
   });
 });

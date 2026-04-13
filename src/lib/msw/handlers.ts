@@ -20,4 +20,40 @@ export const handlers = [
       condition: 'Sunny',
     });
   }),
+  http.get('https://geocoding-api.open-meteo.com/v1/search', ({ request }) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get('name');
+
+    if (name === 'London') {
+      return HttpResponse.json({
+        results: [{ id: 1, name: 'London', latitude: 51.5085, longitude: -0.1257 }],
+      });
+    }
+
+    if (name === 'Pune') {
+      return HttpResponse.json({
+        results: [{ id: 2, name: 'Pune', latitude: 18.5204, longitude: 73.8567 }],
+      });
+    }
+
+    return HttpResponse.json({ results: [] });
+  }),
+  http.get('https://api.open-meteo.com/v1/forecast', ({ request }) => {
+    const url = new URL(request.url);
+    const lat = url.searchParams.get('latitude');
+
+    if (lat === '51.5085') {
+      return HttpResponse.json({
+        current_weather: { temperature: 15, weathercode: 1 },
+      });
+    }
+
+    if (lat === '18.5204') {
+      return HttpResponse.json({
+        current_weather: { temperature: 32, weathercode: 0 },
+      });
+    }
+
+    return new HttpResponse(null, { status: 404 });
+  }),
 ];
