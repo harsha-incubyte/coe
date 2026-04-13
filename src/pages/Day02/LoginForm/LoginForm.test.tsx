@@ -82,5 +82,32 @@ describe('LoginForm', () => {
 
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
   });
+
+  it('should show loading state and disable button during login', async () => {
+    const user = userEvent.setup();
+    // A promise that doesn't resolve immediately
+    let resolveLogin: () => void;
+    const loginPromise = new Promise<void>((resolve) => {
+      resolveLogin = resolve;
+    });
+    
+    render(<LoginForm onLogin={() => loginPromise} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveTextContent(/logging in/i);
+
+    resolveLogin!();
+    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
+    expect(submitButton).toHaveTextContent(/login/i);
+  });
 });
 
