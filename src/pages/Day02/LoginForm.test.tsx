@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vitest } from 'vitest';
 import { LoginForm } from './LoginForm';
 
@@ -12,16 +13,17 @@ describe('LoginForm', () => {
   });
 
   it('should show error when email format is invalid', async () => {
+    const user = userEvent.setup();
     const onLogin = vitest.fn();
     render(<LoginForm onLogin={onLogin} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    await user.type(emailInput, 'invalid-email');
     expect(emailInput).toHaveValue('invalid-email');
     
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
 
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent(/invalid email format/i);
@@ -29,6 +31,7 @@ describe('LoginForm', () => {
   });
 
   it('should show error when password is too short', async () => {
+    const user = userEvent.setup();
     const onLogin = vitest.fn();
     render(<LoginForm onLogin={onLogin} />);
 
@@ -36,9 +39,9 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'short' } });
-    fireEvent.click(submitButton);
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'short');
+    await user.click(submitButton);
 
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent(/password must be at least 8 characters/i);
@@ -46,6 +49,7 @@ describe('LoginForm', () => {
   });
 
   it('should call onLogin with valid credentials', async () => {
+    const user = userEvent.setup();
     const onLogin = vitest.fn();
     render(<LoginForm onLogin={onLogin} />);
 
@@ -53,9 +57,9 @@ describe('LoginForm', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
 
     expect(onLogin).toHaveBeenCalledWith({
       email: 'user@example.com',
@@ -64,3 +68,4 @@ describe('LoginForm', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
+
