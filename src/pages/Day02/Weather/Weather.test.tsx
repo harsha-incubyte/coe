@@ -55,7 +55,7 @@ describe('Weather Component', () => {
     await user.type(input, 'London');
     await user.click(button);
 
-    expect(screen.getByText(/fetching weather/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/fetching weather/i).length).toBeGreaterThan(0);
 
     expect(await screen.findByText(/weather in London/i)).toBeInTheDocument();
     expect(screen.getByText(/15/i)).toBeInTheDocument();

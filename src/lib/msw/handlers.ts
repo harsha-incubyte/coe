@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 
 export const handlers = [
   http.post('/api/login', async ({ request }) => {
@@ -20,7 +20,8 @@ export const handlers = [
       condition: 'Sunny',
     });
   }),
-  http.get('https://geocoding-api.open-meteo.com/v1/search', ({ request }) => {
+  http.get('https://geocoding-api.open-meteo.com/v1/search', async ({ request }) => {
+    await delay(100);
     const url = new URL(request.url);
     const name = url.searchParams.get('name');
 
@@ -38,7 +39,8 @@ export const handlers = [
 
     return HttpResponse.json({ results: [] });
   }),
-  http.get('https://api.open-meteo.com/v1/forecast', ({ request }) => {
+  http.get('https://api.open-meteo.com/v1/forecast', async ({ request }) => {
+    await delay(100);
     const url = new URL(request.url);
     const lat = url.searchParams.get('latitude');
 
