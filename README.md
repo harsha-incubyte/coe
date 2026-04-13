@@ -1,73 +1,72 @@
-# React + TypeScript + Vite
+# Centre of Excellence - Incubyte Katas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a collection of React + TypeScript Katas, developed following strict **Test-Driven Development (TDD)** principles. Each day represents a new challenge and a step forward in mastering modern web development.
 
-Currently, two official plugins are available:
+## 🚀 Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Prerequisites
+- Node.js (Latest LTS recommended)
+- npm
 
-## React Compiler
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Initialize Mock Service Worker (MSW):
+   ```bash
+   npx msw init public/ --save
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Running the Project
+- **Development Server**: `npm run dev`
+- **Run Tests**: `npm run test`
+- **Linting**: `npm run lint`
 
-## Expanding the ESLint configuration
+## 🛠 Project Architecture
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The application is designed to showcase daily progress. Each "Day" is isolated within its own directory under `src/pages/`, containing its components, styles, and tests.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Directory Structure
+```text
+src/
+├── components/     # Shared UI components
+├── layouts/        # Page layouts (e.g., MainLayout with Navbar)
+├── lib/            # External library configurations (MSW, etc.)
+├── pages/          # Daily Kata challenges
+│   ├── Day01/      # FizzBuzz & Counter
+│   └── Day02/      # LoginForm & Weather Widget
+├── setupTests.ts   # Vitest setup
+└── main.tsx        # Application entry point with MSW init
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧪 Testing Strategy (TDD)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+We follow the **Red-Green-Refactor** cycle:
+1. 🔴 **Red**: Write a failing test that defines the desired behavior.
+2. 🟢 **Green**: Write the minimum code necessary to pass the test.
+3. ♻️ **Refactor**: Improve the code while ensuring tests stay green.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Mock Service Worker (MSW)
+To simulate real API interactions without a backend, we use MSW.
+- **Handlers**: Located in `src/lib/msw/handlers.ts`
+- **Browser Usage**: The worker is initialized in `main.tsx` during development.
+- **Credentials for Day 02 Login**:
+  - Email: `harsha@incubyte.co`
+  - Password: `password123`
+
+## 📅 Daily Progress
+
+### Day 01: The Basics
+- **FizzBuzz**: Implementation of the classic logic kata.
+- **Counter**: A simple state management component.
+- *Focus*: Vitest setup and `@testing-library/react` basics.
+
+### Day 02: Forms & Auth
+- **Login Form**: A validated form with MSW integration.
+- **Routing**: Navigation between different kata days.
+- *Focus*: User interaction testing (`userEvent`), form validation, and API mocking.
+
+---
+*Created with ❤️ by Harsha at Incubyte*
