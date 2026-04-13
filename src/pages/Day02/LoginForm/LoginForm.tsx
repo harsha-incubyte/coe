@@ -49,7 +49,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       }
       setSuccess('Login successful');
       setTimeout(() => {
-        navigate('/day-02/success');
+        navigate('/day-02/weather');
       }, 500);
     } catch (err) {
       setError('Invalid credentials');
