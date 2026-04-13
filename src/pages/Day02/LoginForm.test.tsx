@@ -27,4 +27,21 @@ describe('LoginForm', () => {
     expect(errorMessage).toHaveTextContent(/invalid email format/i);
     expect(onLogin).not.toHaveBeenCalled();
   });
+
+  it('should show error when password is too short', async () => {
+    const onLogin = vitest.fn();
+    render(<LoginForm onLogin={onLogin} />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+    fireEvent.click(submitButton);
+
+    const errorMessage = await screen.findByRole('alert');
+    expect(errorMessage).toHaveTextContent(/password must be at least 8 characters/i);
+    expect(onLogin).not.toHaveBeenCalled();
+  });
 });
