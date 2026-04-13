@@ -19,9 +19,12 @@ describe('LoginForm', () => {
     const submitButton = screen.getByRole('button', { name: /login/i });
 
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    expect(emailInput).toHaveValue('invalid-email');
+    
     fireEvent.click(submitButton);
 
-    expect(screen.getByText(/invalid email format/i)).toBeInTheDocument();
+    const errorMessage = await screen.findByRole('alert');
+    expect(errorMessage).toHaveTextContent(/invalid email format/i);
     expect(onLogin).not.toHaveBeenCalled();
   });
 });
