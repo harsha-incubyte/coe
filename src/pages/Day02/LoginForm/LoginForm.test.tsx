@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vitest } from 'vitest';
+import { describe, it, expect, vitest, beforeEach } from 'vitest';
 import { LoginForm } from './LoginForm';
 
 const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
@@ -15,6 +15,10 @@ const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
 };
 
 describe('LoginForm', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('should render email and password inputs and a login button', () => {
     renderWithRouter(<LoginForm onLogin={() => {}} />);
 
@@ -174,6 +178,22 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     expect(await screen.findByText(/weather page/i)).toBeInTheDocument();
+  });
+
+  it('should store authentication token in localStorage on successful login', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<LoginForm />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'harsha@incubyte.co');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+    expect(localStorage.getItem('token')).toBe('fake-jwt-token');
   });
 });
 
