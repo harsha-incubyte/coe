@@ -139,7 +139,7 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     const errorMessage = await screen.findByRole('alert');
-    expect(errorMessage).toHaveTextContent(/invalid credentials/i);
+    expect(errorMessage).toHaveTextContent(/Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!/i);
     expect(screen.queryByText(/login successful/i)).not.toBeInTheDocument();
   });
 

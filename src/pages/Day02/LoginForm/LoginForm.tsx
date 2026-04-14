@@ -63,7 +63,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         navigate('/day-02/weather');
       }, 500);
     } catch (err) {
-      setError('Invalid credentials');
+      setError("Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!");
     } finally {
       setIsLoading(false);
     }
