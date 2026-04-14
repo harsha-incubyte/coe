@@ -195,5 +195,21 @@ describe('LoginForm', () => {
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
     expect(localStorage.getItem('token')).toBe('fake-jwt-token');
   });
+
+  it('should redirect to weather page if token is already present on mount', () => {
+    localStorage.setItem('token', 'existing-token');
+
+    render(
+      <Router initialEntries={['/day-02/login']}>
+        <Routes>
+          <Route path="/day-02/login" element={<LoginForm />} />
+          <Route path="/day-02/weather" element={<div>Weather Dashboard</div>} />
+        </Routes>
+      </Router>
+    );
+
+    expect(screen.getByText(/weather dashboard/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument();
+  });
 });
 
