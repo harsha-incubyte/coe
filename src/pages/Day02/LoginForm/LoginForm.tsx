@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import './LoginForm.css';
 
 interface LoginFormProps {
@@ -8,11 +9,18 @@ interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const navigate = useNavigate();
+  const [token, setToken] = useLocalStorage<string | null>('token', null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/day-02/weather');
+    }
+  }, [token, navigate]);
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
@@ -48,7 +56,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         }
 
         const data = await response.json();
-        localStorage.setItem('token', data.token);
+        setToken(data.token);
       }
       setSuccess('Login successful');
       setTimeout(() => {
