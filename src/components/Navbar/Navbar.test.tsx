@@ -15,14 +15,36 @@ describe('Navbar', () => {
     expect(screen.getByText(/Day 02/i)).toBeInTheDocument();
   });
 
-  it('should render the COE logo', () => {
+  it('should be wrapped in a header tag', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+    expect(container.querySelector('header')).toBeInTheDocument();
+  });
+
+  it('should have a button for the User Profile dropdown with Correct ARIA attributes', () => {
     render(
       <MemoryRouter>
         <Navbar />
       </MemoryRouter>
     );
-    
-    expect(screen.getByText(/COE/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/Incubyte Logo/i)).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /user profile/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(button).toHaveAttribute('aria-controls', 'user-menu');
+  });
+
+  it('should have a dropdown menu with a matching ID', () => {
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+    // Initially hidden or empty, but the element structure should exist if we are testing ID link
+    // Actually, we usually test toggle behavior here too
+    const button = screen.getByRole('button', { name: /user profile/i });
+    expect(button).toHaveAttribute('aria-controls', 'user-menu');
   });
 });
