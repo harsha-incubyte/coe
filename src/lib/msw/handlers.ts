@@ -23,13 +23,33 @@ export const weatherHandlers = [
 
     if (name === 'London') {
       return HttpResponse.json({
-        results: [{ id: 1, name: 'London', latitude: 51.5085, longitude: -0.1257 }],
+        results: [
+          { 
+            id: 1, 
+            name: 'London', 
+            latitude: 51.5085, 
+            longitude: -0.1257, 
+            timezone: 'Europe/London', 
+            country: 'United Kingdom', 
+            admin1: 'England' 
+          }
+        ],
       });
     }
 
     if (name === 'Pune') {
       return HttpResponse.json({
-        results: [{ id: 2, name: 'Pune', latitude: 18.5204, longitude: 73.8567 }],
+        results: [
+          { 
+            id: 2, 
+            name: 'Pune', 
+            latitude: 18.5204, 
+            longitude: 73.8567, 
+            timezone: 'Asia/Kolkata', 
+            country: 'India', 
+            admin1: 'Maharashtra' 
+          }
+        ],
       });
     }
 
@@ -42,13 +62,13 @@ export const weatherHandlers = [
 
     if (lat === '51.5085') {
       return HttpResponse.json({
-        current_weather: { temperature: 15, weathercode: 1 },
+        current_weather: { temperature: 15, weathercode: 1, is_day: 1 },
       });
     }
 
     if (lat === '18.5204') {
       return HttpResponse.json({
-        current_weather: { temperature: 32, weathercode: 0 },
+        current_weather: { temperature: 32, weathercode: 0, is_day: 1 },
       });
     }
 
