@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import MainLayout from '@/layouts/MainLayout'
 import Day01 from '@/pages/Day01'
 import Day02 from '@/pages/Day02'
+import Day03 from '@/pages/Day03'
 import '@/App.css'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Navigate to="/day-01" replace />} />
           <Route path="/day-01" element={<Day01 />} />
           <Route path="/day-02/*" element={<Day02 />} />
+          <Route path="/day-03" element={<Day03 />} />
         </Routes>
       </MainLayout>
     </Router>

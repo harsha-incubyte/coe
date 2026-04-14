@@ -27,7 +27,14 @@ const Navbar: React.FC = () => {
             Day 02
           </NavLink>
         </li>
-        <li className="nav-item-disabled">Day 03</li>
+        <li>
+          <NavLink 
+            to="/day-03" 
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Day 03
+          </NavLink>
+        </li>
       </ul>
       <div className="navbar-actions"></div>
     </nav>
