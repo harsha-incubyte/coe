@@ -133,57 +133,55 @@ export const Weather: React.FC = () => {
   }
 
   return (
-    <div className="weather-dashboard">
-      <h1>Weather Dashboard</h1>
-      <div className="search-container">
-        <form className="search-form" onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="text"
-            placeholder="Enter city"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            onFocus={() => city.length >= 3 && setShowSuggestions(true)}
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Fetching weather...' : 'Get Weather'}
-          </button>
-        </form>
+    <div className="weather-dashboard-unified">
+      <div className="search-section">
+        <div className="search-container">
+          <form className="search-form" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="text"
+              placeholder="Search for a city..."
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              onFocus={() => city.length >= 3 && setShowSuggestions(true)}
+            />
+          </form>
 
-        {showSuggestions && suggestions.length > 0 && (
-          <ul className="suggestions-list">
-            {suggestions.map((s) => (
-              <li key={s.id} onClick={() => handleSelectSuggestion(s)}>
-                {s.name}, {s.admin1 ? `${s.admin1}, ` : ''}{s.country}
-              </li>
-            ))}
-          </ul>
-        )}
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="suggestions-list">
+              {suggestions.map((s) => (
+                <li key={s.id} onClick={() => handleSelectSuggestion(s)}>
+                  <span className="suggestion-name">{s.name}</span>
+                  <span className="suggestion-meta">{s.admin1 ? `${s.admin1}, ` : ''}{s.country}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
-      {loading && <div className="loading-state">Updating weather...</div>}
-      {error && <div className="error-message">{error}</div>}
+      {loading && <div className="status-overlay">Updating weather...</div>}
+      {error && <div className="error-overlay">{error}</div>}
 
       {weather && !loading && (
-        <div className="weather-content">
-          <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay} />
-          
-          <div className="weather-card">
-            <div className="card-header">
-              <div className="location-info">
-                <h2>{weather.city}</h2>
-                <p className="location-sub">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
+        <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
+          <div className="weather-overlay-data">
+            <div className="data-header">
+              <div className="city-info">
+                <h2 className="city-name">{weather.city}</h2>
+                <p className="city-meta">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
               </div>
-              <div className="time-info">
-                <span className="local-time">{localTime}</span>
-              </div>
+              <div className="time-pill">{localTime}</div>
             </div>
 
-            <div className="weather-stats">
-              <p className="temp">{Math.round(weather.temperature)}°C</p>
-              <p className="condition">{weather.condition}</p>
+            <div className="data-footer">
+              <div className="temp-display">
+                <span className="temp-value">{Math.round(weather.temperature)}</span>
+                <span className="temp-unit">°C</span>
+              </div>
+              <div className="condition-label">{weather.condition}</div>
             </div>
           </div>
-        </div>
+        </WeatherIllustration>
       )}
     </div>
   );

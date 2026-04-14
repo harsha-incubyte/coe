@@ -5,7 +5,7 @@ import Weather from './Weather'
 const Day02 = () => {
   return (
     <div>
-      <h1>Day 02 - Auth Integration</h1>
+      <h1>Weather | Authentication | API Integration</h1>
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/login" element={<LoginForm />} />

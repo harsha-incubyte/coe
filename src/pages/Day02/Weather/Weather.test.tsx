@@ -35,21 +35,19 @@ describe('Weather Component', () => {
     expect(screen.getByText(/login page/i)).toBeInTheDocument();
   });
 
-  it('should render search input and "Get Weather" button', () => {
+  it('should render search input', () => {
     setup();
-    expect(screen.getByPlaceholderText(/enter city/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /get weather/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search for a city/i)).toBeInTheDocument();
   });
 
   it('should show suggestions after typing 3+ characters and waiting', async () => {
     const user = userEvent.setup();
     setup();
 
-    const input = screen.getByPlaceholderText(/enter city/i);
+    const input = screen.getByPlaceholderText(/search for a city/i);
     await user.type(input, 'London');
 
-    // This will fail because the current Weather.tsx doesn't have autocomplete logic
-    const suggestion = await screen.findByText(/London, England, United Kingdom/i, {}, { timeout: 2000 });
+    const suggestion = await screen.findByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
     expect(suggestion).toBeInTheDocument();
   });
 
@@ -57,13 +55,24 @@ describe('Weather Component', () => {
     const user = userEvent.setup();
     setup();
 
-    const input = screen.getByPlaceholderText(/enter city/i);
+    const input = screen.getByPlaceholderText(/search for a city/i);
     await user.type(input, 'London');
 
-    const suggestion = await screen.findByText(/London, England, United Kingdom/i, {}, { timeout: 2000 });
+    const suggestion = await screen.findByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
     await user.click(suggestion);
 
     expect(await screen.findByRole('heading', { name: /london/i })).toBeInTheDocument();
-    expect(screen.getByText(/15°C/i)).toBeInTheDocument();
+    expect(screen.getByText(/15/i)).toBeInTheDocument();
+    expect(screen.getByText(/mainly clear/i)).toBeInTheDocument();
+  });
+
+  it('should show "City not found" if invalid city is typed', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const input = screen.getByPlaceholderText(/search for a city/i);
+    await user.type(input, 'Atlantis');
+
+    expect(await screen.findByText(/city not found/i, {}, { timeout: 3000 })).toBeInTheDocument();
   });
 });
