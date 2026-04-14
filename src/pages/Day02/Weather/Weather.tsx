@@ -45,10 +45,16 @@ export const Weather: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [localTime, setLocalTime] = useState<string>('');
+  const [skipNextSuggestions, setSkipNextSuggestions] = useState(false);
 
   const [token] = useLocalStorage<string | null>('token', null);
 
   useEffect(() => {
+    if (skipNextSuggestions) {
+      setSkipNextSuggestions(false);
+      return;
+    }
+
     if (city.length < 3) {
       setSuggestions([]);
       setError(null);
@@ -99,6 +105,7 @@ export const Weather: React.FC = () => {
   }, [weather?.timezone]);
 
   const handleSelectSuggestion = async (suggestion: Suggestion) => {
+    setSkipNextSuggestions(true);
     setCity(suggestion.name);
     setShowSuggestions(false);
     setLoading(true);
