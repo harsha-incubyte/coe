@@ -75,4 +75,24 @@ describe('Weather Component', () => {
 
     expect(await screen.findByText(/city not found/i, {}, { timeout: 3000 })).toBeInTheDocument();
   });
+  it('should not show suggestions after a city is selected', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const input = screen.getByPlaceholderText(/search for a city/i);
+    await user.type(input, 'Lond');
+
+    const suggestion = await screen.findByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
+    await user.click(suggestion);
+
+    // Weather should be displayed
+    expect(await screen.findByRole('heading', { name: /london/i })).toBeInTheDocument();
+
+    // The suggestions list should NOT be present
+    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+
+    // Wait for more than the debounce time (300ms) to ensure it doesn't reappear
+    await new Promise((r) => setTimeout(r, 500));
+    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+  });
 });

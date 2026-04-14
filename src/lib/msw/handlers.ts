@@ -21,7 +21,7 @@ export const weatherHandlers = [
     const url = new URL(request.url);
     const name = url.searchParams.get('name');
 
-    if (name === 'London') {
+    if (name?.toLowerCase().startsWith('lond')) {
       return HttpResponse.json({
         results: [
           { 
