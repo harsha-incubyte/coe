@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import WeatherIllustration from './components/WeatherIllustration';
 import './Weather.css';
 
 interface WeatherData {
@@ -42,6 +43,7 @@ export const Weather: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [localTime, setLocalTime] = useState<string>('');
 
   const token = localStorage.getItem('token');
 
@@ -76,6 +78,24 @@ export const Weather: React.FC = () => {
 
     return () => clearTimeout(handler);
   }, [city]);
+
+  useEffect(() => {
+    if (!weather?.timezone) return;
+    
+    const updateTime = () => {
+      const timeStr = new Date().toLocaleTimeString('en-US', {
+        timeZone: weather.timezone,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      setLocalTime(timeStr);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 60000);
+    return () => clearInterval(timer);
+  }, [weather?.timezone]);
 
   const handleSelectSuggestion = async (suggestion: Suggestion) => {
     setCity(suggestion.name);
@@ -144,11 +164,25 @@ export const Weather: React.FC = () => {
       {error && <div className="error-message">{error}</div>}
 
       {weather && !loading && (
-        <div className="weather-info">
-          <h2>{weather.city}</h2>
-          <p>{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
-          <p>Temperature: {weather.temperature}°C</p>
-          <p>Condition: {weather.condition}</p>
+        <div className="weather-content">
+          <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay} />
+          
+          <div className="weather-card">
+            <div className="card-header">
+              <div className="location-info">
+                <h2>{weather.city}</h2>
+                <p className="location-sub">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
+              </div>
+              <div className="time-info">
+                <span className="local-time">{localTime}</span>
+              </div>
+            </div>
+
+            <div className="weather-stats">
+              <p className="temp">{Math.round(weather.temperature)}°C</p>
+              <p className="condition">{weather.condition}</p>
+            </div>
+          </div>
         </div>
       )}
     </div>

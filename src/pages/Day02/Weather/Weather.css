@@ -1,13 +1,53 @@
 .weather-dashboard {
-  max-width: 400px;
+  max-width: 500px;
   margin: 2rem auto;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1a1a1a;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 800;
+  color: #1e293b;
 }
 
 .search-container {
   position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 12px;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.search-button {
+  padding: 14px 24px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .suggestions-list {
@@ -16,17 +56,76 @@
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #ddd;
-  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-top: 8px;
+  padding: 8px 0;
   list-style: none;
-  z-index: 10;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 100;
 }
 
 .suggestions-list li {
-  padding: 8px;
+  padding: 12px 20px;
   cursor: pointer;
 }
 
 .suggestions-list li:hover {
-  background: #eee;
+  background: #f1f5f9;
+}
+
+.weather-card {
+  padding: 2rem;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.location-info h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.location-sub {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.local-time {
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.weather-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.temp {
+  font-size: 4.5rem;
+  font-weight: 950;
+  margin: 0;
+  color: #1e293b;
+}
+
+.condition {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #3b82f6;
+  margin: 0;
 }
