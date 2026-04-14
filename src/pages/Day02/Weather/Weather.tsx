@@ -75,7 +75,7 @@ export const Weather: React.FC = () => {
       } catch (err) {
         setError('Error fetching suggestions');
       }
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(handler);
   }, [city]);
