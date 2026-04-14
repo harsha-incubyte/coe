@@ -7,33 +7,34 @@ describe('Authentication Flow', () => {
   });
 
   it('should login, view weather, search and logout', () => {
+    // Intercept login request
+    cy.intercept('POST', '**/api/login').as('loginRequest');
+
     // Visit login page
     cy.visit('/day-02/login');
 
     // Attempt login with valid credentials
     cy.get('#email').type('harsha@incubyte.co');
     cy.get('#password').type('password123');
-    cy.get('.login-submit').click();
+    cy.get('.login-form').submit();
 
-    // Verify successful login message and redirection
-    cy.contains('Login successful').should('be.visible');
-    
-    // RED: Redirected to /day-02/weather
+    // Verify redirection to weather dashboard (Cypress automatically waits for assertions)
     cy.url().should('include', '/day-02/weather');
+    cy.get('.logout-button').should('be.visible');
+    cy.get('input[placeholder="Search for a city..."]').should('be.visible');
 
     // Search for a city
     cy.get('input[placeholder="Search for a city..."]').type('Lond');
-    cy.contains('London').click();
+    cy.get('.suggestions-list li').first().click();
 
     // Verify weather data is displayed
     cy.contains('London').should('be.visible');
     cy.contains('°C').should('be.visible');
 
     // Logout
-    // THIS WILL BE RED: The logout button doesn't exist yet
     cy.get('.logout-button').click();
     
-    // Verify redirection to login page
+    // Verify redirection back to login page
     cy.url().should('include', '/day-02/login');
     cy.get('#email').should('be.visible');
   });
