@@ -10,7 +10,7 @@ describe('Weather Component', () => {
   });
 
   const setup = () => {
-    localStorage.setItem('token', 'fake-token');
+    localStorage.setItem('token', JSON.stringify('fake-token'));
     return render(
       <Router initialEntries={['/day-02/weather']}>
         <Routes>

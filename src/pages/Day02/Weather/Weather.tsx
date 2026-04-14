@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import WeatherIllustration from './components/WeatherIllustration';
 import './Weather.css';
 
@@ -45,7 +46,7 @@ export const Weather: React.FC = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [localTime, setLocalTime] = useState<string>('');
 
-  const token = localStorage.getItem('token');
+  const [token] = useLocalStorage<string | null>('token', null);
 
   useEffect(() => {
     if (city.length < 3) {
