@@ -96,4 +96,71 @@ describe('Weather Component', () => {
     await new Promise((r) => setTimeout(r, 500));
     expect(screen.queryByRole('list')).not.toBeInTheDocument();
   });
+
+  it('should navigate suggestions with ArrowDown and ArrowUp', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const input = screen.getByPlaceholderText(/search for a city/i);
+    await user.type(input, 'London');
+
+    // Wait for suggestions to appear
+    await screen.findByRole('listbox', {}, { timeout: 3000 });
+    const suggestions = screen.getAllByRole('option');
+
+    // Initially none selected
+    expect(suggestions[0]).not.toHaveClass('active');
+
+    // ArrowDown should select first suggestion
+    await user.keyboard('{ArrowDown}');
+    expect(suggestions[0]).toHaveClass('active');
+    expect(input).toHaveAttribute('aria-activedescendant', suggestions[0].id);
+
+    // ArrowDown again should select second suggestion
+    await user.keyboard('{ArrowDown}');
+    expect(suggestions[1]).toHaveClass('active');
+    expect(input).toHaveAttribute('aria-activedescendant', suggestions[1].id);
+
+    // ArrowUp should go back to first suggestion
+    await user.keyboard('{ArrowUp}');
+    expect(suggestions[0]).toHaveClass('active');
+  });
+
+  it('should select suggestion with Enter key', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const input = screen.getByPlaceholderText(/search for a city/i);
+    await user.type(input, 'London');
+
+    // Wait for suggestions to appear
+    await screen.findByRole('listbox', {}, { timeout: 3000 });
+    const suggestions = screen.getAllByRole('option');
+
+    // Navigate to first suggestion and press Enter
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    // Weather should be displayed for the first suggestion
+    expect(await screen.findByRole('heading', { name: /london/i })).toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('should close suggestions with Escape key', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const input = screen.getByPlaceholderText(/search for a city/i);
+    await user.type(input, 'London');
+
+    // Wait for suggestions to appear
+    await screen.findByRole('listbox', {}, { timeout: 3000 });
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    // Press Escape
+    await user.keyboard('{Escape}');
+
+    // Suggestions should be closed
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
 });
