@@ -72,5 +72,14 @@ To simulate real API interactions without a backend, we use MSW.
 - **E2E Testing**: End-to-end verification of the full user journey using Cypress.
 - *Focus*: Custom hooks, debounced interactions, state persistence, MSW API simulation, and Cypress E2E testing.
 
+### Day 03: Semantic Audit & Accessibility
+- **Semantic Refactor**: Replaced generic "div soup" with semantic HTML5 elements (`<header>`, `<main>`, `<section>`, `<nav>`) to improve SEO and screen reader navigation.
+- **Accessibility (A11y)**:
+  - **Skip Link**: Implemented a "Skip to Content" link for keyboard users.
+  - **Keyboard Navigation**: Enhanced the Weather Search bar to be fully keyboard accessible (Arrow keys, Enter, Escape) following WCAG AA standards.
+  - **ARIA Compliance**: Added appropriate ARIA roles and attributes (combobox, listbox, activedescendant) to complex interactive components.
+  - **Scroll Management**: Implemented auto-scrolling for keyboard-navigated dropdowns to ensure the active item is always visible.
+- *Focus*: Web Content Accessibility Guidelines (WCAG), focus management, ARIA patterns, and semantic HTML structure.
+
 ---
 *Created with ❤️ by Harsha at Incubyte*
