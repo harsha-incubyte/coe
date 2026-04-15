@@ -75,6 +75,7 @@ describe('Weather Component', () => {
 
     expect(await screen.findByText(/city not found/i, {}, { timeout: 3000 })).toBeInTheDocument();
   });
+  
   it('should not show suggestions after a city is selected', async () => {
     const user = userEvent.setup();
     setup();
