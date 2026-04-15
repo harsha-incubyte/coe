@@ -78,13 +78,13 @@ export const Weather: React.FC = () => {
         setError(null);
         setSuggestions(data.results);
         setShowSuggestions(true);
-      } catch (err) {
+      } catch {
         setError('Error fetching suggestions');
       }
     }, 300);
 
     return () => clearTimeout(handler);
-  }, [city]);
+  }, [city, skipNextSuggestions]);
 
   useEffect(() => {
     if (!weather?.timezone) return;
@@ -129,7 +129,7 @@ export const Weather: React.FC = () => {
         weatherCode: weatherData.current_weather.weathercode,
         isDay: weatherData.current_weather.is_day === 1,
       });
-    } catch (err) {
+    } catch {
       setError('Error loading weather data');
     } finally {
       setLoading(false);

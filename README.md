@@ -63,10 +63,14 @@ To simulate real API interactions without a backend, we use MSW.
 - **Counter**: A simple state management component.
 - *Focus*: Vitest setup and `@testing-library/react` basics.
 
-### Day 02: Forms & Auth
-- **Login Form**: A validated form with MSW integration.
-- **Routing**: Navigation between different kata days.
-- *Focus*: User interaction testing (`userEvent`), form validation, and API mocking.
+### Day 02: Forms & Weather Dashboard
+- **Login Form**: A validated form with MSW integration and auto-redirect logic.
+- **Weather Dashboard**: A premium, data-rich weather interface featuring:
+  - Real-time location search with debouncing (300ms).
+  - Persistence of "Recent Searches" using local storage.
+- **Custom Hooks**: Implementation of `useLocalStorage` for state persistence across sessions.
+- **E2E Testing**: End-to-end verification of the full user journey using Cypress.
+- *Focus*: Custom hooks, debounced interactions, state persistence, MSW API simulation, and Cypress E2E testing.
 
 ---
 *Created with ❤️ by Harsha at Incubyte*

@@ -3,8 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import './LoginForm.css';
 
+interface LoginData {
+  email: string;
+  password: string;
+}
+
 interface LoginFormProps {
-  onLogin?: (data: any) => Promise<void>;
+  onLogin?: (data: LoginData) => Promise<void>;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -62,7 +67,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       setTimeout(() => {
         navigate('/day-02/weather');
       }, 500);
-    } catch (err) {
+    } catch {
       setError("Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!");
     } finally {
       setIsLoading(false);

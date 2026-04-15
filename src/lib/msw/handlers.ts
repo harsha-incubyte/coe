@@ -1,8 +1,13 @@
 import { http, HttpResponse, delay } from 'msw';
 
+interface LoginRequestBody {
+  email: string;
+  password: string;
+}
+
 export const authHandlers = [
   http.post('/api/login', async ({ request }) => {
-    const { email, password } = (await request.json()) as any;
+    const { email, password } = (await request.json()) as LoginRequestBody;
 
     if (email === 'harsha@incubyte.co' && password === 'password123') {
       return HttpResponse.json({
