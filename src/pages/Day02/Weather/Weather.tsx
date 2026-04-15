@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import WeatherIllustration from './components/WeatherIllustration';
@@ -44,20 +44,49 @@ export const Weather: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [localTime, setLocalTime] = useState<string>('');
-  const [skipNextSuggestions, setSkipNextSuggestions] = useState(false);
+  const skipNextSuggestionsRef = useRef(false);
 
   const [token, setToken] = useLocalStorage<string | null>('token', null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (skipNextSuggestions) {
-      setSkipNextSuggestions(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+        setActiveSuggestionIndex(-1);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (activeSuggestionIndex >= 0) {
+      const activeElement = document.getElementById(`suggestion-${suggestions[activeSuggestionIndex].id}`);
+      if (activeElement) {
+        activeElement.scrollIntoView({
+          block: 'nearest',
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [activeSuggestionIndex, suggestions]);
+
+  useEffect(() => {
+    if (skipNextSuggestionsRef.current) {
+      skipNextSuggestionsRef.current = false;
       return;
     }
 
     if (city.length < 3) {
       setSuggestions([]);
       setError(null);
+      setActiveSuggestionIndex(-1);
       return;
     }
 
@@ -78,13 +107,14 @@ export const Weather: React.FC = () => {
         setError(null);
         setSuggestions(data.results);
         setShowSuggestions(true);
+        setActiveSuggestionIndex(-1);
       } catch {
         setError('Error fetching suggestions');
       }
     }, 300);
 
     return () => clearTimeout(handler);
-  }, [city, skipNextSuggestions]);
+  }, [city]);
 
   useEffect(() => {
     if (!weather?.timezone) return;
@@ -105,9 +135,10 @@ export const Weather: React.FC = () => {
   }, [weather?.timezone]);
 
   const handleSelectSuggestion = async (suggestion: Suggestion) => {
-    setSkipNextSuggestions(true);
+    skipNextSuggestionsRef.current = true;
     setCity(suggestion.name);
     setShowSuggestions(false);
+    setActiveSuggestionIndex(-1);
     setLoading(true);
     setError(null);
     setWeather(null);
@@ -140,6 +171,31 @@ export const Weather: React.FC = () => {
     setToken(null);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!showSuggestions && suggestions.length > 0) {
+        setShowSuggestions(true);
+        setActiveSuggestionIndex(0);
+      } else {
+        setActiveSuggestionIndex((prev) => 
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveSuggestionIndex((prev) => (prev > -1 ? prev - 1 : -1));
+    } else if (e.key === 'Enter') {
+      if (activeSuggestionIndex >= 0 && suggestions[activeSuggestionIndex]) {
+        e.preventDefault();
+        handleSelectSuggestion(suggestions[activeSuggestionIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setActiveSuggestionIndex(-1);
+    }
+  };
+
   if (!token) {
     return <Navigate to="/day-02/login" replace />;
   }
@@ -153,7 +209,7 @@ export const Weather: React.FC = () => {
           </svg>
           <span>Logout</span>
         </button>
-        <div className="search-container">
+        <div className="search-container" ref={searchContainerRef}>
           <form className="search-form" onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
@@ -161,13 +217,35 @@ export const Weather: React.FC = () => {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               onFocus={() => city.length >= 3 && setShowSuggestions(true)}
+              onKeyDown={handleKeyDown}
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions && suggestions.length > 0}
+              aria-haspopup="listbox"
+              aria-controls="suggestions-listbox"
+              aria-activedescendant={
+                activeSuggestionIndex >= 0 
+                  ? `suggestion-${suggestions[activeSuggestionIndex].id}` 
+                  : undefined
+              }
             />
           </form>
 
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="suggestions-list">
-              {suggestions.map((s) => (
-                <li key={s.id} onClick={() => handleSelectSuggestion(s)}>
+            <ul 
+              id="suggestions-listbox"
+              className="suggestions-list"
+              role="listbox"
+            >
+              {suggestions.map((s, index) => (
+                <li 
+                  key={s.id} 
+                  id={`suggestion-${s.id}`}
+                  onClick={() => handleSelectSuggestion(s)}
+                  role="option"
+                  aria-selected={index === activeSuggestionIndex}
+                  className={index === activeSuggestionIndex ? 'active' : ''}
+                >
                   <span className="suggestion-name">{s.name}</span>
                   <span className="suggestion-meta">{s.admin1 ? `${s.admin1}, ` : ''}{s.country}</span>
                 </li>

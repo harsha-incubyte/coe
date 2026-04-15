@@ -95,7 +95,8 @@
   transition: background 0.2s;
 }
 
-.suggestions-list li:hover {
+.suggestions-list li:hover,
+.suggestions-list li.active {
   background: rgba(255, 255, 255, 0.05);
 }
 
