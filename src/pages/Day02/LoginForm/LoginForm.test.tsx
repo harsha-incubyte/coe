@@ -28,7 +28,7 @@ describe('LoginForm', () => {
   });
 
   it('should render email and password inputs and a login button', () => {
-    renderWithRouter(<LoginForm onLogin={async () => {}} />);
+    renderWithRouter(<LoginForm onLogin={async () => {}} redirectPath="/day-02/weather" />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('LoginForm', () => {
   it('should show error when email format is invalid', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
@@ -57,7 +57,7 @@ describe('LoginForm', () => {
   it('should show error when password is too short', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -76,7 +76,7 @@ describe('LoginForm', () => {
   it('should call onLogin with valid credentials', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -95,7 +95,7 @@ describe('LoginForm', () => {
 
   it('should show success message on successful login', async () => {
     const user = userEvent.setup();
-    renderWithRouter(<LoginForm onLogin={async () => {}} />);
+    renderWithRouter(<LoginForm onLogin={async () => {}} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -117,7 +117,7 @@ describe('LoginForm', () => {
       resolveLogin = resolve;
     });
     
-    renderWithRouter(<LoginForm onLogin={() => loginPromise} />);
+    renderWithRouter(<LoginForm onLogin={() => loginPromise} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -139,7 +139,7 @@ describe('LoginForm', () => {
   it('should show error message when login fails with invalid credentials', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn().mockRejectedValue(new Error('Unauthorized'));
-    renderWithRouter(<LoginForm onLogin={onLogin} />);
+    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -157,7 +157,7 @@ describe('LoginForm', () => {
 
   it('should login successfully using integrated API (MSW)', async () => {
     const user = userEvent.setup();
-    renderWithRouter(<LoginForm />); // No onLogin prop
+    renderWithRouter(<LoginForm redirectPath="/day-02/weather" />); // No onLogin prop
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -175,7 +175,7 @@ describe('LoginForm', () => {
     render(
       <Router initialEntries={['/day-02/login']}>
         <Routes>
-          <Route path="/day-02/login" element={<LoginForm />} />
+          <Route path="/day-02/login" element={<LoginForm redirectPath="/day-02/weather" />} />
           <Route path="/day-02/weather" element={<div>Weather Page</div>} />
         </Routes>
       </Router>
@@ -194,7 +194,7 @@ describe('LoginForm', () => {
 
   it('should store authentication token in localStorage on successful login', async () => {
     const user = userEvent.setup();
-    renderWithRouter(<LoginForm />);
+    renderWithRouter(<LoginForm redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -214,7 +214,7 @@ describe('LoginForm', () => {
     render(
       <Router initialEntries={['/day-02/login']}>
         <Routes>
-          <Route path="/day-02/login" element={<LoginForm />} />
+          <Route path="/day-02/login" element={<LoginForm redirectPath="/day-02/weather" />} />
           <Route path="/day-02/weather" element={<div>Weather Dashboard</div>} />
         </Routes>
       </Router>

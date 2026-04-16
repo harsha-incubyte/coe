@@ -11,13 +11,13 @@ interface LoginData {
 
 interface LoginFormProps {
   onLogin?: (data: LoginData) => Promise<void>;
-  /** Path to redirect to after successful login. Defaults to '/day-02/weather'. */
-  redirectPath?: string;
+  /** Path to redirect to after successful login. */
+  redirectPath: string;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ 
   onLogin, 
-  redirectPath = '/day-02/weather' 
+  redirectPath
 }) => {
   const navigate = useNavigate();
   const [token, setToken] = useLocalStorage<string | null>('token', null);

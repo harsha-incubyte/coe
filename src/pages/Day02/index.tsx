@@ -7,8 +7,8 @@ const Day02 = () => {
     <div>
       <h1>Weather | Authentication | API Integration</h1>
       <Routes>
-        <Route path="/" element={<LoginForm />} />
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/" element={<LoginForm redirectPath="/day-02/weather" />} />
+        <Route path="/login" element={<LoginForm redirectPath="/day-02/weather" />} />
         <Route path="/weather" element={<Weather />} />
       </Routes>
     </div>
