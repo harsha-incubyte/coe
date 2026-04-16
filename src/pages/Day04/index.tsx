@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AccessibleModal from './AccessibleModal/AccessibleModal';
+import Modal from '@/components/Modal/Modal';
 import './Day04.css';
 
 const Day04: React.FC = () => {
@@ -22,7 +22,7 @@ const Day04: React.FC = () => {
           Open Accessible Modal
         </button>
 
-        <AccessibleModal 
+        <Modal 
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
           title="Day 04 KATA Modal"
@@ -35,6 +35,7 @@ const Day04: React.FC = () => {
               <li><strong>Initial Focus:</strong> Focus is automatically set to the first interactive element.</li>
               <li><strong>Focus Restoration:</strong> Closing the modal returns focus to the trigger button.</li>
               <li><strong>ARIA Attributes:</strong> Proper role, aria-modal, and aria-labelledby.</li>
+              <li><strong>Smooth Motion:</strong> Framer Motion for professional entrance/exit animations.</li>
             </ul>
             
             <form onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
@@ -48,7 +49,7 @@ const Day04: React.FC = () => {
               </div>
             </form>
           </div>
-        </AccessibleModal>
+        </Modal>
       </section>
 
       <section className="exercise-section">
