@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
 import { axe } from 'jest-axe';
 import Modal from './Modal';
@@ -59,5 +59,27 @@ describe('Modal Component', () => {
     const { container } = render(<Modal {...defaultProps} isOpen={false} />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it('traps focus correctly and wraps around', async () => {
+    render(
+      <Modal {...defaultProps}>
+        <input data-testid="first" />
+        <button data-testid="last">Last</button>
+      </Modal>
+    );
+
+    const closeButton = screen.getByLabelText('Close modal');
+    const lastButton = screen.getByTestId('last');
+
+    // Wrap from last to first
+    lastButton.focus();
+    fireEvent.keyDown(window, { key: 'Tab' });
+    await waitFor(() => expect(document.activeElement).toBe(closeButton));
+
+    // Wrap from first to last
+    closeButton.focus();
+    fireEvent.keyDown(window, { key: 'Tab', shiftKey: true });
+    await waitFor(() => expect(document.activeElement).toBe(lastButton));
   });
 });
