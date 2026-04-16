@@ -56,8 +56,8 @@ describe('ArticleCardGood', () => {
     // Header should exist
     expect(container.querySelector('header')).toBeInTheDocument();
 
-    // Title should be an h3
-    const title = screen.getByRole('heading', { level: 3 });
+    // Title should be an h2
+    const title = screen.getByRole('heading', { level: 2 });
     expect(title).toHaveTextContent(/Good Article/i);
 
     // Date should be in a <time> tag
