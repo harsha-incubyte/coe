@@ -1,7 +1,7 @@
 import { render, screen, act, waitForElementToBeRemoved } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ToastContainer from './ToastContainer';
-import { useToast, SHOW_TOAST_EVENT } from '../../hooks/useToast';
+import { useToast, SHOW_TOAST_EVENT } from '@/hooks/useToast';
 
 describe('Toast System', () => {
   it('renders a toast when the custom event is dispatched via hook', async () => {

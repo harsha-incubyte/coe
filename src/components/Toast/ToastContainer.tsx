@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ToastData, SHOW_TOAST_EVENT } from '../../hooks/useToast';
+import type { ToastData } from '@/hooks/useToast';
+import { SHOW_TOAST_EVENT } from '@/hooks/useToast';
 import './Toast.css';
 
 const ToastContainer: React.FC = () => {
