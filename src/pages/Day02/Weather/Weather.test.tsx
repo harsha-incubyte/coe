@@ -3,10 +3,19 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Weather } from './Weather';
+import { vitest } from 'vitest';
+
+const mockShowToast = vitest.fn();
+vitest.mock('@/hooks/useToast', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
 
 describe('Weather Component', () => {
   beforeEach(() => {
     localStorage.clear();
+    mockShowToast.mockClear();
   });
 
   const setup = () => {
@@ -161,5 +170,16 @@ describe('Weather Component', () => {
 
     // Suggestions should be closed
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('should show toast notification on logout', async () => {
+    const user = userEvent.setup();
+    setup();
+
+    const logoutButton = screen.getByRole('button', { name: /logout/i });
+    await user.click(logoutButton);
+
+    expect(mockShowToast).toHaveBeenCalledWith('You have been logged out successfully.', 'info');
+    expect(screen.getByText(/login page/i)).toBeInTheDocument();
   });
 });
