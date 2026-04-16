@@ -4,6 +4,7 @@ import Day01 from '@/pages/Day01'
 import Day02 from '@/pages/Day02'
 import Day03 from '@/pages/Day03'
 import Day04 from '@/pages/Day04'
+import ToastContainer from '@/components/Toast/ToastContainer'
 import '@/App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/day-04" element={<Day04 />} />
         </Routes>
       </MainLayout>
+      <ToastContainer />
     </Router>
   )
 }
