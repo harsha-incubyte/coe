@@ -68,7 +68,7 @@ export const Weather: React.FC = () => {
   useEffect(() => {
     if (activeSuggestionIndex >= 0) {
       const activeElement = document.getElementById(`suggestion-${suggestions[activeSuggestionIndex].id}`);
-      if (activeElement) {
+      if (activeElement && typeof activeElement.scrollIntoView === 'function') {
         activeElement.scrollIntoView({
           block: 'nearest',
           behavior: 'smooth'

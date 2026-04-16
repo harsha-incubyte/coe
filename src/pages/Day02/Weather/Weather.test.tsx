@@ -47,8 +47,8 @@ describe('Weather Component', () => {
     const input = screen.getByPlaceholderText(/search for a city/i);
     await user.type(input, 'London');
 
-    const suggestion = await screen.findByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
-    expect(suggestion).toBeInTheDocument();
+    const suggestions = await screen.findAllByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
+    expect(suggestions.length).toBeGreaterThan(0);
   });
 
   it('should fetch and display weather data after selecting a suggestion', async () => {

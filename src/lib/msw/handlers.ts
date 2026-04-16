@@ -37,6 +37,15 @@ export const weatherHandlers = [
             timezone: 'Europe/London', 
             country: 'United Kingdom', 
             admin1: 'England' 
+          },
+          { 
+            id: 10, 
+            name: 'London', 
+            latitude: 42.9834, 
+            longitude: -81.233, 
+            timezone: 'America/Toronto', 
+            country: 'Canada', 
+            admin1: 'Ontario' 
           }
         ],
       });
