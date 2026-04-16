@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
+import { axe } from 'jest-axe';
 import Modal from './Modal';
 
 describe('Modal Component', () => {
@@ -46,5 +47,17 @@ describe('Modal Component', () => {
     const modal = screen.getByRole('dialog');
     expect(modal).toHaveAttribute('aria-modal', 'true');
     expect(modal).toHaveAttribute('aria-labelledby');
+  });
+
+  it('should have no accessibility violations when open', async () => {
+    const { container } = render(<Modal {...defaultProps} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('should have no accessibility violations when closed', async () => {
+    const { container } = render(<Modal {...defaultProps} isOpen={false} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });
