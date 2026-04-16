@@ -57,22 +57,22 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           if (e.shiftKey) { // Shift + Tab
             if (firstElement.contains(document.activeElement)) {
               e.preventDefault();
-              lastElement.focus();
+              setTimeout(() => lastElement.focus(), 0);
             }
           } else { // Tab
             if (lastElement.contains(document.activeElement)) {
               e.preventDefault();
-              firstElement.focus();
+              setTimeout(() => firstElement.focus(), 0);
             }
           }
         }
       };
 
-      document.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keydown', handleKeyDown);
 
       return () => {
         clearTimeout(timer);
-        document.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [isOpen, onClose]);
