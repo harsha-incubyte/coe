@@ -1,85 +1,154 @@
 import React, { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
+import Button from '@/components/Button/Button';
+import Input from '@/components/Form/Input';
+import { useToast } from '@/hooks/useToast';
 import './Day04.css';
 
 const Day04: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showToast } = useToast();
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsModalOpen(false);
+      showToast('Action completed successfully!', 'success');
+    }, 1500);
+  };
 
   return (
     <div className="day-04-container">
-      <h1>ARIA Patterns & Accessible React Components</h1>
+      <header className="day-04-header">
+        <h1>ARIA Patterns & Reusable Components</h1>
+        <p className="subtitle">Building the atomic foundation for professional, accessible web applications.</p>
+      </header>
       
-      <section className="exercise-section">
-        <h2>KATA: The Decoupled Accessible Modal</h2>
-        <p>Goal: Build a custom modal that traps focus and manages its own lifecycle without tightly coupling to the parent component.</p>
-        
-        <button 
-          className="btn-primary" 
-          onClick={() => setIsModalOpen(true)}
-          aria-haspopup="dialog"
-        >
-          Open Accessible Modal
-        </button>
+      <div className="playground-grid">
+        <section className="exercise-section card-glass">
+          <div className="card-header">
+            <span className="badge">KATA 01</span>
+            <h2>The Decoupled Accessible Modal</h2>
+          </div>
+          <p>A headless modal implementation with focus trapping, Escape handling, and smooth Framer Motion animations.</p>
+          
+          <Button 
+            variant="primary" 
+            onClick={() => setIsModalOpen(true)}
+            aria-haspopup="dialog"
+            size="lg"
+          >
+            Launch Modal Experience
+          </Button>
 
-        <Modal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          title="Day 04 KATA Modal"
-        >
-          <div className="modal-demo-content">
-            <p>This modal implements the following accessibility features:</p>
-            <ul>
-              <li><strong>Focus Trap:</strong> You can't tab out of this modal.</li>
-              <li><strong>Escape Hatch:</strong> Pressing 'Esc' closes the modal.</li>
-              <li><strong>Initial Focus:</strong> Focus is automatically set to the first interactive element.</li>
-              <li><strong>Focus Restoration:</strong> Closing the modal returns focus to the trigger button.</li>
-              <li><strong>ARIA Attributes:</strong> Proper role, aria-modal, and aria-labelledby.</li>
-              <li><strong>Smooth Motion:</strong> Framer Motion for professional entrance/exit animations.</li>
-            </ul>
-            
-            <form onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label htmlFor="modal-input" style={{ display: 'block', marginBottom: '0.5rem' }}>Sample Input:</label>
-                <input id="modal-input" type="text" placeholder="Type something..." className="modal-input" style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
-              </div>
+          <Modal 
+            isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)} 
+            title="Premium Modal Experience"
+          >
+            <form onSubmit={handleFormSubmit} className="modal-form">
+              <p style={{ marginBottom: '1.5rem' }}>
+                This modal component is now globally available in <code>@/components/Modal</code>.
+              </p>
+              
+              <Input 
+                label="Full Name" 
+                placeholder="e.g. John Doe" 
+                required 
+                fullWidth 
+              />
+              
+              <Input 
+                label="Environment" 
+                placeholder="e.g. Production" 
+                helperText="This helps us tag your request correctly."
+                fullWidth 
+              />
+              
               <div className="modal-actions">
-                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Submit Action</button>
+                <Button variant="ghost" type="button" onClick={() => setIsModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="primary" type="submit" isLoading={isSubmitting}>
+                  Confirm Changes
+                </Button>
               </div>
             </form>
-          </div>
-        </Modal>
-      </section>
+          </Modal>
+        </section>
 
-      <section className="exercise-section">
-        <h2>Exercise: ARIA Live Regions</h2>
-        <p>ARIA live regions allow you to announce dynamic changes to screen reader users without moving their focus.</p>
-        
-        <div className="live-region-demo">
-          <button 
-            className="btn-secondary" 
-            onClick={() => {
-              const msg = `Last updated at ${new Date().toLocaleTimeString()}`;
-              setAnnouncement(msg);
-            }}
-          >
-            Trigger Announcement
-          </button>
+        <section className="exercise-section card-glass">
+          <div className="card-header">
+            <span className="badge">KATA 02</span>
+            <h2>Global Announcement Hub</h2>
+          </div>
+          <p>Compare how different ARIA live intensities affect screen reader announcements.</p>
           
-          <div 
-            aria-live="polite" 
-            className="announcement-box"
-            style={{ 
-              marginTop: '1rem', 
-              padding: '1rem', 
-              background: '#f8fafc', 
-              borderRadius: '8px',
-              border: '1px dashed #cbd5e1',
-              minHeight: '3rem'
-            }}
-          >
-            {announcement}
+          <div className="live-region-playground">
+            <div className="button-group-vertical">
+              <Button 
+                variant="secondary" 
+                onClick={() => {
+                  const msg = `Success: Data synced at ${new Date().toLocaleTimeString()}`;
+                  setAnnouncement(msg);
+                  showToast(msg, 'success');
+                }}
+                fullWidth
+              >
+                Trigger Polite Announcement
+              </Button>
+              
+              <Button 
+                variant="danger" 
+                onClick={() => {
+                  const msg = `CRITICAL: Connection lost at ${new Date().toLocaleTimeString()}!`;
+                  setAnnouncement(msg);
+                  showToast(msg, 'error');
+                }}
+                fullWidth
+              >
+                Trigger Assertive Announcement
+              </Button>
+            </div>
+            
+            <div className="live-output">
+              <label>ARIA Live Output:</label>
+              <div 
+                aria-live="polite" 
+                className="announcement-box"
+              >
+                {announcement || <span style={{ opacity: 0.3 }}>Waiting for interaction...</span>}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section className="exercise-section card-glass">
+        <div className="card-header">
+          <span className="badge">Preview</span>
+          <h2>Atomic Library Gallery</h2>
+        </div>
+        <div className="gallery-grid">
+          <div className="gallery-item">
+            <h3>Button Variants</h3>
+            <div className="gallery-flex">
+              <Button variant="primary">Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="danger">Danger</Button>
+            </div>
+          </div>
+          <div className="gallery-item">
+            <h3>Loading States</h3>
+            <div className="gallery-flex">
+              <Button isLoading>Loading</Button>
+              <Button variant="secondary" isLoading>Loading</Button>
+            </div>
           </div>
         </div>
       </section>
