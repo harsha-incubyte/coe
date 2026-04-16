@@ -27,7 +27,7 @@ const Day03: React.FC = () => {
   return (
     <div className="day-03-page">
       <section className="demo-header">
-        <h1>Day 03: Semantic Audit & Accessibility</h1>
+        <h1>Semantic Audit & Accessibility</h1>
         <p className="description">
           Toggle between <strong>Semantic HTML</strong> and <strong>Div Soup</strong> to see how 
           the underlying structure changes while maintaining a similar visual identity.
