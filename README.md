@@ -43,18 +43,15 @@ src/
 
 ## 🧪 Testing Strategy (TDD)
 
-We follow the **Red-Green-Refactor** cycle:
-1. 🔴 **Red**: Write a failing test that defines the desired behavior.
-2. 🟢 **Green**: Write the minimum code necessary to pass the test.
-3. ♻️ **Refactor**: Improve the code while ensuring tests stay green.
+We follow a strict **Red-Green-Refactor** cycle using standardized commit markers (🔴, 🟢, ♻️, ⚙️). Our testing stack includes:
 
-### Mock Service Worker (MSW)
-To simulate real API interactions without a backend, we use MSW.
-- **Handlers**: Located in `src/lib/msw/handlers.ts`
-- **Browser Usage**: The worker is initialized in `main.tsx` during development.
-- **Credentials for Day 02 Login**:
-  - Email: `harsha@incubyte.co`
-  - Password: `password123`
+- **Unit Testing (Vitest + React Testing Library)**: For isolated component logic and DOM state verification.
+- **End-to-End Testing (Cypress)**: For verifying critical user journeys (e.g., Auth flow, Weather search).
+- **API Mocking (Mock Service Worker)**: To intercept and mock network requests in both unit and E2E environments.
+- **Automated Accessibility Auditing**:
+  - **`jest-axe`**: Integrated into component unit tests to catch structural A11y issues early.
+  - **`cypress-axe`**: Dynamic E2E auditing to catch regressions during interaction (e.g., expanded dropdowns).
+- **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
 
 ## 📅 Daily Progress
 
@@ -65,25 +62,30 @@ To simulate real API interactions without a backend, we use MSW.
 
 ### Day 02: Forms & Weather Dashboard
 - **Login Form**: A validated form with MSW integration and auto-redirect logic.
-- **Weather Dashboard**: A premium, data-rich weather interface featuring:
-  - Real-time location search with debouncing (300ms).
-  - Persistence of "Recent Searches" using local storage.
-- **Custom Hooks**: Implementation of `useLocalStorage` for state persistence across sessions.
-- **E2E Testing**: End-to-end verification of the full user journey using Cypress.
-- *Focus*: Custom hooks, debounced interactions, state persistence, MSW API simulation, and Cypress E2E testing.
+- **Weather Dashboard**: A premium interface featuring debounced search (300ms) and local storage persistence.
+- *Focus*: Custom hooks, MSW API simulation, and Cypress E2E testing.
 
 ### Day 03: Semantic Audit & Accessibility
-- **Semantic Refactor**: Replaced generic "div soup" with semantic HTML5 elements (`<header>`, `<main>`, `<section>`, `<nav>`) to improve SEO and screen reader navigation.
-- **Accessibility (A11y)**:
-  - **Skip Link**: Implemented a "Skip to Content" link for keyboard users.
-  - **Keyboard Navigation**: Enhanced the Weather Search bar to be fully keyboard accessible (Arrow keys, Enter, Escape) following WCAG AA standards.
-  - **ARIA Compliance**: Added appropriate ARIA roles and attributes (combobox, listbox, activedescendant) to complex interactive components.
-  - **Scroll Management**: Implemented auto-scrolling for keyboard-navigated dropdowns to ensure the active item is always visible.
-- *Focus*: Web Content Accessibility Guidelines (WCAG), focus management, ARIA patterns, and semantic HTML structure.
+- **Semantic Refactor**: Replaced generic "div soup" with semantic HTML5 elements.
+- **A11y Enhancements**: Implemented "Skip to Content" links and fully keyboard-accessible search bars (WCAG AA).
+- *Focus*: Focus management, ARIA patterns, and semantic document structure.
+
+### Day 04: ARIA Patterns & Reusable Components
+- **Accessible Modal**: A decoupled, headless modal with focus trapping, focus restoration, and Escape key handling.
+- **ARIA Live Regions**: Implementation of a global announcement hub to compare `polite` vs `assertive` live intensities.
+- **Polymorphic Components**: Building reusable, type-safe atomic components (Button, Input).
+- *Focus*: Focus trapping, focus restoration, ARIA dialog patterns, and live region announcements.
+
+### Day 05: Automation & UI Sanity
+- **Automated A11y**: Integration of `jest-axe` for unit tests and `cypress-axe` for dynamic E2E flow verification.
+- **Touch Targets**: Standardized all interactive elements (buttons, links, triggers) to a minimum **44x44px** hit area.
+- **Contrast Polish**: Optimized color contrast for all critical UI elements (errors, primary actions) to ensure passing WCAG 4.5:1 ratio on dark backgrounds.
+- *Focus*: Automated accessibility auditing, mobile ergonomics, and WCAG compliance.
 
 ## 📝 TODOs
 
-- [ ] **Theming & Color Consistency**: Remove all hardcoded color values from styling files and centralize them into a theme file (e.g., CSS variables or a dedicated theme constant). Establish a standard usage pattern across all components to ensure brand consistency and easier maintenance.
+- [ ] **Internationalization (i18n)**: Implement support for multiple languages using a framework like `react-i18next`. Ensure all static text, date formats, and accessibility labels are localized.
+- [ ] **Shared Theme System**: Standardize all color tokens and spacing into a centralized CSS variable system to remove ad-hoc styling.
 
 ---
 *Created with ❤️ by Harsha at Incubyte*
