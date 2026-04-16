@@ -18,16 +18,16 @@ describe('withAuth HOC', () => {
     localStorage.clear();
   });
 
-  it('should render fallback Login UI if not authenticated', () => {
+  it('should render fallback Login UI with dynamic redirectPath if not authenticated', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/secure-page']}>
         <ProtectedComponent title="My Dashboard" />
       </MemoryRouter>
     );
 
     expect(screen.getByText(/Authentication Required/i)).toBeInTheDocument();
     expect(screen.getByTestId('mock-login-form')).toBeInTheDocument();
-    expect(screen.getByText(/Login Form for \/day-06/i)).toBeInTheDocument();
+    expect(screen.getByText(/Login Form for \/secure-page/i)).toBeInTheDocument();
     expect(screen.queryByText(/Protected: My Dashboard/i)).not.toBeInTheDocument();
   });
 

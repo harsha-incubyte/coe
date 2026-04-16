@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import { useLocation } from 'react-router-dom';
 import { LoginForm } from '@/pages/Day02/LoginForm/LoginForm';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 
@@ -10,15 +11,17 @@ import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
   const AuthenticatedComponent = (props: P) => {
     const [token] = useLocalStorage<string | null>('token', null);
+    const location = useLocation();
 
     if (!token) {
       // Fallback UI when not authenticated
       // Re-using Day 02 LoginForm as the LoginPrompt
+      // Dynamically redirect user back to where they were trying to go
       return (
         <div className="auth-guard-container" style={{ padding: '2rem', textAlign: 'center' }}>
           <h2>Authentication Required</h2>
           <p>Please sign in to access this secure area.</p>
-          <LoginForm redirectPath="/day-06" />
+          <LoginForm redirectPath={location.pathname} />
         </div>
       );
     }
