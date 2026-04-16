@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
+import { useToast } from '@/hooks/useToast';
 import WeatherIllustration from './components/WeatherIllustration';
 import './Weather.css';
 
@@ -50,6 +51,7 @@ export const Weather: React.FC = () => {
 
   const [token, setToken] = useLocalStorage<string | null>('token', null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -169,6 +171,7 @@ export const Weather: React.FC = () => {
 
   const handleLogout = () => {
     setToken(null);
+    showToast('You have been logged out successfully.', 'info');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
+import { useToast } from '@/hooks/useToast';
 import './LoginForm.css';
 
 interface LoginData {
@@ -21,6 +22,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     if (token) {
       navigate('/day-02/weather');
@@ -37,11 +40,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     
     if (!validateEmail(email)) {
       setError('Invalid email format');
+      showToast('Invalid email format', 'error');
       return;
     }
 
     if (!validatePassword(password)) {
       setError('Password must be at least 8 characters');
+      showToast('Password must be at least 8 characters', 'error');
       return;
     }
 
@@ -64,11 +69,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         setToken(data.token);
       }
       setSuccess('Login successful');
+      showToast('Welcome back! You have successfully logged in.', 'success');
       setTimeout(() => {
         navigate('/day-02/weather');
       }, 500);
     } catch {
-      setError("Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!");
+      const errorMessage = "Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!";
+      setError(errorMessage);
+      showToast('Login failed. Please check your credentials.', 'error');
     } finally {
       setIsLoading(false);
     }
