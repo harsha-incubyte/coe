@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Modal.css';
@@ -13,7 +13,8 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const titleId = `modal-title-${Math.random().toString(36).substring(2, 9)}`;
+  const generatedId = useId();
+  const titleId = `modal-title-${generatedId}`;
 
   useEffect(() => {
     if (isOpen) {

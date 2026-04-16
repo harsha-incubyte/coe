@@ -135,7 +135,6 @@ describe('Weather Component', () => {
 
     // Wait for suggestions to appear
     await screen.findByRole('listbox', {}, { timeout: 3000 });
-    const suggestions = screen.getAllByRole('option');
 
     // Navigate to first suggestion and press Enter
     await user.keyboard('{ArrowDown}');

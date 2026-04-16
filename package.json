@@ -11,7 +11,8 @@
     "msw-init": "msw init public/ --save",
     "preview": "vite preview",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "test:all": "npm run lint && npm run test -- --run && npm run cy:run"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",

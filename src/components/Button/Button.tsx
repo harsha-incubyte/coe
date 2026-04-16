@@ -40,7 +40,7 @@ const Button = <T extends ElementType = 'button'>({
   return (
     <Component
       className={classNames}
-      disabled={isLoading || (props as any).disabled}
+      disabled={isLoading || (props as ComponentPropsWithoutRef<'button'>).disabled}
       aria-busy={isLoading}
       aria-live={isLoading ? 'polite' : undefined}
       {...props}

@@ -1,5 +1,5 @@
 import { render, screen, act, waitForElementToBeRemoved } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import ToastContainer from './ToastContainer';
 import { useToast, SHOW_TOAST_EVENT } from '@/hooks/useToast';
 

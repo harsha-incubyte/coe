@@ -8,8 +8,12 @@ import './Toast.css';
 const ToastContainer: React.FC = () => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
+
   useEffect(() => {
-    const handleShowToast = (event: any) => {
+    const handleShowToast = (event: CustomEvent<ToastData>) => {
       const newToast: ToastData = event.detail;
       setToasts((prev) => [...prev, newToast]);
 
@@ -20,13 +24,9 @@ const ToastContainer: React.FC = () => {
       }
     };
 
-    window.addEventListener(SHOW_TOAST_EVENT, handleShowToast);
-    return () => window.removeEventListener(SHOW_TOAST_EVENT, handleShowToast);
+    window.addEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
+    return () => window.removeEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
   }, []);
-
-  const removeToast = (id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
 
   return createPortal(
     <div 
