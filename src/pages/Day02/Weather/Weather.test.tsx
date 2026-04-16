@@ -83,8 +83,8 @@ describe('Weather Component', () => {
     const input = screen.getByPlaceholderText(/search for a city/i);
     await user.type(input, 'Lond');
 
-    const suggestion = await screen.findByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
-    await user.click(suggestion);
+    const suggestions = await screen.findAllByText(/London/i, { selector: '.suggestion-name' }, { timeout: 3000 });
+    await user.click(suggestions[0]);
 
     // Weather should be displayed
     expect(await screen.findByRole('heading', { name: /london/i })).toBeInTheDocument();

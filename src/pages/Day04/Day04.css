@@ -1,0 +1,31 @@
+.day-04-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.day-04-container h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  /* Using global h1 color from index.css */
+}
+
+.exercise-section {
+  background: var(--code-bg, #1f2028);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border, #2e303a);
+}
+
+.exercise-section h2 {
+  margin-top: 0;
+  color: var(--accent, #c084fc);
+  font-size: 1.5rem;
+}
+
+.exercise-section p {
+  color: var(--text, #9ca3af);
+  margin-bottom: 2rem;
+}
