@@ -8,7 +8,7 @@ describe('Day 04: ARIA Patterns & Accessible Components', () => {
   describe('Accessible Modal KATA', () => {
     it('traps focus inside the modal and wraps around', () => {
       // Open the modal
-      cy.get('button').contains('Launch Modal Experience').click();
+      cy.contains('button', 'Launch Modal Experience').click();
       
       // Modal should be visible
       cy.get('[role="dialog"]').should('be.visible');
@@ -36,11 +36,11 @@ describe('Day 04: ARIA Patterns & Accessible Components', () => {
 
       // Shift + Tab from first element (Close button) should wrap to last element (Confirm button)
       cy.get('button[aria-label="Close modal"]').focus().tab({ shift: true });
-      cy.get('button').contains('Confirm Changes').should('be.focused');
+      cy.contains('button', 'Confirm Changes').should('be.focused');
     });
 
     it('restores focus to the trigger button on close', () => {
-      cy.get('button').contains('Launch Modal Experience').as('trigger');
+      cy.contains('button', 'Launch Modal Experience').as('trigger');
       cy.get('@trigger').click();
       
       cy.wait(500);
@@ -57,7 +57,7 @@ describe('Day 04: ARIA Patterns & Accessible Components', () => {
     });
 
     it('closes on Escape key', () => {
-      cy.get('button').contains('Launch Modal Experience').click();
+      cy.contains('button', 'Launch Modal Experience').click();
       cy.wait(300);
       cy.get('[role="dialog"]').should('be.visible');
       

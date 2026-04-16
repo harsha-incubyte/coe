@@ -55,12 +55,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           const lastElement = focusableElements[focusableElements.length - 1];
 
           if (e.shiftKey) { // Shift + Tab
-            if (document.activeElement === firstElement) {
+            if (firstElement.contains(document.activeElement)) {
               e.preventDefault();
               lastElement.focus();
             }
           } else { // Tab
-            if (document.activeElement === lastElement) {
+            if (lastElement.contains(document.activeElement)) {
               e.preventDefault();
               firstElement.focus();
             }
@@ -117,6 +117,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
               <div className="modal-header">
                 <h2 id={titleId}>{title}</h2>
                 <button 
+                  type="button"
                   className="close-button" 
                   onClick={onClose} 
                   aria-label="Close modal"

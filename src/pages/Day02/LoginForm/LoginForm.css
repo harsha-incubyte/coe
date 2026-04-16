@@ -77,7 +77,7 @@
 .message-error {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  color: #ff6b6b;
 }
 
 .message-success {

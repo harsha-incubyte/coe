@@ -62,7 +62,7 @@
 
 .input-error {
   font-size: 0.8125rem;
-  color: #ef4444;
+  color: #ff6b6b; /* Brighter red for accessibility contrast (>4.5:1) */
   margin: 0;
   font-weight: 600;
   padding-left: 0.25rem;
