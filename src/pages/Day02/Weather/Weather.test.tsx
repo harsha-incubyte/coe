@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Weather } from './Weather';
+import { Weather } from './Weather'; // Named import for raw component
+import { withAuth } from '@/components/withAuth/withAuth';
 import { vitest } from 'vitest';
 
 const mockShowToast = vitest.fn();
@@ -13,6 +14,8 @@ vitest.mock('@/hooks/useToast', () => ({
 }));
 
 describe('Weather Component', () => {
+  const ProtectedWeather = withAuth(Weather);
+
   beforeEach(() => {
     localStorage.clear();
     mockShowToast.mockClear();
@@ -20,31 +23,30 @@ describe('Weather Component', () => {
 
   const setup = () => {
     localStorage.setItem('token', JSON.stringify('fake-token'));
+    // We test the ProtectedWeather to ensure HOC works with it
     return render(
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
-          <Route path="/day-02/weather" element={<Weather />} />
-          <Route path="/day-02/login" element={<div>Login Page</div>} />
+          <Route path="/day-02/weather" element={<ProtectedWeather />} />
         </Routes>
       </Router>
     );
   };
 
-  it('should redirect to login if no token is present in localStorage', () => {
+  it('should show authentication required if no token is present', () => {
     localStorage.clear();
     render(
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
-          <Route path="/day-02/weather" element={<Weather />} />
-          <Route path="/day-02/login" element={<div>Login Page</div>} />
+          <Route path="/day-02/weather" element={<ProtectedWeather />} />
         </Routes>
       </Router>
     );
 
-    expect(screen.getByText(/login page/i)).toBeInTheDocument();
+    expect(screen.getByText(/Authentication Required/i)).toBeInTheDocument();
   });
 
-  it('should render search input', () => {
+  it('should render search input when authenticated', () => {
     setup();
     expect(screen.getByPlaceholderText(/search for a city/i)).toBeInTheDocument();
   });
@@ -172,7 +174,7 @@ describe('Weather Component', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('should show toast notification on logout', async () => {
+  it('should show toast notification on logout and fallback to login prompt', async () => {
     const user = userEvent.setup();
     setup();
 
@@ -180,6 +182,6 @@ describe('Weather Component', () => {
     await user.click(logoutButton);
 
     expect(mockShowToast).toHaveBeenCalledWith('You have been logged out successfully.', 'info');
-    expect(screen.getByText(/login page/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Authentication Required/i)).toBeInTheDocument();
   });
 });

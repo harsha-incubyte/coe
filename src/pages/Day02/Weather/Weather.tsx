@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import { useToast } from '@/hooks/useToast';
 import WeatherIllustration from './components/WeatherIllustration';
+import { mapWeatherCode } from './WeatherUtils';
 import './Weather.css';
 
 interface WeatherData {
@@ -28,17 +28,8 @@ interface Suggestion {
   elevation: number;
 }
 
-const mapWeatherCode = (code: number) => {
-  const codes: Record<number, string> = {
-    0: 'Clear sky',
-    1: 'Mainly clear',
-    2: 'Partly cloudy',
-    3: 'Overcast',
-  };
-  return codes[code] || 'Cloudy';
-};
-
 export const Weather: React.FC = () => {
+
   const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -49,7 +40,7 @@ export const Weather: React.FC = () => {
   const [localTime, setLocalTime] = useState<string>('');
   const skipNextSuggestionsRef = useRef(false);
 
-  const [token, setToken] = useLocalStorage<string | null>('token', null);
+  const [, setToken] = useLocalStorage<string | null>('token', null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
@@ -199,9 +190,6 @@ export const Weather: React.FC = () => {
     }
   };
 
-  if (!token) {
-    return <Navigate to="/day-02/login" replace />;
-  }
 
   return (
     <div className="weather-dashboard-unified">

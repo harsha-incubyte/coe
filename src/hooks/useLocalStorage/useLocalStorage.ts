@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 /**
  * A custom hook that synchronizes state with window.localStorage.
@@ -28,6 +28,24 @@ export function useLocalStorage<T>(
 
   const [storedValue, setStoredValue] = useState<T>(readValue);
 
+  // Sync with other hooks in the same window
+  useEffect(() => {
+    const handleStorageChange = (e: CustomEvent | StorageEvent) => {
+      if ((e as StorageEvent).key && (e as StorageEvent).key !== key) return;
+      if ((e as CustomEvent).detail && (e as CustomEvent).detail.key !== key) return;
+      
+      setStoredValue(readValue());
+    };
+
+    window.addEventListener('storage', handleStorageChange as EventListener); // Other windows/tabs
+    window.addEventListener('local-storage', handleStorageChange as EventListener); // Same window
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange as EventListener);
+      window.removeEventListener('local-storage', handleStorageChange as EventListener);
+    };
+  }, [key, readValue]);
+
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.
   const setValue = useCallback(
@@ -43,6 +61,9 @@ export function useLocalStorage<T>(
         // Save to local storage
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          
+          // Dispatch custom event for cross-hook sync in same window
+          window.dispatchEvent(new CustomEvent('local-storage', { detail: { key } }));
         }
       } catch (error) {
         console.warn(`Error setting localStorage key “${key}”:`, error);
