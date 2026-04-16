@@ -1,4 +1,4 @@
-import React, { useId, InputHTMLAttributes } from 'react';
+import React, { useId, type InputHTMLAttributes } from 'react';
 import './Form.css';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {

@@ -1,7 +1,5 @@
 .day-05-container {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding-bottom: 4rem;
 }
 
 .day-05-header {
@@ -10,9 +8,6 @@
 }
 
 .day-05-header h1 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
   background: linear-gradient(135deg, #fff 0%, #10b981 100%);
   background-clip: text;
   -webkit-background-clip: text;
@@ -152,7 +147,7 @@
 }
 
 .contrast-card.hardened {
-  background: #10b981;
+  background: #065f46; /* Emerald 800 for high contrast */
   color: #fff;
   font-weight: 700;
 }
@@ -168,7 +163,7 @@
 .day-05-footer {
   margin-top: 5rem;
   text-align: center;
-  color: #4b5563;
+  color: #9ca3af;
   font-size: 0.875rem;
 }
 

@@ -1,4 +1,4 @@
-import React, { ElementType, ComponentPropsWithoutRef } from 'react';
+import React, { type ElementType, type ComponentPropsWithoutRef } from 'react';
 import './Button.css';
 
 interface ButtonProps<T extends ElementType = 'button'> {
@@ -9,6 +9,7 @@ interface ButtonProps<T extends ElementType = 'button'> {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
+  className?: string;
 }
 
 type PolymorphicButtonProps<T extends ElementType> = ButtonProps<T> & 
@@ -25,8 +26,8 @@ const Button = <T extends ElementType = 'button'>({
   className = '',
   children,
   ...props
-}: PolymorphicButtonProps<T>) => {
-  const Component = as || 'button';
+}: PolymorphicButtonProps<T> & { className?: string }) => {
+  const Component = (as || 'button') as any;
   
   const classNames = [
     'btn-atomic',

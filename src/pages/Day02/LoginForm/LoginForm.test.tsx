@@ -20,7 +20,7 @@ describe('LoginForm', () => {
   });
 
   it('should render email and password inputs and a login button', () => {
-    renderWithRouter(<LoginForm onLogin={() => {}} />);
+    renderWithRouter(<LoginForm onLogin={async () => {}} />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('LoginForm', () => {
 
   it('should show success message on successful login', async () => {
     const user = userEvent.setup();
-    renderWithRouter(<LoginForm onLogin={() => Promise.resolve()} />);
+    renderWithRouter(<LoginForm onLogin={async () => {}} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
