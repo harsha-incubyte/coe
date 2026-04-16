@@ -11,9 +11,14 @@ interface LoginData {
 
 interface LoginFormProps {
   onLogin?: (data: LoginData) => Promise<void>;
+  /** Path to redirect to after successful login. Defaults to '/day-02/weather'. */
+  redirectPath?: string;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ 
+  onLogin, 
+  redirectPath = '/day-02/weather' 
+}) => {
   const navigate = useNavigate();
   const [token, setToken] = useLocalStorage<string | null>('token', null);
   const [email, setEmail] = useState('');
@@ -26,9 +31,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   useEffect(() => {
     if (token) {
-      navigate('/day-02/weather');
+      navigate(redirectPath);
     }
-  }, [token, navigate]);
+  }, [token, navigate, redirectPath]);
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
@@ -71,7 +76,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       setSuccess('Login successful');
       showToast('Welcome back! You have successfully logged in.', 'success');
       setTimeout(() => {
-        navigate('/day-02/weather');
+        navigate(redirectPath);
       }, 500);
     } catch {
       const errorMessage = "Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!";

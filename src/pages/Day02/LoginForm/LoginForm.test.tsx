@@ -223,5 +223,27 @@ describe('LoginForm', () => {
     expect(screen.getByText(/weather dashboard/i)).toBeInTheDocument();
     expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument();
   });
+
+  it('should navigate to custom redirectPath if provided', async () => {
+    const user = userEvent.setup();
+    render(
+      <Router initialEntries={['/login']}>
+        <Routes>
+          <Route path="/login" element={<LoginForm redirectPath="/custom-path" />} />
+          <Route path="/custom-path" element={<div>Custom Page</div>} />
+        </Routes>
+      </Router>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+
+    await user.type(emailInput, 'harsha@incubyte.co');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(await screen.findByText(/custom page/i)).toBeInTheDocument();
+  });
 });
 
