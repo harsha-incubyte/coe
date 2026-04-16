@@ -85,7 +85,7 @@
 }
 
 .btn-increment {
-  background: var(--accent);
+  background: var(--accent-dark);
   color: white;
 }
 

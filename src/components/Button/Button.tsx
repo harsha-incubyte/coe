@@ -27,7 +27,7 @@ const Button = <T extends ElementType = 'button'>({
   children,
   ...props
 }: PolymorphicButtonProps<T> & { className?: string }) => {
-  const Component = (as || 'button') as any;
+  const Component = (as || 'button') as React.ElementType;
   
   const classNames = [
     'btn-atomic',

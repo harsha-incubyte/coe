@@ -23,6 +23,8 @@ This project is a collection of React + TypeScript Katas, developed following st
 - **Development Server**: `npm run dev`
 - **Run Tests**: `npm run test`
 - **Linting**: `npm run lint`
+- **Accessibility Audit**: `npm run test:a11y:ci`
+- **Full Quality Check**: `npm run test:all` (Lints + Unit Tests + E2E + Pa11y)
 
 ## 🛠 Project Architecture
 
@@ -51,7 +53,17 @@ We follow a strict **Red-Green-Refactor** cycle using standardized commit marker
 - **Automated Accessibility Auditing**:
   - **`jest-axe`**: Integrated into component unit tests to catch structural A11y issues early.
   - **`cypress-axe`**: Dynamic E2E auditing to catch regressions during interaction (e.g., expanded dropdowns).
+  - **`Pa11y`**: Global, URL-based accessibility auditing against WCAG 2.1 AA standards, integrated into the CI pipeline.
 - **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
+
+## 🤖 Continuous Integration (GitHub Actions)
+
+This project uses GitHub Actions to ensure code quality on every push and pull request. The workflow includes:
+- **Build**: Verifies that the application compiles correctly.
+- **Lint**: Ensures code follows ESLint standards.
+- **Test**: Runs all unit tests with Vitest.
+- **E2E**: Executes Cypress end-to-end tests.
+- **A11y**: Performs a full site accessibility audit using Pa11y.
 
 ## 📅 Daily Progress
 

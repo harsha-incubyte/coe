@@ -4,6 +4,13 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vitest, beforeEach } from 'vitest';
 import { LoginForm } from './LoginForm';
 
+const mockShowToast = vitest.fn();
+vitest.mock('@/hooks/useToast', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
+
 const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
   return render(
     <Router initialEntries={[route]}>
@@ -17,6 +24,7 @@ const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
 describe('LoginForm', () => {
   beforeEach(() => {
     localStorage.clear();
+    mockShowToast.mockClear();
   });
 
   it('should render email and password inputs and a login button', () => {
@@ -42,6 +50,7 @@ describe('LoginForm', () => {
 
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent(/invalid email format/i);
+    expect(mockShowToast).toHaveBeenCalledWith('Invalid email format', 'error');
     expect(onLogin).not.toHaveBeenCalled();
   });
 
@@ -60,6 +69,7 @@ describe('LoginForm', () => {
 
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent(/password must be at least 8 characters/i);
+    expect(mockShowToast).toHaveBeenCalledWith('Password must be at least 8 characters', 'error');
     expect(onLogin).not.toHaveBeenCalled();
   });
 
@@ -96,6 +106,7 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+    expect(mockShowToast).toHaveBeenCalledWith('Welcome back! You have successfully logged in.', 'success');
   });
 
   it('should show loading state and disable button during login', async () => {
@@ -140,6 +151,7 @@ describe('LoginForm', () => {
 
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent(/Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!/i);
+    expect(mockShowToast).toHaveBeenCalledWith('Login failed. Please check your credentials.', 'error');
     expect(screen.queryByText(/login successful/i)).not.toBeInTheDocument();
   });
 

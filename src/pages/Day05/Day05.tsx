@@ -33,7 +33,30 @@ const Day05: React.FC = () => {
           </div>
         </section>
 
-        {/* Section 2: Touch Targets */}
+        {/* Section 2: Pa11y CI */}
+        <section className="demo-section card-glass">
+          <div className="section-icon">🤖</div>
+          <h2>Pa11y Headless CI</h2>
+          <p>
+            Automated command-line audits that run against production-like builds to catch issues 
+            that only appear in deep page crawls.
+          </p>
+          <div className="pa11y-report">
+            <div className="pa11y-header">
+              <span className="terminal-dot"></span>
+              <span className="terminal-dot"></span>
+              <span className="terminal-dot"></span>
+              <span className="terminal-title">pa11y-ci report</span>
+            </div>
+            <div className="pa11y-body">
+              <div className="pa11y-line success">✔ http://localhost:4173/day-01 - 0 errors</div>
+              <div className="pa11y-line success">✔ http://localhost:4173/day-02 - 0 errors</div>
+              <div className="pa11y-line success">✔ http://localhost:4173/day-05 - 0 errors</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: Touch Targets */}
         <section className="demo-section card-glass">
           <div className="section-icon">📱</div>
           <h2>Mobile Ergonomics</h2>
@@ -94,7 +117,7 @@ const Day05: React.FC = () => {
       </div>
 
       <footer className="day-05-footer">
-        <p>Verified with AXE Core Engine version 4.8.2</p>
+        <p>Verified with AXE Core Engine and Pa11y CI</p>
       </footer>
     </div>
   );

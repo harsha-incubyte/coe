@@ -79,6 +79,58 @@
   box-shadow: 0 0 10px #10b981;
 }
 
+.pa11y-report {
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--mono, monospace);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.pa11y-header {
+  background: #1a1a1a;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #374151;
+}
+
+.terminal-dot:nth-child(1) { background: #ff5f56; }
+.terminal-dot:nth-child(2) { background: #ffbd2e; }
+.terminal-dot:nth-child(3) { background: #27c93f; }
+
+.terminal-title {
+  font-size: 0.75rem;
+  color: #cbd5e1; /* Optimized for WCAG AA compliance (ratio > 4.5:1) */
+  margin-left: 0.5rem;
+  text-transform: lowercase;
+}
+
+.pa11y-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pa11y-line {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.pa11y-line.success {
+  color: #27c93f;
+}
+
 .touch-comparison {
   display: flex;
   gap: 3rem;
