@@ -46,7 +46,7 @@
 
 .login-submit {
   margin-top: 1rem;
-  padding: 0.8rem;
+  padding: 0.875rem; /* Standardized to hit 44px+ height */
   border-radius: 8px;
   border: 1px solid var(--accent-border);
   background: var(--accent-bg);
