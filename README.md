@@ -81,5 +81,9 @@ To simulate real API interactions without a backend, we use MSW.
   - **Scroll Management**: Implemented auto-scrolling for keyboard-navigated dropdowns to ensure the active item is always visible.
 - *Focus*: Web Content Accessibility Guidelines (WCAG), focus management, ARIA patterns, and semantic HTML structure.
 
+## 📝 TODOs
+
+- [ ] **Theming & Color Consistency**: Remove all hardcoded color values from styling files and centralize them into a theme file (e.g., CSS variables or a dedicated theme constant). Establish a standard usage pattern across all components to ensure brand consistency and easier maintenance.
+
 ---
 *Created with ❤️ by Harsha at Incubyte*
