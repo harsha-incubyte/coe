@@ -3,6 +3,14 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:5173",
-    supportFile: false,
+    supportFile: "cypress/support/e2e.ts",
+    setupNodeEvents(on) {
+      on('task', {
+        log(message) {
+          console.log(message);
+          return null;
+        },
+      });
+    },
   },
 });

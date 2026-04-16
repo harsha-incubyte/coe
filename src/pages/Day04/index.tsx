@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Modal from '@/components/Modal/Modal';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Form/Input';
@@ -10,6 +10,8 @@ const Day04: React.FC = () => {
   const [announcement, setAnnouncement] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
+
+  const handleModalClose = useCallback(() => setIsModalOpen(false), []);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +49,7 @@ const Day04: React.FC = () => {
 
           <Modal 
             isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
+            onClose={handleModalClose} 
             title="Premium Modal Experience"
           >
             <form onSubmit={handleFormSubmit} className="modal-form">
@@ -70,7 +72,7 @@ const Day04: React.FC = () => {
               />
               
               <div className="modal-actions">
-                <Button variant="ghost" type="button" onClick={() => setIsModalOpen(false)}>
+                <Button variant="ghost" type="button" onClick={handleModalClose}>
                   Cancel
                 </Button>
                 <Button variant="primary" type="submit" isLoading={isSubmitting}>

@@ -11,7 +11,7 @@ const ArticleCardGood: React.FC<ArticleCardProps> = ({ title, date, content }) =
   return (
     <article className="article-card">
       <header className="card-header">
-        <h3 className="title-text">{title}</h3>
+        <h2 className="title-text">{title}</h2>
         <div className="card-meta">
           <time className="date" dateTime={date}>
             {date}

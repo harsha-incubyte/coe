@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       };
 
       // Delay focus slightly to ensure modal is rendered and visible during animation
-      const timer = setTimeout(focusFirstElement, 50);
+      const timer = setTimeout(focusFirstElement, 100);
 
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -73,12 +73,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       return () => {
         clearTimeout(timer);
         document.removeEventListener('keydown', handleKeyDown);
-        if (previousFocusRef.current) {
-          previousFocusRef.current.focus();
-        }
       };
     }
   }, [isOpen, onClose]);
+
+  // Focus restoration: only restore focus when modal closes
+  useEffect(() => {
+    if (!isOpen && previousFocusRef.current) {
+      const timer = setTimeout(() => {
+        previousFocusRef.current?.focus();
+        previousFocusRef.current = null;
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   return createPortal(
     <AnimatePresence>

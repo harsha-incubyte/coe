@@ -172,7 +172,7 @@
 
 .dropdown-links li a {
   text-decoration: none;
-  color: var(--text);
+  color: var(--text-h);
   font-size: 0.9rem;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
