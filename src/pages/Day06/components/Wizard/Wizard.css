@@ -1,0 +1,131 @@
+.wizard-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.wizard-stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  flex: 1;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2d2d2d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  border: 2px solid #555;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.step-item.active .step-number {
+  background: #007bff;
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.step-item.active .step-label {
+  color: #fff;
+  font-weight: bold;
+}
+
+.step-item.completed .step-number {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.wizard-step-content {
+  min-height: 200px;
+  text-align: center;
+}
+
+.wizard-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.wizard-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wizard-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.wizard-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wizard-btn.primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.wizard-btn.secondary {
+  background: #444;
+  color: #fff;
+}
+
+.mock-progress-bar {
+  height: 8px;
+  background: #2d2d2d;
+  border-radius: 4px;
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #007bff;
+  transition: width 0.5s ease;
+}
+
+.status-success {
+  color: #28a745;
+  font-weight: bold;
+}
