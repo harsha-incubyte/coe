@@ -37,7 +37,7 @@ src/
 ├── hooks/          # Domain-agnostic utility hooks (Wizard, LocalStorage)
 ├── layouts/        # Page layouts (e.g., MainLayout with Navbar)
 ├── lib/            # External library configurations (MSW, etc.)
-├── pages/          # Daily Kata challenges (Day01 - Day06)
+├── pages/          # Daily Kata challenges (Day01 - Day07)
 ├── setupTests.ts   # Vitest setup
 └── main.tsx        # Application entry point with MSW init
 ```
@@ -99,6 +99,12 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - **Headless Component Logic**: Refactored core navigation into generic, domain-agnostic hooks (`useStepNavigation`) and components, allowing the Wizard logic to be reused across different domains.
 - **Auth Protection (HOC)**: Created a reusable `withAuth` Higher-Order Component to standardize route protection and dynamic redirection logic across the app.
 - *Focus*: Performance optimization (Split Context), Headless Architecture, and Higher-Order Components.
+
+### Day 07: State Management & Data Fetching
+- **Zustand Store**: Centralized client-side state management for authentication with persistent storage (replacing manual `localStorage` hooks).
+- **React Query Integration**: Robust server state management with automatic caching, background refetching, and standardized loading/error handling.
+- **Optimistic Task Board**: Implementation of a task management system featuring optimistic UI updates for real-time responsiveness and error recovery.
+- *Focus*: Decoupling client vs. server state, cache synchronization, and advanced TDD patterns for asynchronous data.
 
 ## 📝 TODOs
 
