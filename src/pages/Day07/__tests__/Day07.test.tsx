@@ -19,14 +19,14 @@ describe('Day07 Component', () => {
     useAppStore.setState({ user: { id: '1', name: 'Harsha', email: 'harsha@incubyte.co' } });
   });
 
-  it('🔴 should render personalized welcome message from Zustand store', () => {
+  it('🟢 should render personalized welcome message from Zustand store', () => {
     render(<Day07 />, { wrapper: createWrapper() });
     const welcome = screen.getByText(/Welcome back,/i);
     expect(welcome).toBeInTheDocument();
     expect(welcome).toHaveTextContent(/Harsha/i);
   });
 
-  it('🔴 should display tasks fetched by React Query', async () => {
+  it('🟢 should display tasks fetched by React Query', async () => {
     render(<Day07 />, { wrapper: createWrapper() });
     
     expect(screen.getByText(/Fetching your tasks/i)).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('Day07 Component', () => {
     });
   });
 
-  it('🔴 should handle task completion toggle', async () => {
+  it('🟢 should handle task completion toggle', async () => {
     render(<Day07 />, { wrapper: createWrapper() });
 
     await waitFor(() => {
