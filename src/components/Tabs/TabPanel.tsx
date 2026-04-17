@@ -4,9 +4,10 @@ import { useTabs } from './TabsContext';
 interface TabPanelProps {
   id: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
+export const TabPanel: React.FC<TabPanelProps> = ({ id, children, className = '' }) => {
   const { activeTab } = useTabs();
   const isActive = activeTab === id;
 
@@ -17,7 +18,7 @@ export const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
       role="tabpanel"
       id={`panel-${id}`}
       aria-labelledby={`tab-${id}`}
-      className="tab-panel"
+      className={`tab-panel ${className}`}
     >
       {children}
     </div>

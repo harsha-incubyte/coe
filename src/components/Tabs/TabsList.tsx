@@ -2,9 +2,10 @@ import React from 'react';
 
 interface TabsListProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-export const TabsList: React.FC<TabsListProps> = ({ children }) => {
+export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const tabs = Array.from((e.currentTarget as HTMLElement).querySelectorAll('[role="tab"]')) as HTMLElement[];
     const index = tabs.indexOf(document.activeElement as HTMLElement);
@@ -34,7 +35,11 @@ export const TabsList: React.FC<TabsListProps> = ({ children }) => {
   };
 
   return (
-    <div role="tablist" className="tabs-list" onKeyDown={handleKeyDown}>
+    <div 
+      role="tablist" 
+      className={`tabs-list ${className}`} 
+      onKeyDown={handleKeyDown}
+    >
       {children}
     </div>
   );
