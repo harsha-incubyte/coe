@@ -1,6 +1,10 @@
-# Project Guidelines & Discipline
+## 1. Planning and Implementation
+Every task must start with an **Implementation Plan** artifact that includes:
+- **Proposed Changes:** A clear description of the files to be created or modified.
+- **Committing Strategy:** A predefined sequence of incremental commits following the TDD markers (🔴, 🟢, ♻️, ⚙️).
+- **User Review Required:** Any open questions or domain preferences to be confirmed before work begins.
 
-## 1. Test-Driven Development (TDD)
+## 2. Test-Driven Development (TDD)
 We follow the **Red-Green-Refactor** cycle strictly for every feature and bug fix.
 
 - **RED (🔴):** Never write implementation code before a failing test exists. This ensures we are testing the right thing and that our requirements are clear.
