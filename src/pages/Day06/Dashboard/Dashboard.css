@@ -1,5 +1,5 @@
 .dashboard-container {
-  padding: 2rem;
+  padding-bottom: 4rem;
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -10,10 +10,6 @@
 }
 
 .dashboard-header h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  letter-spacing: -0.04em;
   background: linear-gradient(135deg, var(--text-h) 0%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
