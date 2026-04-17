@@ -1,10 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { Weather } from './Weather'; // Named import for raw component
+import { describe, it, expect, beforeEach, vitest } from 'vitest';
+import { Weather } from './Weather'; 
 import { withAuth } from '@/components/withAuth/withAuth';
-import { vitest } from 'vitest';
+import { useAppStore } from '@/store';
 
 const mockShowToast = vitest.fn();
 vitest.mock('@/hooks/useToast', () => ({
@@ -17,13 +17,17 @@ describe('Weather Component', () => {
   const ProtectedWeather = withAuth(Weather);
 
   beforeEach(() => {
+    useAppStore.getState().logout();
     localStorage.clear();
     mockShowToast.mockClear();
   });
 
   const setup = () => {
-    localStorage.setItem('token', JSON.stringify('fake-token'));
-    // We test the ProtectedWeather to ensure HOC works with it
+    useAppStore.getState().login(
+      { id: '1', email: 'test@example.com', name: 'Test User' },
+      'fake-token'
+    );
+    
     return render(
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
@@ -35,7 +39,9 @@ describe('Weather Component', () => {
   };
 
   it('should show authentication required if no token is present', () => {
-    localStorage.clear();
+    // Ensure logged out
+    useAppStore.getState().logout();
+    
     render(
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
@@ -176,14 +182,23 @@ describe('Weather Component', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('should show toast notification on logout and fallback to login prompt', async () => {
-    const user = userEvent.setup();
-    setup();
+  it('should show toast notification on session expiration', async () => {
+    useAppStore.getState().login(
+      { id: '1', email: 'test@example.com', name: 'Test User' },
+      'fake-token'
+    );
 
-    const logoutButton = screen.getByRole('button', { name: /logout/i });
-    await user.click(logoutButton);
+    render(
+      <Router>
+        <Weather />
+      </Router>
+    );
 
-    expect(mockShowToast).toHaveBeenCalledWith('You have been logged out successfully.', 'info');
-    expect(await screen.findByText(/Authentication Required/i)).toBeInTheDocument();
+    // Trigger logout via store to simulate session expiration
+    await waitFor(() => {
+      useAppStore.getState().logout();
+    });
+
+    expect(mockShowToast).toHaveBeenCalledWith('Session expired. Please login again.', 'warning');
   });
 });
