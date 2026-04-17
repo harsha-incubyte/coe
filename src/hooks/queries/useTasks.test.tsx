@@ -19,7 +19,7 @@ const createWrapper = () => {
 };
 
 describe('useTasks Hook', () => {
-  it('🔴 useTasksQuery should fetch tasks from API', async () => {
+  it('🟢 useTasksQuery should fetch tasks from API', async () => {
     const { result } = renderHook(() => useTasksQuery(), {
       wrapper: createWrapper(),
     });
@@ -31,7 +31,7 @@ describe('useTasks Hook', () => {
     expect(result.current.data?.[0]).toHaveProperty('title');
   });
 
-  it('🔴 useCreateTaskMutation should add a task', async () => {
+  it('🟢 useCreateTaskMutation should add a task', async () => {
     const { result } = renderHook(() => useCreateTaskMutation(), {
       wrapper: createWrapper(),
     });
@@ -44,7 +44,7 @@ describe('useTasks Hook', () => {
     expect(result.current.data?.title).toBe(newTaskTitle);
   });
 
-  it('🔴 useUpdateTaskMutation should perform updates', async () => {
+  it('🟢 useUpdateTaskMutation should perform updates', async () => {
     const { result } = renderHook(() => useUpdateTaskMutation(), {
       wrapper: createWrapper(),
     });
