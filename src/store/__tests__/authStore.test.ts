@@ -6,14 +6,14 @@ describe('Auth Store (Zustand)', () => {
     useAppStore.setState({ user: null, token: null, isAuthenticated: false });
   });
 
-  it('🔴 should have initial unauthenticated state', () => {
+  it('🟢 should have initial unauthenticated state', () => {
     const state = useAppStore.getState();
     expect(state.user).toBeNull();
     expect(state.token).toBeNull();
     expect(state.isAuthenticated).toBe(false);
   });
 
-  it('🔴 should update state correctly on login', () => {
+  it('🟢 should update state correctly on login', () => {
     const mockUser = { id: '1', name: 'Test User', email: 'test@example.com' };
     const mockToken = 'mock-token';
 
@@ -25,7 +25,7 @@ describe('Auth Store (Zustand)', () => {
     expect(state.isAuthenticated).toBe(true);
   });
 
-  it('🔴 should clear state correctly on logout', () => {
+  it('🟢 should clear state correctly on logout', () => {
     const mockUser = { id: '1', name: 'Test User', email: 'test@example.com' };
     const mockToken = 'mock-token';
 
