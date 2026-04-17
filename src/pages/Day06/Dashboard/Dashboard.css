@@ -5,20 +5,27 @@
 }
 
 .dashboard-header {
-  margin-bottom: 3rem;
   text-align: center;
+  margin-bottom: 5rem;
 }
 
 .dashboard-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #fff, #007bff);
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--text-h) 0%, #3b82f6 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.dashboard-header p {
-  color: #888;
+.dashboard-header .subtitle {
+  font-size: 1.25rem;
+  color: var(--text);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .dashboard-main-content {

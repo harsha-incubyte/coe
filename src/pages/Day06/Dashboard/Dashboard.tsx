@@ -13,7 +13,7 @@ export const Dashboard: React.FC = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <h1>Advanced React Patterns Dashboard</h1>
-        <p>Compound Components | Split Context | HOCs | Code Splitting</p>
+        <p className="subtitle">Compound Components | Split Context | HOCs | Code Splitting</p>
       </header>
 
       {/* KATA 1: Compound Tabs Component */}
