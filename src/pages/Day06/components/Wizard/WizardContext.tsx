@@ -2,9 +2,10 @@ import { createContext, useContext } from 'react';
 import type { Dispatch } from 'react';
 
 export type WizardStep = 'SCAN' | 'NETWORK' | 'CONFIGURE' | 'TEST';
+export const WIZARD_STEPS: WizardStep[] = ['SCAN', 'NETWORK', 'CONFIGURE', 'TEST'];
+
 
 export interface WizardState {
-  step: WizardStep;
   deviceId: string;
   networkConfig: {
     ssid: string;
@@ -12,15 +13,14 @@ export interface WizardState {
   };
 }
 
+
 export type WizardAction =
-  | { type: 'NEXT_STEP' }
-  | { type: 'PREV_STEP' }
   | { type: 'SET_DEVICE_ID'; payload: string }
   | { type: 'SET_NETWORK_CONFIG'; payload: Partial<WizardState['networkConfig']> }
   | { type: 'RESET' };
 
+
 export const initialState: WizardState = {
-  step: 'SCAN',
   deviceId: '',
   networkConfig: {
     ssid: '',
@@ -28,18 +28,9 @@ export const initialState: WizardState = {
   }
 };
 
+
 export const wizardReducer = (state: WizardState, action: WizardAction): WizardState => {
   switch (action.type) {
-    case 'NEXT_STEP':
-      if (state.step === 'SCAN') return { ...state, step: 'NETWORK' };
-      if (state.step === 'NETWORK') return { ...state, step: 'CONFIGURE' };
-      if (state.step === 'CONFIGURE') return { ...state, step: 'TEST' };
-      return state;
-    case 'PREV_STEP':
-      if (state.step === 'NETWORK') return { ...state, step: 'SCAN' };
-      if (state.step === 'CONFIGURE') return { ...state, step: 'NETWORK' };
-      if (state.step === 'TEST') return { ...state, step: 'CONFIGURE' };
-      return state;
     case 'SET_DEVICE_ID':
       return { ...state, deviceId: action.payload };
     case 'SET_NETWORK_CONFIG':
@@ -53,6 +44,7 @@ export const wizardReducer = (state: WizardState, action: WizardAction): WizardS
       return state;
   }
 };
+
 
 export const StateContext = createContext<WizardState | undefined>(undefined);
 export const DispatchContext = createContext<Dispatch<WizardAction> | undefined>(undefined);

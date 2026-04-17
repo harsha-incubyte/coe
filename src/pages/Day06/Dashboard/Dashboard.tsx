@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs } from '../components/Tabs/Tabs';
-import { Wizard } from '../components/Wizard/Wizard';
+import { DeviceConfigurationWizard as Wizard } from '../components/Wizard/Wizard';
+
 import { Spinner } from '@/components/Spinner/Spinner';
 import './Dashboard.css';
 

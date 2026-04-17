@@ -1,19 +1,21 @@
 import React, { memo } from 'react';
-import { useWizardState, useWizardDispatch } from './WizardContext';
-import type { WizardStep } from './WizardContext';
+import { useWizard, useWizardActions } from './useWizard';
+import { useWizardState, useWizardDispatch, WIZARD_STEPS } from './WizardContext';
 import { WizardProvider } from './WizardProvider';
+import { Wizard as GenericWizard, WizardStep } from '@/components/Wizard';
+
+
 import './Wizard.css';
 
 const StepIndicator: React.FC = () => {
-  const { step } = useWizardState();
-  const steps: WizardStep[] = ['SCAN', 'NETWORK', 'CONFIGURE', 'TEST'];
+  const { steps, getStepStatus } = useWizard();
 
   return (
     <div className="wizard-stepper">
       {steps.map((s, i) => (
         <div 
           key={s} 
-          className={`step-item ${step === s ? 'active' : ''} ${steps.indexOf(step) > i ? 'completed' : ''}`}
+          className={`step-item ${getStepStatus(s)}`}
         >
           <span className="step-number">{i + 1}</span>
           <span className="step-label">{s}</span>
@@ -23,37 +25,39 @@ const StepIndicator: React.FC = () => {
   );
 };
 
+
 // PERFORMANCE PROOF COMPONENT
 // This button only consumes Dispatch, so it should NOT re-render when state strings change.
 const NextButton = memo(() => {
-  const dispatch = useWizardDispatch();
+  const { next } = useWizardActions();
   console.log('NextButton rendered'); // The performance proof
 
   return (
     <button 
       className="wizard-btn primary"
-      onClick={() => dispatch({ type: 'NEXT_STEP' })}
+      onClick={next}
     >
       Next Step
     </button>
   );
 });
 
-const PrevButton: React.FC = () => {
-  const { step } = useWizardState();
-  const dispatch = useWizardDispatch();
 
-  if (step === 'SCAN') return null;
+const PrevButton: React.FC = () => {
+  const { isFirstStep, prev } = useWizard();
+
+  if (isFirstStep) return null;
 
   return (
     <button 
       className="wizard-btn secondary"
-      onClick={() => dispatch({ type: 'PREV_STEP' })}
+      onClick={prev}
     >
       Previous
     </button>
   );
 };
+
 
 const ScanStep: React.FC = () => {
   const { deviceId } = useWizardState();
@@ -112,36 +116,40 @@ const TestStep: React.FC = () => (
 );
 
 const WizardContent: React.FC = () => {
-  const { step } = useWizardState();
-
-  const renderStep = () => {
-    switch (step) {
-      case 'SCAN': return <ScanStep />;
-      case 'NETWORK': return <NetworkStep />;
-      case 'CONFIGURE': return <ConfigureStep />;
-      case 'TEST': return <TestStep />;
-      default: return null;
-    }
-  };
-
   return (
     <div className="wizard-container">
       <StepIndicator />
       <div className="wizard-body">
-        {renderStep()}
+        <WizardStep index={0}><ScanStep /></WizardStep>
+        <WizardStep index={1}><NetworkStep /></WizardStep>
+        <WizardStep index={2}><ConfigureStep /></WizardStep>
+        <WizardStep index={3}><TestStep /></WizardStep>
       </div>
+
+
       <div className="wizard-footer">
         <PrevButton />
-        {step !== 'TEST' && <NextButton />}
+        <NextButtonWrapper />
       </div>
     </div>
   );
 };
 
-export const Wizard: React.FC = () => {
+
+const NextButtonWrapper: React.FC = () => {
+  const { isLastStep } = useWizard();
+  if (isLastStep) return null;
+  return <NextButton />;
+};
+
+export const DeviceConfigurationWizard: React.FC = () => {
   return (
     <WizardProvider>
-      <WizardContent />
+      <GenericWizard totalSteps={WIZARD_STEPS.length}>
+        <WizardContent />
+      </GenericWizard>
     </WizardProvider>
   );
 };
+
+

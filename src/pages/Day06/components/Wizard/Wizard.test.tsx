@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vitest, beforeEach } from 'vitest';
-import { Wizard } from './Wizard';
+import { DeviceConfigurationWizard } from './Wizard';
+
 
 describe('Wizard Component (Split Context Pattern)', () => {
   beforeEach(() => {
@@ -8,7 +9,8 @@ describe('Wizard Component (Split Context Pattern)', () => {
   });
 
   it('should navigate through steps', () => {
-    render(<Wizard />);
+    render(<DeviceConfigurationWizard />);
+
     
     expect(screen.getByText(/Scan for Devices/i)).toBeInTheDocument();
     
@@ -22,7 +24,8 @@ describe('Wizard Component (Split Context Pattern)', () => {
   });
 
   it('should update state via inputs', async () => {
-    render(<Wizard />);
+    render(<DeviceConfigurationWizard />);
+
     
     const input = screen.getByPlaceholderText(/e.g. DEV-8821/i);
     fireEvent.change(input, { target: { value: 'MY-DEVICE-123' } });
@@ -33,7 +36,8 @@ describe('Wizard Component (Split Context Pattern)', () => {
   it('should prove performance isolation (NextButton does not re-render on input)', () => {
     const consoleSpy = vitest.spyOn(console, 'log');
     
-    render(<Wizard />);
+    render(<DeviceConfigurationWizard />);
+
     
     // Initial render count for NextButton
     const initialLogCount = consoleSpy.mock.calls.filter(call => call[0] === 'NextButton rendered').length;
