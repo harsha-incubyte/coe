@@ -33,12 +33,11 @@ The application is designed to showcase daily progress. Each "Day" is isolated w
 ### Directory Structure
 ```text
 src/
-├── components/     # Shared UI components
+├── components/     # Shared UI components (Atomic + Patterns like Wizard)
+├── hooks/          # Domain-agnostic utility hooks (Wizard, LocalStorage)
 ├── layouts/        # Page layouts (e.g., MainLayout with Navbar)
 ├── lib/            # External library configurations (MSW, etc.)
-├── pages/          # Daily Kata challenges
-│   ├── Day01/      # FizzBuzz & Counter
-│   └── Day02/      # LoginForm & Weather Widget
+├── pages/          # Daily Kata challenges (Day01 - Day06)
 ├── setupTests.ts   # Vitest setup
 └── main.tsx        # Application entry point with MSW init
 ```
@@ -93,6 +92,13 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - **Touch Targets**: Standardized all interactive elements (buttons, links, triggers) to a minimum **44x44px** hit area.
 - **Contrast Polish**: Optimized color contrast for all critical UI elements (errors, primary actions) to ensure passing WCAG 4.5:1 ratio on dark backgrounds.
 - *Focus*: Automated accessibility auditing, mobile ergonomics, and WCAG compliance.
+
+### Day 06: Performance & Headless Architecture
+- **Multi-Step Configuration Wizard**: A complex, high-performance dashboard view for device onboarding.
+- **Split Context Pattern**: Implementation of a performance-first state management pattern, decoupling "Navigation State" from "Domain Data" to eliminate redundant re-rendering of control buttons.
+- **Headless Component Logic**: Refactored core navigation into generic, domain-agnostic hooks (`useStepNavigation`) and components, allowing the Wizard logic to be reused across different domains.
+- **Auth Protection (HOC)**: Created a reusable `withAuth` Higher-Order Component to standardize route protection and dynamic redirection logic across the app.
+- *Focus*: Performance optimization (Split Context), Headless Architecture, and Higher-Order Components.
 
 ## 📝 TODOs
 
