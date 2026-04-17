@@ -21,7 +21,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as any)?.from?.pathname || redirectPath;
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || redirectPath;
   const isAuthenticated = useAppStore((state) => state.isAuthenticated);
   const login = useAppStore((state) => state.login);
   

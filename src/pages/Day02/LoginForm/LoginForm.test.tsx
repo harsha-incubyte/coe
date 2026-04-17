@@ -3,6 +3,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vitest, beforeEach } from 'vitest';
 import { LoginForm } from './LoginForm';
+import { useAppStore } from '@/store';
 
 const mockShowToast = vitest.fn();
 vitest.mock('@/hooks/useToast', () => ({
@@ -23,6 +24,7 @@ const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
 
 describe('LoginForm', () => {
   beforeEach(() => {
+    useAppStore.setState({ user: null, token: null, isAuthenticated: false });
     localStorage.clear();
     mockShowToast.mockClear();
   });
@@ -168,6 +170,7 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
+    expect(useAppStore.getState().isAuthenticated).toBe(true);
   });
 
   it('should navigate to weather page after successful login', async () => {
@@ -192,7 +195,7 @@ describe('LoginForm', () => {
     expect(await screen.findByText(/weather page/i)).toBeInTheDocument();
   });
 
-  it('should store authentication token in localStorage on successful login', async () => {
+  it('should store authentication token in store on successful login', async () => {
     const user = userEvent.setup();
     renderWithRouter(<LoginForm redirectPath="/day-02/weather" />);
 
@@ -205,11 +208,11 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
-    expect(localStorage.getItem('token')).toBe(JSON.stringify('fake-jwt-token'));
+    expect(useAppStore.getState().token).toBe('fake-jwt-token');
   });
 
   it('should redirect to weather page if token is already present on mount', () => {
-    localStorage.setItem('token', JSON.stringify('existing-token'));
+    useAppStore.setState({ user: { id: '1', name: 'Test', email: 'test@example.com' }, token: 'token', isAuthenticated: true });
 
     render(
       <Router initialEntries={['/day-02/login']}>
