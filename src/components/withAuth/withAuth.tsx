@@ -3,16 +3,31 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/store';
 
 /**
+ * withAuth HOC Options
+ */
+export interface WithAuthOptions {
+  /** Optional component to render instead of redirecting to login */
+  fallback?: ComponentType<object>;
+}
+
+/**
  * withAuth HOC
  * Protects a component by checking for a valid token in the store.
- * If no token is found, it redirects to the login page.
+ * If no token is found, it redirects to the login page or renders a fallback.
  */
-export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
+export function withAuth<P extends object>(
+  WrappedComponent: ComponentType<P>,
+  options: WithAuthOptions = {}
+) {
   const AuthenticatedComponent = (props: P) => {
     const isAuthenticated = useAppStore((state) => state.isAuthenticated);
     const location = useLocation();
 
     if (!isAuthenticated) {
+      if (options.fallback) {
+        const Fallback = options.fallback;
+        return <Fallback />;
+      }
       // Redirect to login page instead of rendering inline
       return <Navigate to="/day-02/login" state={{ from: location }} replace />;
     }
