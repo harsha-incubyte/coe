@@ -184,3 +184,40 @@
   background: var(--accent-bg);
   color: var(--text-h);
 }
+
+.dropdown-logout-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-h);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.dropdown-logout-btn:hover {
+  background: var(--accent-bg);
+  color: #ef4444;
+}
+
+.login-nav-btn {
+  text-decoration: none;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.login-nav-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px var(--accent-bg);
+}

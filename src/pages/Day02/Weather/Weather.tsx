@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
+import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import WeatherIllustration from './components/WeatherIllustration';
 import { WeatherTabs } from './components/WeatherTabs';
@@ -41,9 +41,15 @@ export const Weather: React.FC = () => {
   const [localTime, setLocalTime] = useState<string>('');
   const skipNextSuggestionsRef = useRef(false);
 
-  const [, setToken] = useLocalStorage<string | null>('token', null);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      showToast('Session expired. Please login again.', 'warning');
+    }
+  }, [isAuthenticated, showToast]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -161,10 +167,6 @@ export const Weather: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    setToken(null);
-    showToast('You have been logged out successfully.', 'info');
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
@@ -195,12 +197,6 @@ export const Weather: React.FC = () => {
   return (
     <div className="weather-dashboard-unified">
       <div className="search-section">
-        <button className="logout-button" onClick={handleLogout} title="Logout">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
-          </svg>
-          <span>Logout</span>
-        </button>
         <div className="search-container" ref={searchContainerRef}>
           <form className="search-form" onSubmit={(e) => e.preventDefault()}>
             <input

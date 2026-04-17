@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, Task } from '@/hooks/queries/useTasks';
+import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, type Task } from '@/hooks/queries/useTasks';
 import { useAppStore } from '@/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Day07.css';
@@ -11,7 +11,7 @@ const Day07: React.FC = () => {
   const { user } = useAppStore();
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const handleAddTask = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
     createTask.mutate(newTaskTitle, {
@@ -48,6 +48,10 @@ const Day07: React.FC = () => {
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             disabled={createTask.isPending}
+            required={true}
+            aria-required={true}
+            aria-invalid={!newTaskTitle.trim()}
+            aria-describedby="task-error"
           />
           <button type="submit" disabled={createTask.isPending || !newTaskTitle.trim()}>
             {createTask.isPending ? '...' : 'Add Task'}

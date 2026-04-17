@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
+import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import './LoginForm.css';
 
@@ -22,7 +22,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || redirectPath;
-  const [token, setToken] = useLocalStorage<string | null>('token', null);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+  const login = useAppStore((state) => state.login);
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -32,10 +34,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const { showToast } = useToast();
 
   useEffect(() => {
-    if (token) {
+    if (isAuthenticated) {
       navigate(from);
     }
-  }, [token, navigate, from]);
+  }, [isAuthenticated, navigate, from]);
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
@@ -73,7 +75,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         }
 
         const data = await response.json();
-        setToken(data.token);
+        // Assuming the API returns user info and a token
+        login({ id: '1', email: data.email || email, name: 'Harsha Vardhana' }, data.token);
       }
       setSuccess('Login successful');
       showToast('Welcome back! You have successfully logged in.', 'success');

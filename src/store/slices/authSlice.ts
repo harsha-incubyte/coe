@@ -1,5 +1,4 @@
-import { StateCreator } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { type StateCreator } from 'zustand';
 
 export interface User {
   id: string;
