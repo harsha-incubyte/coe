@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import { useToast } from '@/hooks/useToast';
 import './LoginForm.css';
@@ -20,6 +20,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   redirectPath
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as any)?.from?.pathname || redirectPath;
   const [token, setToken] = useLocalStorage<string | null>('token', null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,9 +33,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   useEffect(() => {
     if (token) {
-      navigate(redirectPath);
+      navigate(from);
     }
-  }, [token, navigate, redirectPath]);
+  }, [token, navigate, from]);
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
@@ -76,7 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       setSuccess('Login successful');
       showToast('Welcome back! You have successfully logged in.', 'success');
       setTimeout(() => {
-        navigate(redirectPath);
+        navigate(from);
       }, 500);
     } catch {
       const errorMessage = "Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!";

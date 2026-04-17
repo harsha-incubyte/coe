@@ -28,6 +28,7 @@ describe('Weather Component', () => {
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
           <Route path="/day-02/weather" element={<ProtectedWeather />} />
+          <Route path="/day-02/login" element={<div>Authentication Required</div>} />
         </Routes>
       </Router>
     );
@@ -39,6 +40,7 @@ describe('Weather Component', () => {
       <Router initialEntries={['/day-02/weather']}>
         <Routes>
           <Route path="/day-02/weather" element={<ProtectedWeather />} />
+          <Route path="/day-02/login" element={<div>Authentication Required</div>} />
         </Routes>
       </Router>
     );

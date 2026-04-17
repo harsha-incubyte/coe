@@ -1,12 +1,11 @@
 import type { ComponentType } from 'react';
-import { useLocation } from 'react-router-dom';
-import { LoginForm } from '@/pages/Day02/LoginForm/LoginForm';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 
 /**
  * withAuth HOC
  * Protects a component by checking for a valid token in localStorage.
- * If no token is found, it renders the LoginForm as a fallback.
+ * If no token is found, it redirects to the login page.
  */
 export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
   const AuthenticatedComponent = (props: P) => {
@@ -14,16 +13,8 @@ export function withAuth<P extends object>(WrappedComponent: ComponentType<P>) {
     const location = useLocation();
 
     if (!token) {
-      // Fallback UI when not authenticated
-      // Re-using Day 02 LoginForm as the LoginPrompt
-      // Dynamically redirect user back to where they were trying to go
-      return (
-        <div className="auth-guard-container" style={{ padding: '2rem', textAlign: 'center' }}>
-          <h2>Authentication Required</h2>
-          <p>Please sign in to access this secure area.</p>
-          <LoginForm redirectPath={location.pathname} />
-        </div>
-      );
+      // Redirect to login page instead of rendering inline
+      return <Navigate to="/day-02/login" state={{ from: location }} replace />;
     }
 
     // Forward props and render the wrapped component
