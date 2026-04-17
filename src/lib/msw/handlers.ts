@@ -122,7 +122,7 @@ export const taskHandlers = [
     
     const stored = sessionStorage.getItem('mock-tasks');
     let tasks = stored ? JSON.parse(stored) : [];
-    tasks = tasks.map((t: any) => t.id === id ? { ...t, completed } : t);
+    tasks = tasks.map((t: { id: string; completed: boolean }) => t.id === id ? { ...t, completed } : t);
     sessionStorage.setItem('mock-tasks', JSON.stringify(tasks));
 
     return HttpResponse.json({ id, completed });
