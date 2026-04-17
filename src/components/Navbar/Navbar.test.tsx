@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { useAppStore } from '@/store';
 import Navbar from './Navbar';
 
 describe('Navbar', () => {
+  beforeEach(() => {
+    useAppStore.setState({ isAuthenticated: false, user: null });
+  });
+
   it('should render Day 01 and Day 02 links', () => {
     render(
       <MemoryRouter>
@@ -25,6 +30,10 @@ describe('Navbar', () => {
   });
 
   it('should have a button for the User Profile dropdown with Correct ARIA attributes', () => {
+    useAppStore.setState({ 
+      isAuthenticated: true, 
+      user: { id: '1', name: 'John Doe', email: 'john@example.com' } 
+    });
     render(
       <MemoryRouter>
         <Navbar />
@@ -37,6 +46,10 @@ describe('Navbar', () => {
   });
 
   it('should have a dropdown menu with a matching ID', () => {
+    useAppStore.setState({ 
+      isAuthenticated: true, 
+      user: { id: '1', name: 'John Doe', email: 'john@example.com' } 
+    });
     render(
       <MemoryRouter>
         <Navbar />
