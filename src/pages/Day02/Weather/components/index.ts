@@ -1,0 +1,1 @@
+export { WeatherTabs } from './WeatherTabs';

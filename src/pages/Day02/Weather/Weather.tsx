@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage/useLocalStorage';
 import { useToast } from '@/hooks/useToast';
 import WeatherIllustration from './components/WeatherIllustration';
+import { WeatherTabs } from './components/WeatherTabs';
 import { mapWeatherCode } from './WeatherUtils';
 import './Weather.css';
 
@@ -250,25 +251,27 @@ export const Weather: React.FC = () => {
       {error && <div className="error-overlay">{error}</div>}
 
       {weather && !loading && (
-        <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
-          <div className="weather-overlay-data">
-            <div className="data-header">
-              <div className="city-info">
-                <h2 className="city-name">{weather.city}</h2>
-                <p className="city-meta">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
+        <WeatherTabs>
+          <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
+            <div className="weather-overlay-data">
+              <div className="data-header">
+                <div className="city-info">
+                  <h2 className="city-name">{weather.city}</h2>
+                  <p className="city-meta">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
+                </div>
+                <div className="time-pill">{localTime}</div>
               </div>
-              <div className="time-pill">{localTime}</div>
-            </div>
 
-            <div className="data-footer">
-              <div className="temp-display">
-                <span className="temp-value">{Math.round(weather.temperature)}</span>
-                <span className="temp-unit">°C</span>
+              <div className="data-footer">
+                <div className="temp-display">
+                  <span className="temp-value">{Math.round(weather.temperature)}</span>
+                  <span className="temp-unit">°C</span>
+                </div>
+                <div className="condition-label">{weather.condition}</div>
               </div>
-              <div className="condition-label">{weather.condition}</div>
             </div>
-          </div>
-        </WeatherIllustration>
+          </WeatherIllustration>
+        </WeatherTabs>
       )}
     </div>
   );
