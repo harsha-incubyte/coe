@@ -1,17 +1,14 @@
 import React from 'react';
 import Button from '@/components/Button/Button';
+import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day05.css';
 
 const Day05: React.FC = () => {
   return (
-    <div className="day-05-container">
-      <header className="day-05-header">
-        <h1>Automation & UI Sanity</h1>
-        <p className="subtitle">
-          Hardening the application with automated accessibility audits and mobile ergonomics.
-        </p>
-      </header>
-
+    <PageLayout
+      title="Automation & UI Sanity"
+      description="Hardening the application with automated accessibility audits and mobile ergonomics."
+    >
       <div className="day-05-grid">
         {/* Section 1: Automated Audits */}
         <section className="demo-section card-glass">
@@ -116,10 +113,10 @@ const Day05: React.FC = () => {
         </section>
       </div>
 
-      <footer className="day-05-footer">
+      <footer className="day-05-footer" style={{ marginTop: '2rem' }}>
         <p>Verified with AXE Core Engine and Pa11y CI</p>
       </footer>
-    </div>
+    </PageLayout>
   );
 };
 

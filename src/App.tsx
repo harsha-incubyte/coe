@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { queryClient } from '@/lib/queryClient'
+import { ThemeManager } from '@/design-system/theme/ThemeManager'
 import MainLayout from '@/layouts/MainLayout'
 import Day01 from '@/pages/Day01'
 import Day02 from '@/pages/Day02'
@@ -17,22 +18,24 @@ import '@/App.css'
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<Navigate to="/day-01" replace />} />
-            <Route path="/day-01" element={<Day01 />} />
-            <Route path="/day-02/*" element={<Day02 />} />
-            <Route path="/day-03" element={<Day03 />} />
-            <Route path="/day-04" element={<Day04 />} />
-            <Route path="/day-05" element={<Day05 />} />
-            <Route path="/day-06" element={<Day06 />} />
-            <Route path="/day-07" element={<Day07 />} />
-            <Route path="/day-08" element={<Day08 />} />
-          </Routes>
-        </MainLayout>
-        <ToastContainer />
-      </Router>
+      <ThemeManager>
+        <Router>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<Navigate to="/day-01" replace />} />
+              <Route path="/day-01" element={<Day01 />} />
+              <Route path="/day-02/*" element={<Day02 />} />
+              <Route path="/day-03" element={<Day03 />} />
+              <Route path="/day-04" element={<Day04 />} />
+              <Route path="/day-05" element={<Day05 />} />
+              <Route path="/day-06" element={<Day06 />} />
+              <Route path="/day-07" element={<Day07 />} />
+              <Route path="/day-08" element={<Day08 />} />
+            </Routes>
+          </MainLayout>
+          <ToastContainer />
+        </Router>
+      </ThemeManager>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

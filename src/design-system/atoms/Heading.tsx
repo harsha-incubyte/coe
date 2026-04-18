@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { theme } from '@/design-system/theme';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -38,3 +39,5 @@ export const Heading = styled.h1.attrs<StyledHeadingProps>(({ $level = 1 }) => (
 
   ${({ $level = 1 }) => levelStyles[$level]}
 `;
+
+Heading.defaultProps = { theme };

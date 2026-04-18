@@ -2,19 +2,22 @@ import { Routes, Route } from 'react-router-dom'
 import { LoginForm } from './LoginForm/LoginForm'
 import { Weather } from './Weather/Weather'
 import { withAuth } from '@/components/withAuth/withAuth'
+import { PageLayout } from '@/design-system/layout/PageLayout'
 
 const ProtectedWeather = withAuth(Weather)
 
 const Day02 = () => {
   return (
-    <div>
-      <h1>Weather | Authentication | API Integration</h1>
+    <PageLayout 
+      title="Weather | Authentication | API Integration"
+      description="Testing routes, API mocking, and protected paths."
+    >
       <Routes>
         <Route path="/" element={<LoginForm redirectPath="/day-02/weather" />} />
         <Route path="/login" element={<LoginForm redirectPath="/day-02/weather" />} />
         <Route path="/weather" element={<ProtectedWeather />} />
       </Routes>
-    </div>
+    </PageLayout>
   )
 }
 

@@ -14,17 +14,16 @@ describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
 
     // Visit a page where the Navbar is present
     cy.visit('/day-03');
-    // Ensure the main content is loaded
+    // Ensure the main content is loaded AND wait for animations to finish
     cy.get('main').should('be.visible');
+    cy.wait(500); // Wait for PageLayout animations
     // Inject axe-core
     cy.injectAxe();
   });
 
   it('should have no accessibility violations on baseline and after opening profile dropdown', () => {
     // Check baseline accessibility
-    cy.checkA11y(undefined, undefined, (violations) => {
-      cy.task('log', JSON.stringify(violations, null, 2));
-    });
+    cy.checkA11y();
 
     // Open User Profile dropdown
     cy.get('.user-profile-btn').click();

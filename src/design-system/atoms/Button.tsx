@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { theme } from '@/design-system/theme';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -114,3 +115,5 @@ export const Button = styled.button<StyledButtonProps>`
   /* Apply Size Styles */
   ${({ $size = 'md' }) => sizeStyles[$size]}
 `;
+
+Button.defaultProps = { theme };

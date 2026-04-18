@@ -1,14 +1,17 @@
 import FizzBuzzUI from '@/components/FizzBuzz'
 import CounterUI from '@/components/Counter'
+import { PageLayout } from '@/design-system/layout/PageLayout'
 
 const Day01 = () => {
   return (
-    <div>
-      <h1>FizzBuzz & Counter</h1>
+    <PageLayout 
+      title="FizzBuzz & Counter" 
+      description="Our very first React components."
+    >
       <FizzBuzzUI />
       <section id="spacer" style={{ height: '50px' }}></section>
       <CounterUI />
-    </div>
+    </PageLayout>
   )
 }
 

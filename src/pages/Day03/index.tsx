@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ArticleCardBad from './ArticleCard/ArticleCardBad';
 import ArticleCardGood from './ArticleCard/ArticleCardGood';
+import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day03.css';
 
 const Day03: React.FC = () => {
@@ -25,32 +26,32 @@ const Day03: React.FC = () => {
   ];
 
   return (
-    <div className="day-03-page">
-      <section className="demo-header">
-        <h1>Semantic Audit & Accessibility</h1>
-        <p className="description">
+    <PageLayout
+      title="Semantic Audit & Accessibility"
+      description={
+        <span>
           Toggle between <strong>Semantic HTML</strong> and <strong>Div Soup</strong> to see how 
           the underlying structure changes while maintaining a similar visual identity.
           Use <code>Tab</code> to navigate and see the accessibility differences.
-        </p>
-        
-        <div className="toggle-container">
-          <label className="switch-label">
-            <span className={!useSemantic ? 'active' : ''}>Non-Semantic</span>
-            <div 
-              className="switch" 
-              onClick={() => setUseSemantic(!useSemantic)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setUseSemantic(!useSemantic); }}
-              aria-label="Toggle Semantic HTML"
-            >
-              <div className={`slider ${useSemantic ? 'on' : ''}`}></div>
-            </div>
-            <span className={useSemantic ? 'active' : ''}>Semantic</span>
-          </label>
-        </div>
-      </section>
+        </span>
+      }
+    >
+      <div className="toggle-container" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center' }}>
+        <label className="switch-label">
+          <span className={!useSemantic ? 'active' : ''}>Non-Semantic</span>
+          <div 
+            className="switch" 
+            onClick={() => setUseSemantic(!useSemantic)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setUseSemantic(!useSemantic); }}
+            aria-label="Toggle Semantic HTML"
+          >
+            <div className={`slider ${useSemantic ? 'on' : ''}`}></div>
+          </div>
+          <span className={useSemantic ? 'active' : ''}>Semantic</span>
+        </label>
+      </div>
 
       <div className="comparison-grid">
         {articles.map((article, index) => (
@@ -64,7 +65,7 @@ const Day03: React.FC = () => {
         ))}
       </div>
 
-      <section className="audit-notes">
+      <section className="audit-notes" style={{ marginTop: '2rem' }}>
         <h2>Semantic Audit Notes</h2>
         <ul>
           <li><strong>Article Container:</strong> Using <code>&lt;article&gt;</code> instead of <code>&lt;div&gt;</code> marks the content as independently distributable.</li>
@@ -73,7 +74,7 @@ const Day03: React.FC = () => {
           <li><strong>Interactive Elements:</strong> Using <code>&lt;a&gt;</code> for navigation links provides free keyboard support (Enter key) and correct role announcement.</li>
         </ul>
       </section>
-    </div>
+    </PageLayout>
   );
 };
 

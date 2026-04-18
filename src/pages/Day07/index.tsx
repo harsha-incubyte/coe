@@ -4,6 +4,7 @@ import { useAppStore } from '@/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/design-system/atoms/Input';
 import { Checkbox } from '@/design-system/atoms/Checkbox';
+import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day07.css';
 
 const Day07: React.FC = () => {
@@ -22,17 +23,15 @@ const Day07: React.FC = () => {
   };
 
   return (
-    <div className="day07-container">
-      <header className="day07-header">
-        <div className="header-content">
-          <h1>State Management & Data Fetching</h1>
-          <p className="welcome-text">
-            Welcome back, <strong>{user?.name || 'Guest'}</strong>. 
-            Managing your server state with React Query and client state with Zustand.
-          </p>
-        </div>
-      </header>
-
+    <PageLayout
+      title="State Management & Data Fetching"
+      description={
+        <span>
+          Welcome back, <strong>{user?.name || 'Guest'}</strong>. 
+          Managing your server state with React Query and client state with Zustand.
+        </span>
+      }
+    >
       <div className="tasks-section">
         <div className="section-header">
           <h2>Task Board</h2>
@@ -59,7 +58,6 @@ const Day07: React.FC = () => {
             {createTask.isPending ? '...' : 'Add Task'}
           </button>
         </form>
-
 
         <div className="tasks-list-container">
           {isLoading ? (
@@ -97,7 +95,7 @@ const Day07: React.FC = () => {
         </div>
       </div>
 
-      <footer className="day07-footer">
+      <footer className="day07-footer" style={{ marginTop: '2rem' }}>
         <div className="concept-card">
           <h3>Zustand Auth State</h3>
           <p>Auth state is persisted in localStorage. Refresh the page to see it persist!</p>
@@ -108,7 +106,7 @@ const Day07: React.FC = () => {
           <p>Open the devtools (bottom right) to inspect the 'tasks' query and cache behavior.</p>
         </div>
       </footer>
-    </div>
+    </PageLayout>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs } from '@/components/Tabs';
 import { DeviceConfigurationWizard as Wizard } from '@/pages/Day06/components/Wizard/Wizard';
-
+import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Spinner } from '@/components/Spinner/Spinner';
 import './Dashboard.css';
 
@@ -10,11 +10,10 @@ const RealTimeDataChart = lazy(() => import('@/pages/Day06/components/RealTimeDa
 
 export const Dashboard: React.FC = () => {
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <h1>Advanced React Patterns Dashboard</h1>
-        <p className="subtitle">Compound Components | Split Context | HOCs | Code Splitting</p>
-      </header>
+    <PageLayout
+      title="Advanced React Patterns Dashboard"
+      description="Compound Components | Split Context | HOCs | Code Splitting"
+    >
 
       {/* KATA 1: Compound Tabs Component */}
       <Tabs defaultValue="device-setup">
@@ -56,6 +55,6 @@ export const Dashboard: React.FC = () => {
           </Tabs.Panel>
         </section>
       </Tabs>
-    </div>
+    </PageLayout>
   );
 };

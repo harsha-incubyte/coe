@@ -5,6 +5,7 @@ import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useBoolean } from '@/hooks/useBoolean';
+import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day04.css';
 
 const Day04: React.FC = () => {
@@ -24,11 +25,10 @@ const Day04: React.FC = () => {
   };
 
   return (
-    <div className="day-04-container">
-      <header className="day-04-header">
-        <h1>ARIA Patterns & Reusable Components</h1>
-        <p className="subtitle">Building the atomic foundation for professional, accessible web applications.</p>
-      </header>
+    <PageLayout
+      title="ARIA Patterns & Reusable Components"
+      description="Building the atomic foundation for professional, accessible web applications."
+    >
       
       <div className="playground-grid">
         <section className="exercise-section card-glass">
@@ -154,7 +154,7 @@ const Day04: React.FC = () => {
           </div>
         </div>
       </section>
-    </div>
+    </PageLayout>
   );
 };
 
