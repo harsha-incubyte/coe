@@ -3,6 +3,51 @@ import styled from 'styled-components';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';
 import { Heading } from '@/design-system/atoms/Heading';
 import { Button } from '@/design-system/atoms/Button';
+import { Input } from '@/design-system/atoms/Input';
+import { Checkbox } from '@/design-system/atoms/Checkbox';
+
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+
+const HookCard = styled.div`
+  padding: ${({ theme }) => theme.spacing.xl};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const DisclosureDemo = () => {
+  const { isOpen, onToggle } = useDisclosure();
+  return (
+    <div>
+      <Button $variant="accent" $size="sm" onClick={onToggle}>
+        {isOpen ? 'Close' : 'Show'} Secret Message
+      </Button>
+      {isOpen && (
+        <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+          This message is managed by useDisclosure!
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MediaQueryDemo = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  return (
+    <div style={{ 
+      padding: '0.5rem 1rem', 
+      borderRadius: '20px', 
+      display: 'inline-block',
+      background: isMobile ? '#f43f5e' : '#10b981',
+      color: 'white',
+      fontSize: '0.8rem',
+      fontWeight: 'bold'
+    }}>
+      {isMobile ? 'Mobile View: ON' : 'Desktop View: ON'}
+    </div>
+  );
+};
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -71,7 +116,15 @@ const ComponentShowcase = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
+const FormShowcase = styled(ComponentShowcase)`
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 500px;
+`;
+
 const Day08: React.FC = () => {
+  const [checked, setChecked] = React.useState(false);
+
   return (
     <ThemeManager>
       <PageContainer>
@@ -124,6 +177,25 @@ const Day08: React.FC = () => {
             <Button $size="md">Medium (Default)</Button>
             <Button $size="lg">Large</Button>
           </ComponentShowcase>
+
+          <Heading $level={3} style={{ marginTop: '2rem' }}>Form Elements</Heading>
+          <FormShowcase>
+            <Input 
+              label="Standard Input" 
+              placeholder="e.g. John Doe" 
+              helperText="Built with full A11y support"
+            />
+            <Input 
+              label="Error State" 
+              defaultValue="Invalid Value"
+              error="This field is required"
+            />
+            <Checkbox 
+              label="Accept Terms & Conditions" 
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+            />
+          </FormShowcase>
         </Section>
 
         <Section>
@@ -139,8 +211,22 @@ const Day08: React.FC = () => {
         </Section>
 
         <Section>
-          <Heading $level={2}>Coming Soon: Headless Components</Heading>
-          <p>Next up: Implementing custom headless logic for Dropdowns and Modals.</p>
+          <Heading $level={2}>4. Custom Hooks</Heading>
+          <p>Foundational hooks to power our design system and manage complex UI states.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            <HookCard>
+              <Heading $level={3}>useBoolean / useDisclosure</Heading>
+              <p>Standardized toggle and open/close logic with semantic callbacks.</p>
+              <DisclosureDemo />
+            </HookCard>
+            
+            <HookCard>
+              <Heading $level={3}>useMediaQuery</Heading>
+              <p>Type-safe responsive logic that tracks viewport changes.</p>
+              <MediaQueryDemo />
+            </HookCard>
+          </div>
         </Section>
       </PageContainer>
     </ThemeManager>
