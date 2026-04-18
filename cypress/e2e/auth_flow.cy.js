@@ -4,6 +4,22 @@ describe('Authentication Flow', () => {
     cy.window().then((win) => {
       win.localStorage.clear();
     });
+
+    // Mock weather APIs for this test to keep it deterministic 
+    // without affecting the global MSW browser config
+    cy.intercept('GET', '**/geocoding-api.open-meteo.com/v1/search*', {
+      body: {
+        results: [
+          { id: 1, name: 'London', latitude: 51.5085, longitude: -0.1257, country: 'United Kingdom' }
+        ]
+      }
+    }).as('geocoding');
+
+    cy.intercept('GET', '**/api.open-meteo.com/v1/forecast*', {
+      body: {
+        current_weather: { temperature: 15, weathercode: 1, is_day: 1 }
+      }
+    }).as('forecast');
   });
 
   it('should login, view weather, search and logout', () => {
