@@ -101,10 +101,11 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - *Focus*: Performance optimization (Split Context), Headless Architecture, and Higher-Order Components.
 
 ### Day 07: State Management & Data Fetching
-- **Zustand Store**: Centralized client-side state management for authentication with persistent storage (replacing manual `localStorage` hooks).
-- **React Query Integration**: Robust server state management with automatic caching, background refetching, and standardized loading/error handling.
-- **Optimistic Task Board**: Implementation of a task management system featuring optimistic UI updates for real-time responsiveness and error recovery.
-- *Focus*: Decoupling client vs. server state, cache synchronization, and advanced TDD patterns for asynchronous data.
+- **Persistent Zustand Store**: Centralized client-side state management for authentication using `zustand/middleware/persist` (replacing manual `localStorage` hooks) for seamless session recovery.
+- **Advanced React Query Integration**: Implementation of a robust server state management system for task handling, featuring automatic background refetching and centralized query hydration.
+- **Optimistic UI Updates**: Premium Task Board implementation that provides "instant" feedback on completion toggles using React Query's `onMutate` pattern, complete with error rollback.
+- **Animated UX with Framer Motion**: Integrated `framer-motion` for fluid task transitions, status pill indicators, and high-quality interaction feedback.
+- *Focus*: Synchronization of client vs. server state, optimistic mutation patterns, and maintaining UI responsiveness during long-running asynchronous operations.
 
 ## 📝 TODOs
 
