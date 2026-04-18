@@ -1,6 +1,6 @@
 import { withAuth } from '@/components/withAuth/withAuth';
 import { Dashboard } from './Dashboard/Dashboard';
-import { LoginForm } from '../Day02/LoginForm/LoginForm';
+import { LoginForm } from '@/pages/Day02/LoginForm/LoginForm';
 import './Dashboard/Dashboard.css';
 
 const Day06Fallback = () => (

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Tabs } from '../Tabs';
+import { Tabs } from '@/components/Tabs/Tabs';
 
 describe('Tabs Component (Compound Pattern)', () => {
   it('should render active panel content by default', () => {

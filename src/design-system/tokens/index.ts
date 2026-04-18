@@ -39,7 +39,7 @@ export const colors = {
     700: '#374151',
     800: '#1f2937',
     900: '#111827',
-    950: '#030712',
+    950: '#020617', // Deeper navy-black
   },
   // Semantic Colors
   success: '#10b981',
@@ -47,10 +47,15 @@ export const colors = {
   error: '#ef4444',
   info: '#3b82f6',
 
-  // Background/Surface
-  background: '#ffffff',
-  surface: '#f3f4f6',
-  surfaceDark: '#1f2937',
+  // Dark Theme Oriented Semantic Tokens
+  text: '#f9fafb',         // neutral[50]
+  textSecondary: '#9ca3af', // neutral[400]
+  textMuted: '#6b7280',     // neutral[500]
+  
+  background: '#020617',    // neutral[950]
+  surface: '#0f172a',       // Deep navy surface
+  surfaceLight: '#1e293b',  // Lightened surface
+  border: '#1e293b',        // Border color for surfaces
 };
 
 export const spacing = {
@@ -97,11 +102,11 @@ export const typography = {
 };
 
 export const shadows = {
-  sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  base: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  sm: '0 1px 2px 0 rgb(0 0 0 / 0.5)',
+  base: '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)',
+  md: '0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5)',
+  lg: '0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5)',
+  xl: '0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5)',
 };
 
 export const borderRadius = {

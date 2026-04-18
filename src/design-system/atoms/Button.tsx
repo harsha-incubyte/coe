@@ -11,29 +11,31 @@ interface StyledButtonProps {
 
 const variantStyles = {
   primary: css`
-    background-color: ${({ theme }) => theme.colors.primary[600]};
+    background-color: ${({ theme }) => theme.colors.primary[500]};
     color: white;
     border: none;
 
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.primary[700]};
+      background-color: ${({ theme }) => theme.colors.primary[600]};
     }
 
     &:active:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.primary[800]};
+      background-color: ${({ theme }) => theme.colors.primary[700]};
     }
   `,
   secondary: css`
     background-color: transparent;
-    color: ${({ theme }) => theme.colors.primary[600]};
-    border: 1px solid ${({ theme }) => theme.colors.primary[600]};
+    color: ${({ theme }) => theme.colors.primary[400]};
+    border: 1px solid ${({ theme }) => theme.colors.primary[400]};
 
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.primary[50]};
+      background-color: rgba(99, 102, 241, 0.1);
+      border-color: ${({ theme }) => theme.colors.primary[300]};
+      color: ${({ theme }) => theme.colors.primary[300]};
     }
 
     &:active:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.primary[100]};
+      background-color: rgba(99, 102, 241, 0.2);
     }
   `,
   accent: css`
@@ -42,21 +44,21 @@ const variantStyles = {
     border: none;
 
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.accent[700]};
+      background-color: ${({ theme }) => theme.colors.accent[500]};
     }
 
     &:active:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.accent[800]};
+      background-color: ${({ theme }) => theme.colors.accent[700]};
     }
   `,
   ghost: css`
     background-color: transparent;
-    color: ${({ theme }) => theme.colors.neutral[600]};
+    color: ${({ theme }) => theme.colors.textSecondary};
     border: none;
 
     &:hover:not(:disabled) {
-      background-color: ${({ theme }) => theme.colors.neutral[100]};
-      color: ${({ theme }) => theme.colors.neutral[900]};
+      background-color: ${({ theme }) => theme.colors.surfaceLight};
+      color: ${({ theme }) => theme.colors.text};
     }
   `,
   danger: css`
@@ -103,7 +105,7 @@ export const Button = styled.button<StyledButtonProps>`
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primary[200]};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primary[500]}40;
   }
 
   /* Apply Variant Styles */

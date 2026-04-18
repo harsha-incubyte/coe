@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useAppStore } from '../index';
+import { useAppStore } from '@/store';
 
 describe('Auth Store (Zustand)', () => {
   beforeEach(() => {

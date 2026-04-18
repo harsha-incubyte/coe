@@ -33,7 +33,7 @@ export const Heading = styled.h1.attrs<StyledHeadingProps>(({ $level = 1 }) => (
   margin-bottom: ${({ theme }) => theme.spacing.md};
   font-family: ${({ theme }) => theme.typography.fontFamily.heading};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.neutral[950]};
+  color: ${({ theme }) => theme.colors.text};
   line-height: ${({ theme }) => theme.typography.lineHeight.tight};
 
   ${({ $level = 1 }) => levelStyles[$level]}

@@ -1,12 +1,12 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs } from '@/components/Tabs';
-import { DeviceConfigurationWizard as Wizard } from '../components/Wizard/Wizard';
+import { DeviceConfigurationWizard as Wizard } from '@/pages/Day06/components/Wizard/Wizard';
 
 import { Spinner } from '@/components/Spinner/Spinner';
 import './Dashboard.css';
 
 // KATA 4: Code Splitting
-const RealTimeDataChart = lazy(() => import('../components/RealTimeDataChart/RealTimeDataChart'));
+const RealTimeDataChart = lazy(() => import('@/pages/Day06/components/RealTimeDataChart/RealTimeDataChart'));
 
 export const Dashboard: React.FC = () => {
   return (

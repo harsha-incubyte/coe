@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ThemeManager } from '../../design-system/theme/ThemeManager';
-import { Heading } from '../../design-system/atoms/Heading';
-import { Button } from '../../design-system/atoms/Button';
+import { ThemeManager } from '@/design-system/theme/ThemeManager';
+import { Heading } from '@/design-system/atoms/Heading';
+import { Button } from '@/design-system/atoms/Button';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -12,6 +12,18 @@ const PageContainer = styled.div`
 
 const Section = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing['3xl']};
+
+  p {
+    color: ${({ theme }) => theme.colors.textSecondary};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+`;
+
+const Description = styled.p`
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  opacity: 0.8;
 `;
 
 const TokenGrid = styled.div`
@@ -32,16 +44,18 @@ const ColorSwatch = styled.div<{ $colorKey: string; $step: string | number }>`
   justify-content: flex-end;
   padding: ${({ theme }) => theme.spacing.sm};
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  color: ${({ theme }) => theme.colors.neutral[900]};
+  color: ${({ theme, $step }) => (Number($step) > 400 ? 'white' : theme.colors.neutral[950])};
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const SwatchInfo = styled.div`
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const ComponentShowcase = styled.div`
@@ -49,9 +63,9 @@ const ComponentShowcase = styled.div`
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.xl};
-  background-color: ${({ theme }) => theme.colors.neutral[50]};
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  border: 1px dashed ${({ theme }) => theme.colors.neutral[300]};
+  border: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const Day08: React.FC = () => {
@@ -60,9 +74,9 @@ const Day08: React.FC = () => {
       <PageContainer>
         <header>
           <Heading $level={1}>Day 08: Design Systems & Component Architecture</Heading>
-          <p style={{ color: '#666', fontSize: '1.2rem', marginBottom: '3rem' }}>
+          <Description>
             Establishing a premium foundation with Design Tokens and Atomic Design.
-          </p>
+          </Description>
         </header>
 
         <Section>

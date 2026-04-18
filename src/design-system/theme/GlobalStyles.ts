@@ -16,7 +16,7 @@ export const GlobalStyles = createGlobalStyle`
   body {
     font-family: ${({ theme }) => theme.typography.fontFamily.base};
     background-color: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.neutral[900]};
+    color: ${({ theme }) => theme.colors.text};
     line-height: ${({ theme }) => theme.typography.lineHeight.normal};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -26,16 +26,16 @@ export const GlobalStyles = createGlobalStyle`
     font-family: ${({ theme }) => theme.typography.fontFamily.heading};
     font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
     line-height: ${({ theme }) => theme.typography.lineHeight.tight};
-    color: ${({ theme }) => theme.colors.neutral[950]};
+    color: ${({ theme }) => theme.colors.text};
   }
 
   a {
-    color: ${({ theme }) => theme.colors.primary[600]};
+    color: ${({ theme }) => theme.colors.primary[400]};
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 
     &:hover {
-      color: ${({ theme }) => theme.colors.primary[700]};
+      color: ${({ theme }) => theme.colors.primary[300]};
     }
   }
 
@@ -50,15 +50,15 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.neutral[100]};
+    background: ${({ theme }) => theme.colors.neutral[900]};
   }
 
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.neutral[300]};
+    background: ${({ theme }) => theme.colors.neutral[700]};
     border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.neutral[400]};
+    background: ${({ theme }) => theme.colors.neutral[600]};
   }
 `;
