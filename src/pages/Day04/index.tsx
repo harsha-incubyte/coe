@@ -4,19 +4,20 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
 import { useDisclosure } from '@/hooks/useDisclosure';
+import { useBoolean } from '@/hooks/useBoolean';
 import './Day04.css';
 
 const Day04: React.FC = () => {
   const { isOpen: isModalOpen, onOpen: openModal, onClose: handleModalClose } = useDisclosure();
   const [announcement, setAnnouncement] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, { setTrue: startSubmitting, setFalse: stopSubmitting }] = useBoolean(false);
   const { showToast } = useToast();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    startSubmitting();
     setTimeout(() => {
-      setIsSubmitting(false);
+      stopSubmitting();
       handleModalClose();
       showToast('Action completed successfully!', 'success');
     }, 1500);
