@@ -11,6 +11,7 @@ When drafting commit messages, use the following structure:
 | **Implementation (GREEN)** | 🟢 | `feat` |
 | **Refactoring** | ♻️ | `refactor` |
 | **Maintenance/Build** | ⚙️ | `chore` |
+| **Aesthetics/UI** | 🎨 | `style` |
 
 ### Variables
 - **DayXX**: Identify current project day (e.g., `Day02`).

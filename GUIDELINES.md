@@ -16,6 +16,7 @@ Every commit must use the appropriate TDD marker:
 - 🔴 `test: ...` for a new failing test.
 - 🟢 `feat: ...` or `fix: ...` for making a test pass.
 - ♻️ `refactor: ...` for clean up.
+- 🎨 `style: ...` for aesthetic changes/improvements.
 - ⚙️ `chore: ...` for config or infrastructure changes.
 
 ## 3. Component Architecture
