@@ -40,7 +40,7 @@ export const Weather: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, { setTrue: startLoading, setFalse: stopLoading }] = useBoolean(false);
   const [error, setError] = useState<string | null>(null);
-  const { isOpen: showSuggestions, onOpen: openSuggestions, onClose: closeSuggestions } = useDisclosure(false);
+  const { isOpen: showSuggestions, onOpen: openSuggestions, onClose: closeSuggestions } = useDisclosure();
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [localTime, setLocalTime] = useState<string>('');
   const skipNextSuggestionsRef = useRef(false);
