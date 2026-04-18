@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input } from '@/design-system/atoms/Input';
+import { useBoolean } from '@/hooks/useBoolean';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import WeatherIllustration from './components/WeatherIllustration';
 import { WeatherTabs } from './components/WeatherTabs';
 import { mapWeatherCode } from './WeatherUtils';
@@ -35,9 +38,9 @@ export const Weather: React.FC = () => {
   const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, { setTrue: startLoading, setFalse: stopLoading }] = useBoolean(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const { isOpen: showSuggestions, onOpen: openSuggestions, onClose: closeSuggestions } = useDisclosure(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [localTime, setLocalTime] = useState<string>('');
   const skipNextSuggestionsRef = useRef(false);
@@ -52,19 +55,10 @@ export const Weather: React.FC = () => {
     }
   }, [isAuthenticated, showToast]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-        setActiveSuggestionIndex(-1);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  useOnClickOutside(searchContainerRef, () => {
+    closeSuggestions();
+    setActiveSuggestionIndex(-1);
+  });
 
   useEffect(() => {
     if (activeSuggestionIndex >= 0) {
@@ -107,7 +101,7 @@ export const Weather: React.FC = () => {
 
         setError(null);
         setSuggestions(data.results);
-        setShowSuggestions(true);
+        openSuggestions();
         setActiveSuggestionIndex(-1);
       } catch {
         setError('Error fetching suggestions');
@@ -138,9 +132,9 @@ export const Weather: React.FC = () => {
   const handleSelectSuggestion = async (suggestion: Suggestion) => {
     skipNextSuggestionsRef.current = true;
     setCity(suggestion.name);
-    setShowSuggestions(false);
+    closeSuggestions();
     setActiveSuggestionIndex(-1);
-    setLoading(true);
+    startLoading();
     setError(null);
     setWeather(null);
 
@@ -164,7 +158,7 @@ export const Weather: React.FC = () => {
     } catch {
       setError('Error loading weather data');
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   };
 
@@ -173,7 +167,7 @@ export const Weather: React.FC = () => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (!showSuggestions && suggestions.length > 0) {
-        setShowSuggestions(true);
+        openSuggestions();
         setActiveSuggestionIndex(0);
       } else {
         setActiveSuggestionIndex((prev) => 
@@ -189,7 +183,7 @@ export const Weather: React.FC = () => {
         handleSelectSuggestion(suggestions[activeSuggestionIndex]);
       }
     } else if (e.key === 'Escape') {
-      setShowSuggestions(false);
+      closeSuggestions();
       setActiveSuggestionIndex(-1);
     }
   };
@@ -208,7 +202,7 @@ export const Weather: React.FC = () => {
               placeholder="Search for a city..."
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              onFocus={() => city.length >= 3 && setShowSuggestions(true)}
+              onFocus={() => city.length >= 3 && openSuggestions()}
               onKeyDown={handleKeyDown}
               role="combobox"
               aria-autocomplete="list"
