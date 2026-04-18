@@ -3,8 +3,7 @@ import { useWizard, useWizardActions } from './useWizard';
 import { useWizardState, useWizardDispatch, WIZARD_STEPS } from './WizardContext';
 import { WizardProvider } from './WizardProvider';
 import { Wizard as GenericWizard, WizardStep } from '@/components/Wizard';
-
-
+import { Input } from '@/design-system/atoms/Input';
 import './Wizard.css';
 
 const StepIndicator: React.FC = () => {
@@ -67,12 +66,14 @@ const ScanStep: React.FC = () => {
     <div className="wizard-step-content">
       <h2>Scan for Devices</h2>
       <p>Enter the Device ID found on your hardware sticker.</p>
-      <input 
-        type="text" 
-        placeholder="e.g. DEV-8821" 
+      <Input
+        label="Device ID"
+        hideLabel
+        type="text"
+        placeholder="e.g. DEV-8821"
         value={deviceId}
         onChange={(e) => dispatch({ type: 'SET_DEVICE_ID', payload: e.target.value })}
-        className="wizard-input"
+        fullWidth
       />
     </div>
   );
@@ -85,18 +86,17 @@ const NetworkStep: React.FC = () => {
   return (
     <div className="wizard-step-content">
       <h2>Network Settings</h2>
-      <div className="form-group">
-        <label>SSID</label>
-        <input 
-          type="text" 
-          value={networkConfig.ssid}
-          onChange={(e) => dispatch({ type: 'SET_NETWORK_CONFIG', payload: { ssid: e.target.value } })}
-          className="wizard-input"
-        />
-      </div>
+      <Input
+        label="SSID"
+        type="text"
+        value={networkConfig.ssid}
+        onChange={(e) => dispatch({ type: 'SET_NETWORK_CONFIG', payload: { ssid: e.target.value } })}
+        fullWidth
+      />
     </div>
   );
 };
+
 
 const ConfigureStep: React.FC = () => (
   <div className="wizard-step-content">

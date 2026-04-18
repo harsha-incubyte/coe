@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
+import { Input } from '@/design-system/atoms/Input';
 import WeatherIllustration from './components/WeatherIllustration';
 import { WeatherTabs } from './components/WeatherTabs';
 import { mapWeatherCode } from './WeatherUtils';
@@ -199,7 +200,10 @@ export const Weather: React.FC = () => {
       <div className="search-section">
         <div className="search-container" ref={searchContainerRef}>
           <form className="search-form" onSubmit={(e) => e.preventDefault()}>
-            <input
+            <Input
+
+              label="Search for a city"
+              hideLabel
               type="text"
               placeholder="Search for a city..."
               value={city}
@@ -216,6 +220,7 @@ export const Weather: React.FC = () => {
                   ? `suggestion-${suggestions[activeSuggestionIndex].id}` 
                   : undefined
               }
+              fullWidth
             />
           </form>
 

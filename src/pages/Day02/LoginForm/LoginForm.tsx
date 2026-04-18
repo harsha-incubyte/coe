@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
+import { Input } from '@/design-system/atoms/Input';
 import './LoginForm.css';
 
 interface LoginData {
@@ -105,26 +106,25 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
       )}
       <form onSubmit={handleSubmit} className="login-form" noValidate>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input 
-            id="email" 
-            type="email" 
-            placeholder="Enter your email"
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input 
-            id="password" 
-            type="password" 
-            placeholder="Enter your password"
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-          />
-        </div>
+        <Input
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          id="password"
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
         <button type="submit" className="login-submit" disabled={isLoading}>
           {isLoading ? 'Logging in...' : 'Login'}
         </button>

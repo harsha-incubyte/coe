@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { fizzBuzz } from '@/lib/fizzbuzz';
+import { Input } from '@/design-system/atoms/Input';
 import '@/components/FizzBuzz/FizzBuzzUI.css';
 
 const FizzBuzzUI: React.FC = () => {
@@ -22,15 +23,17 @@ const FizzBuzzUI: React.FC = () => {
   return (
     <div className="fizzbuzz-container">
       <h2 className="fizzbuzz-title">FizzBuzz Generator</h2>
-      <input
+      <Input
+        label="FizzBuzz length"
+        hideLabel
         type="number"
         min="1"
         value={limit === '' ? '' : limit}
         onChange={handleInputChange}
         placeholder="Enter a number"
-        className="fizzbuzz-input"
         aria-label="FizzBuzz length"
       />
+
       <div className="fizzbuzz-sequence">
         {generateSequence().map(({ num, res }) => (
           <span 

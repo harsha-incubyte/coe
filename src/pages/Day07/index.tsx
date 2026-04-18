@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, type Task } from '@/hooks/queries/useTasks';
 import { useAppStore } from '@/store';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Input } from '@/design-system/atoms/Input';
+import { Checkbox } from '@/design-system/atoms/Checkbox';
 import './Day07.css';
 
 const Day07: React.FC = () => {
@@ -42,21 +44,22 @@ const Day07: React.FC = () => {
         </div>
 
         <form className="add-task-form" onSubmit={handleAddTask}>
-          <input
+          <Input
+            label="New Task"
+            hideLabel
             type="text"
             placeholder="What needs to be done?"
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             disabled={createTask.isPending}
-            required={true}
-            aria-required={true}
-            aria-invalid={!newTaskTitle.trim()}
-            aria-describedby="task-error"
+            required
+            fullWidth
           />
           <button type="submit" disabled={createTask.isPending || !newTaskTitle.trim()}>
             {createTask.isPending ? '...' : 'Add Task'}
           </button>
         </form>
+
 
         <div className="tasks-list-container">
           {isLoading ? (
@@ -80,16 +83,13 @@ const Day07: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className={`task-item ${task.completed ? 'completed' : ''}`}
                   >
-                    <label className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        checked={task.completed}
-                        onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                    <span className="task-title">{task.title}</span>
+                    <Checkbox
+                      label={task.title}
+                      checked={task.completed}
+                      onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
+                    />
                   </motion.li>
+
                 ))}
               </AnimatePresence>
             </ul>

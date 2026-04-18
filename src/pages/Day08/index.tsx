@@ -33,10 +33,12 @@ const TokenGrid = styled.div`
   margin-top: ${({ theme }) => theme.spacing.lg};
 `;
 
-const ColorSwatch = styled.div<{ $colorKey: string; $step: string | number }>`
+type ColorPaletteKey = 'primary' | 'accent' | 'neutral';
+type ColorStep = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
+
+const ColorSwatch = styled.div<{ $colorKey: ColorPaletteKey; $step: ColorStep }>`
   height: 100px;
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  background-color: ${({ theme, $colorKey, $step }) => (theme.colors as any)[$colorKey][$step]};
+  background-color: ${({ theme, $colorKey, $step }) => theme.colors[$colorKey][$step]};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   box-shadow: ${({ theme }) => theme.shadows.base};
   display: flex;
@@ -86,7 +88,7 @@ const Day08: React.FC = () => {
           
           <Heading $level={3}>Primary Palette</Heading>
           <TokenGrid>
-            {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map((step) => (
+            {([50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const).map((step) => (
               <ColorSwatch key={step} $colorKey="primary" $step={step}>
                 <SwatchInfo>Primary {step}</SwatchInfo>
               </ColorSwatch>
@@ -95,7 +97,7 @@ const Day08: React.FC = () => {
 
           <Heading $level={3} style={{ marginTop: '2rem' }}>Accent Palette</Heading>
           <TokenGrid>
-            {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map((step) => (
+            {([50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const).map((step) => (
               <ColorSwatch key={step} $colorKey="accent" $step={step}>
                 <SwatchInfo>Accent {step}</SwatchInfo>
               </ColorSwatch>
