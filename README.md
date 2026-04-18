@@ -44,7 +44,7 @@ src/
 
 ## 🧪 Testing Strategy (TDD)
 
-We follow a strict **Red-Green-Refactor** cycle using standardized commit markers (🔴, 🟢, ♻️, ⚙️). Our testing stack includes:
+We follow a strict **Red-Green-Refactor** cycle using standardized commit markers (🔴, 🟢, ♻️, ⚙️, 🎨). Our testing stack includes:
 
 - **Unit Testing (Vitest + React Testing Library)**: For isolated component logic and DOM state verification.
 - **End-to-End Testing (Cypress)**: For verifying critical user journeys (e.g., Auth flow, Weather search).
@@ -107,16 +107,18 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - **Animated UX with Framer Motion**: Integrated `framer-motion` for fluid task transitions, status pill indicators, and high-quality interaction feedback.
 - *Focus*: Synchronization of client vs. server state, optimistic mutation patterns, and maintaining UI responsiveness during long-running asynchronous operations.
 
-### Day 08: Premium Design System Foundations
-- **Design Tokens**: Centralized HSL-based color palette, spacing scale, and typography tokens using `styled-components` ThemeProvider.
+### Day 08: Premium Design System & Architecture Foundations
+- **Design Tokens**: Centralized HSL-based color palette, spacing scale, and typography tokens using `styled-components` ThemeProvider globally.
 - **Atomic Atoms**: Implementation of reusable, type-safe, and WCAG-compliant `Heading`, `Button`, `Input`, and `Checkbox` components.
+- **Custom Hooks Collection**: Reusable, domain-agnostic hooks (`useDisclosure`, `useMediaQuery`, `useOnClickOutside`, `useBoolean`) streamlining interactive states.
+- **Standardized Routing Layouts**: Global `PageLayout` integrating `framer-motion` to provide a premium, consistent page transition experience across all routes.
 - **Accessibility Logic**: Atomic components feature built-in `aria-` attributes, focus management, and automatic ID generation for labels and error messages.
-- *Focus*: Scalable component architecture, Design Systems, and robust Accessibility (WCAG 2.1 AA).
+- *Focus*: Scalable component architecture, Custom Hooks, Design Systems, and robust Accessibility (WCAG 2.1 AA).
 
 ## 📝 TODOs
 
 - [ ] **Internationalization (i18n)**: Implement support for multiple languages using a framework like `react-i18next`. Ensure all static text, date formats, and accessibility labels are localized.
-- [ ] **Shared Theme System**: Standardize all color tokens and spacing into a centralized CSS variable system to remove ad-hoc styling.
+- [x] **Shared Theme System**: Standardize all color tokens and spacing into a centralized CSS variable system to remove ad-hoc styling.
 
 ---
 *Created with ❤️ by Harsha at Incubyte*
