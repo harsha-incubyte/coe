@@ -93,6 +93,14 @@ const Navbar: React.FC = () => {
               Day 07
             </NavLink>
           </li>
+          <li>
+            <NavLink 
+              to="/day-08" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              Day 08
+            </NavLink>
+          </li>
         </ul>
         <div className="navbar-actions">
           {isAuthenticated ? (

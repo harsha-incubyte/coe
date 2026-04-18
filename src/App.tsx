@@ -10,6 +10,7 @@ import Day04 from '@/pages/Day04'
 import Day05 from '@/pages/Day05'
 import Day06 from '@/pages/Day06'
 import Day07 from '@/pages/Day07'
+import Day08 from '@/pages/Day08'
 import ToastContainer from '@/components/Toast/ToastContainer'
 import '@/App.css'
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="/day-05" element={<Day05 />} />
             <Route path="/day-06" element={<Day06 />} />
             <Route path="/day-07" element={<Day07 />} />
+            <Route path="/day-08" element={<Day08 />} />
           </Routes>
         </MainLayout>
         <ToastContainer />

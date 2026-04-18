@@ -24,6 +24,7 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
+    "styled-components": "^6.4.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react": "^6.0.1",
     "axe-core": "^4.11.3",
     "cypress": "^15.13.1",
