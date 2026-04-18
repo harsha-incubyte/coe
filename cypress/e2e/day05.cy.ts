@@ -1,5 +1,17 @@
 describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
   beforeEach(() => {
+    // Set authentication state in localStorage
+    cy.window().then((win) => {
+      win.localStorage.setItem('coe-app-storage', JSON.stringify({
+        state: {
+          user: { id: '1', email: 'harsha@incubyte.co', name: 'Harsha' },
+          token: 'mock-token',
+          isAuthenticated: true
+        },
+        version: 0
+      }));
+    });
+
     // Visit a page where the Navbar is present
     cy.visit('/day-03');
     // Ensure the main content is loaded

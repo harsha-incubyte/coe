@@ -4,6 +4,16 @@ import { withAuth } from './withAuth';
 import { MemoryRouter } from 'react-router-dom';
 import { useAppStore } from '@/store';
 
+// Mock Navigate to avoid infinite loops in tests where we render the component directly
+vitest.mock('react-router-dom', async () => {
+  const actual = await vitest.importActual('react-router-dom');
+  return {
+    ...actual,
+    Navigate: vitest.fn(() => <div data-testid="navigate-mock" />),
+    // Need to mock useLocation and useNavigate if needed, but react-router-dom ones work fine if not looping
+  };
+});
+
 describe('withAuth HOC', () => {
   const MockComponent = ({ title }: { title: string }) => <div>Protected: {title}</div>;
 
@@ -12,16 +22,15 @@ describe('withAuth HOC', () => {
     vitest.clearAllMocks();
   });
 
-  it('should render nothing (Navigate) by default if not authenticated', () => {
+  it('should render Navigate by default if not authenticated', () => {
     const ProtectedComponent = withAuth(MockComponent);
-    const { container } = render(
+    render(
       <MemoryRouter initialEntries={['/secure-page']}>
         <ProtectedComponent title="My Dashboard" />
       </MemoryRouter>
     );
 
-    // Navigate renders null
-    expect(container.firstChild).toBeNull();
+    expect(screen.getByTestId('navigate-mock')).toBeInTheDocument();
   });
 
   it('should render fallback component if provided and not authenticated', () => {

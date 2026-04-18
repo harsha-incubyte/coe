@@ -18,9 +18,9 @@ describe('Authentication Flow', () => {
     cy.get('#password').type('password123');
     cy.get('.login-form').submit();
 
-    // Verify redirection to weather dashboard (Cypress automatically waits for assertions)
+    // Verify redirection to weather dashboard
     cy.url().should('include', '/day-02/weather');
-    cy.get('.logout-button').should('be.visible');
+    cy.get('.user-profile-btn').should('be.visible');
     cy.get('input[placeholder="Search for a city..."]').should('be.visible');
 
     // Search for a city
@@ -31,8 +31,9 @@ describe('Authentication Flow', () => {
     cy.contains('London').should('be.visible');
     cy.contains('°C').should('be.visible');
 
-    // Logout
-    cy.get('.logout-button').click();
+    // Logout via Navbar
+    cy.get('.user-profile-btn').click();
+    cy.get('.dropdown-logout-btn').click();
     
     // Verify redirection back to login page
     cy.url().should('include', '/day-02/login');

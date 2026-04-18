@@ -14,5 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
+    pool: 'forks',
+    isolate: true, // Ensured each test file runs in a fresh process
   },
 })

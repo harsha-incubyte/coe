@@ -9,7 +9,7 @@ describe('Navbar', () => {
     useAppStore.setState({ isAuthenticated: false, user: null });
   });
 
-  it('should render Day 01 and Day 02 links', () => {
+  it('should render Day 01, Day 02 and Day 07 links', () => {
     render(
       <MemoryRouter>
         <Navbar />
@@ -18,6 +18,7 @@ describe('Navbar', () => {
 
     expect(screen.getByText(/Day 01/i)).toBeInTheDocument();
     expect(screen.getByText(/Day 02/i)).toBeInTheDocument();
+    expect(screen.getByText(/Day 07/i)).toBeInTheDocument();
   });
 
   it('should be wrapped in a header tag', () => {
