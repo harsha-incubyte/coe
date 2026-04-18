@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input } from '@/design-system/atoms/Input';
+import { useBoolean } from '@/hooks/useBoolean';
 import './LoginForm.css';
 
 interface LoginData {
@@ -30,7 +31,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, { setTrue: startLoading, setFalse: stopLoading }] = useBoolean(false);
 
   const { showToast } = useToast();
 
@@ -60,7 +61,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       return;
     }
 
-    setIsLoading(true);
+    startLoading();
     try {
       if (onLogin) {
         await onLogin({ email, password });
@@ -89,7 +90,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       setError(errorMessage);
       showToast('Login failed. Please check your credentials.', 'error');
     } finally {
-      setIsLoading(false);
+      stopLoading();
     }
   };
 
