@@ -61,6 +61,7 @@ const SwatchInfo = styled.div`
 const ComponentShowcase = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
   padding: ${({ theme }) => theme.spacing.xl};
   background-color: ${({ theme }) => theme.colors.surface};
