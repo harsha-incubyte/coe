@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
 import { queryClient } from '@/lib/queryClient';
 import { fetchTasks, tasksQueryKey } from '@/hooks/queries/useTasks';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { isOpen: isDropdownOpen, onToggle: toggleDropdown, onClose: closeDropdown } = useDisclosure();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(dropdownRef, closeDropdown);
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAppStore();
   const { showToast } = useToast();
@@ -16,7 +21,7 @@ const Navbar: React.FC = () => {
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     logout();
-    setIsDropdownOpen(false);
+    closeDropdown();
     showToast('You have been logged out successfully.', 'info');
     navigate('/day-02/login');
   };
@@ -104,10 +109,10 @@ const Navbar: React.FC = () => {
         </ul>
         <div className="navbar-actions">
           {isAuthenticated ? (
-            <>
+            <div className="user-profile-wrapper" ref={dropdownRef}>
               <button 
                 className="user-profile-btn"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                onClick={toggleDropdown}
                 aria-expanded={isDropdownOpen}
                 aria-controls="user-menu"
                 aria-label="User Profile"
@@ -138,7 +143,7 @@ const Navbar: React.FC = () => {
                   </ul>
                 </div>
               )}
-            </>
+            </div>
           ) : (
             <NavLink to="/day-02/login" className="login-nav-btn">Login</NavLink>
           )}
