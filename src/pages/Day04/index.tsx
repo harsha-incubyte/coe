@@ -1,24 +1,23 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
+import { useDisclosure } from '@/hooks/useDisclosure';
 import './Day04.css';
 
 const Day04: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: handleModalClose } = useDisclosure();
   const [announcement, setAnnouncement] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
-
-  const handleModalClose = useCallback(() => setIsModalOpen(false), []);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      setIsModalOpen(false);
+      handleModalClose();
       showToast('Action completed successfully!', 'success');
     }, 1500);
   };
@@ -40,7 +39,7 @@ const Day04: React.FC = () => {
           
           <Button 
             variant="primary" 
-            onClick={() => setIsModalOpen(true)}
+            onClick={openModal}
             aria-haspopup="dialog"
             size="lg"
           >
