@@ -1,5 +1,6 @@
 import React, { useId, type InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { theme } from '@/design-system/theme';
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
@@ -14,6 +15,7 @@ const CheckboxContainer = styled.label`
   font-size: ${({ theme }) => theme.typography.fontSize.base};
   color: ${({ theme }) => theme.colors.text};
 `;
+CheckboxContainer.defaultProps = { theme };
 
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   position: absolute;
@@ -26,6 +28,7 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   white-space: nowrap;
   border-width: 0;
 `;
+HiddenCheckbox.defaultProps = { theme };
 
 const StyledCheckbox = styled.div<{ $checked?: boolean }>`
   width: 1.25rem;
@@ -53,6 +56,7 @@ const StyledCheckbox = styled.div<{ $checked?: boolean }>`
     border-color: ${({ theme }) => theme.colors.primary[400]};
   }
 `;
+StyledCheckbox.defaultProps = { theme };
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, checked, ...props }, ref) => {

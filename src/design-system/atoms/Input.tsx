@@ -1,5 +1,7 @@
 import React, { useId, type InputHTMLAttributes } from 'react';
 import styled, { css } from 'styled-components';
+import { theme } from '@/design-system/theme';
+
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -15,7 +17,7 @@ const InputContainer = styled.div<{ $fullWidth?: boolean }>`
   gap: ${({ theme }) => theme.spacing.xs};
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 `;
-
+InputContainer.defaultProps = { theme };
 
 const StyledLabel = styled.label<{ $hideLabel?: boolean }>`
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
@@ -37,6 +39,7 @@ const StyledLabel = styled.label<{ $hideLabel?: boolean }>`
       border-width: 0;
     `}
 `;
+StyledLabel.defaultProps = { theme };
 
 const InputWrapper = styled.div<{ $error?: boolean }>`
   position: relative;
@@ -57,6 +60,7 @@ const InputWrapper = styled.div<{ $error?: boolean }>`
     border-color: ${({ theme, $error }) => ($error ? theme.colors.error : theme.colors.primary[400])};
   }
 `;
+InputWrapper.defaultProps = { theme };
 
 const StyledInput = styled.input`
   width: 100%;
@@ -77,12 +81,15 @@ const StyledInput = styled.input`
     opacity: 0.5;
   }
 `;
+StyledInput.defaultProps = { theme };
 
 const Message = styled.p<{ $variant: 'error' | 'helper' }>`
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
   margin-top: ${({ theme }) => theme.spacing.xs};
   color: ${({ theme, $variant }) => ($variant === 'error' ? theme.colors.error : theme.colors.textSecondary)};
 `;
+Message.defaultProps = { theme };
+
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, fullWidth = false, hideLabel = false, id: providedId, ...props }, ref) => {
@@ -117,14 +124,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {error}
           </Message>
         )}
-        {helperText && !error && (
+        {helperText && (
           <Message id={helperId} $variant="helper">
             {helperText}
           </Message>
         )}
+
       </InputContainer>
     );
   }
 );
 
 Input.displayName = 'Input';
+
