@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
+import { queryClient } from '@/lib/queryClient';
+import { fetchTasks, tasksQueryKey } from '@/hooks/queries/useTasks';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -17,6 +19,13 @@ const Navbar: React.FC = () => {
     setIsDropdownOpen(false);
     showToast('You have been logged out successfully.', 'info');
     navigate('/day-02/login');
+  };
+
+  const prefetchTasks = () => {
+    queryClient.prefetchQuery({
+      queryKey: tasksQueryKey,
+      queryFn: fetchTasks,
+    });
   };
 
   return (
@@ -73,6 +82,15 @@ const Navbar: React.FC = () => {
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
               Day 06
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to="/day-07" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+              onMouseEnter={prefetchTasks}
+            >
+              Day 07
             </NavLink>
           </li>
         </ul>

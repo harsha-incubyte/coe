@@ -6,7 +6,9 @@ export interface Task {
   completed: boolean;
 }
 
-const fetchTasks = async (): Promise<Task[]> => {
+export const tasksQueryKey = ['tasks'] as const;
+
+export const fetchTasks = async (): Promise<Task[]> => {
   const res = await fetch('/api/tasks');
   if (!res.ok) throw new Error('Failed to fetch tasks');
   return res.json();
@@ -32,7 +34,7 @@ const updateTask = async ({ id, completed }: { id: string; completed: boolean })
 
 export const useTasksQuery = () => {
   return useQuery({
-    queryKey: ['tasks'],
+    queryKey: tasksQueryKey,
     queryFn: fetchTasks,
   });
 };
@@ -42,7 +44,7 @@ export const useCreateTaskMutation = () => {
   return useMutation({
     mutationFn: createTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey });
     },
   });
 };
@@ -53,10 +55,10 @@ export const useUpdateTaskMutation = () => {
     mutationFn: updateTask,
     // Optimistic Update
     onMutate: async (updatedTask) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks'] });
-      const previousTasks = queryClient.getQueryData<Task[]>(['tasks']);
+      await queryClient.cancelQueries({ queryKey: tasksQueryKey });
+      const previousTasks = queryClient.getQueryData<Task[]>(tasksQueryKey);
       
-      queryClient.setQueryData(['tasks'], (old: Task[] | undefined) => {
+      queryClient.setQueryData([...tasksQueryKey], (old: Task[] | undefined) => {
         return old?.map((t) => (t.id === updatedTask.id ? { ...t, completed: updatedTask.completed } : t));
       });
 
@@ -64,11 +66,11 @@ export const useUpdateTaskMutation = () => {
     },
     onError: (_err, _newVal, context) => {
       if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks'], context.previousTasks);
+        queryClient.setQueryData([...tasksQueryKey], context.previousTasks);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey });
     },
   });
 };
