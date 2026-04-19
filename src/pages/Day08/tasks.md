@@ -14,9 +14,9 @@
 - [x] Assemble Molecules and Organisms
     - [x] `Dropdown` molecule (styled)
     - [ ] `Modal` organism (styled)
-- [ ] Create Day 08 Route Page
-    - [ ] Design Token showcase
-    - [ ] Component demonstration
+- [x] Create Day 08 Route Page
+    - [x] Design Token showcase
+    - [x] Component demonstration
     - [ ] Storybook integration (iFrame)
 - [ ] Accessibility and Testing
     - [ ] Validate with `axe-core` / `jest-axe`
