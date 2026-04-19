@@ -1,38 +1,37 @@
 import { useState } from 'react';
-import '@/components/Counter/CounterUI.css';
+import * as S from './CounterUI.styles';
 
 export default function CounterUI() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="counter-container">
-      <h2 className="counter-title">Counter</h2>
-      <div className="counter-display">
+    <S.CounterContainer>
+      <S.CounterTitle>Counter</S.CounterTitle>
+      <S.CounterDisplay>
         <span key={count} data-testid="count-display">{count}</span>
-      </div>
-      <div className="counter-controls">
-        <button
+      </S.CounterDisplay>
+      <S.ControlsContainer>
+        <S.CounterButton
+          $variant="decrement"
           onClick={() => setCount(count - 1)}
-          className="counter-button btn-decrement"
         >
           Decrement
-        </button>
-        <button
+        </S.CounterButton>
+        <S.CounterButton
+          $variant="increment"
           onClick={() => setCount(count + 1)}
-          className="counter-button btn-increment"
         >
           Increment
-        </button>
-      </div>
-      <br />
-      <div className="counter-reset">
-        <button
+        </S.CounterButton>
+      </S.ControlsContainer>
+      <S.ResetContainer>
+        <S.CounterButton
+          $variant="reset"
           onClick={() => setCount(0)}
-          className="counter-button btn-reset"
         >
           Reset
-        </button>
-      </div>
-    </div>
+        </S.CounterButton>
+      </S.ResetContainer>
+    </S.CounterContainer>
   );
 }
