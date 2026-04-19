@@ -1,27 +1,40 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
 import { queryClient } from '@/lib/queryClient';
 import { fetchTasks, tasksQueryKey } from '@/hooks/queries/useTasks';
-import { useDisclosure } from '@/hooks/useDisclosure';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import { Dropdown } from '@/design-system/molecules/Dropdown';
+import styled from 'styled-components';
 import './Navbar.css';
 
-const Navbar: React.FC = () => {
-  const { isOpen: isDropdownOpen, onToggle: toggleDropdown, onClose: closeDropdown } = useDisclosure();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing.md};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
 
-  useOnClickOutside(dropdownRef, closeDropdown);
+const UserName = styled.span`
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+`;
+
+const UserEmail = styled.span`
+  font-size: ${({ theme }) => theme.typography.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAppStore();
   const { showToast } = useToast();
 
-  const handleLogout = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleLogout = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     logout();
-    closeDropdown();
     showToast('You have been logged out successfully.', 'info');
     navigate('/day-02/login');
   };
@@ -109,41 +122,30 @@ const Navbar: React.FC = () => {
         </ul>
         <div className="navbar-actions">
           {isAuthenticated ? (
-            <div className="user-profile-wrapper" ref={dropdownRef}>
-              <button 
-                className="user-profile-btn"
-                onClick={toggleDropdown}
-                aria-expanded={isDropdownOpen}
-                aria-controls="user-menu"
-                aria-label="User Profile"
-              >
-                <div className="avatar-placeholder">
-                  {user?.name.charAt(0).toUpperCase() || 'U'}
-                </div>
-              </button>
-              
-              {isDropdownOpen && (
-                <div id="user-menu" className="user-dropdown">
-                  <div className="user-info">
-                    <span className="user-name">{user?.name}</span>
-                    <span className="user-email">{user?.email}</span>
+            <Dropdown
+              trigger={({ isOpen, onToggle }) => (
+                <button 
+                  className="user-profile-btn"
+                  onClick={onToggle}
+                  aria-expanded={isOpen}
+                  aria-label="User Profile"
+                >
+                  <div className="avatar-placeholder">
+                    {user?.name.charAt(0).toUpperCase() || 'U'}
                   </div>
-                  <hr />
-                  <ul className="dropdown-links">
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#settings">Settings</a></li>
-                    <li>
-                      <button 
-                        onClick={handleLogout} 
-                        className="dropdown-logout-btn"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
+                </button>
               )}
-            </div>
+              items={[
+                { label: 'Profile', onClick: () => navigate('#profile') },
+                { label: 'Settings', onClick: () => navigate('#settings') },
+                { label: 'Logout', onClick: (e?: any) => handleLogout(e), variant: 'danger' },
+              ]}
+            >
+              <UserInfo>
+                <UserName>{user?.name}</UserName>
+                <UserEmail>{user?.email}</UserEmail>
+              </UserInfo>
+            </Dropdown>
           ) : (
             <NavLink to="/day-02/login" className="login-nav-btn">Login</NavLink>
           )}
