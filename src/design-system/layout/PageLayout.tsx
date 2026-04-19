@@ -14,38 +14,38 @@ export interface PageLayoutProps {
 const PageContainer = styled(motion.div)<{ $maxWidth?: string }>`
   max-width: ${({ $maxWidth }) => $maxWidth || '1200px'};
   margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing?.['3xl'] || '4rem'} ${({ theme }) => theme.spacing?.md || '1rem'};
+  padding: ${({ theme }) => theme.spacing?.['3xl']} ${({ theme }) => theme.spacing?.md};
   width: 100%;
 `;
 PageContainer.defaultProps = { theme };
 
 const HeaderContainer = styled.header`
-  margin-bottom: ${({ theme }) => theme.spacing?.['3xl'] || '4rem'};
+  margin-bottom: ${({ theme }) => theme.spacing?.['3xl']};
 `;
 HeaderContainer.defaultProps = { theme };
 
 const Description = styled.p`
-  color: ${({ theme }) => theme.colors?.text || '#f9fafb'} !important;
-  font-size: 1.2rem;
+  color: ${({ theme }) => theme.colors?.text};
+  font-size: ${({ theme }) => theme.typography?.fontSize?.xl};
   margin: 0 auto;
-  margin-top: ${({ theme }) => theme.spacing?.sm || '0.5rem'};
-  opacity: 1;
+  margin-top: ${({ theme }) => theme.spacing?.sm};
+  opacity: 1; /* Keep opacity at 1 for accessibility */
   max-width: 800px;
   text-align: center;
-  line-height: 1.6;
+  line-height: ${({ theme }) => theme.typography?.lineHeight?.relaxed};
 
   strong {
-    color: ${({ theme }) => theme.colors?.accent?.[300] || '#c4b5fd'} !important;
-    font-weight: 700;
+    color: ${({ theme }) => theme.colors?.accent?.[300]};
+    font-weight: ${({ theme }) => theme.typography?.fontWeight?.bold};
   }
 
   code {
-    background: ${({ theme }) => theme.colors?.surfaceLight || '#1e293b'} !important;
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: ${({ theme }) => theme.colors?.primary?.[300] || '#a5b4fc'} !important;
-    border: 1px solid ${({ theme }) => theme.colors?.border || '#334155'} !important;
+    background: ${({ theme }) => theme.colors?.surfaceLight};
+    padding: ${({ theme }) => theme.spacing?.xs} ${({ theme }) => theme.spacing?.sm};
+    border-radius: ${({ theme }) => theme.borderRadius?.base};
+    font-size: ${({ theme }) => theme.typography?.fontSize?.sm};
+    color: ${({ theme }) => theme.colors?.primary?.[300]};
+    border: 1px solid ${({ theme }) => theme.colors?.border};
   }
 `;
 Description.defaultProps = { theme };
