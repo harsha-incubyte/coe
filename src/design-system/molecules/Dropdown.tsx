@@ -9,6 +9,8 @@ const DropdownContainer = styled.div`
   display: inline-block;
 `;
 
+DropdownContainer.defaultProps = { theme };
+
 const DropdownMenu = styled.div`
   position: absolute;
   top: 100%;
@@ -28,6 +30,8 @@ const DropdownMenu = styled.div`
     to { opacity: 1; transform: translateY(0); }
   }
 `;
+
+DropdownMenu.defaultProps = { theme };
 
 const DropdownItem = styled.button<{ $variant?: 'default' | 'danger' }>`
   width: 100%;
@@ -49,6 +53,8 @@ const DropdownItem = styled.button<{ $variant?: 'default' | 'danger' }>`
   }
 `;
 
+DropdownItem.defaultProps = { theme };
+
 interface DropdownProps {
   label?: React.ReactNode;
   trigger?: (props: { isOpen: boolean; onToggle: () => void }) => React.ReactNode;
@@ -56,7 +62,7 @@ interface DropdownProps {
   children?: React.ReactNode;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ label, trigger, items, children }) => {
+export const Dropdown = ({ label, trigger, items, children }: DropdownProps) => {
   const { isOpen, onToggle, containerRef, onClose } = useDropdown();
 
   return (
@@ -96,4 +102,3 @@ export const Dropdown: React.FC<DropdownProps> = ({ label, trigger, items, child
   );
 };
 
-Dropdown.defaultProps = { theme };
