@@ -1,0 +1,26 @@
+- [x] Set up environment and dependencies
+    - [x] Install `styled-components`
+    - [x] Set up Design Tokens and Theme
+        - [x] Define colors, typography, and spacing tokens
+        - [x] Create `ThemeManager` and `ThemeProvider`
+        - [x] Implement `GlobalStyles`
+- [x] Build Design System Library (Atoms)
+    - [x] `Button` atom
+    - [x] `Heading` atom
+    - [ ] `Input` atom (if needed)
+- [x] Build Headless Components (Custom Hooks)
+    - [x] `useDropdown` hook
+    - [ ] `useModal` hook
+- [x] Assemble Molecules and Organisms
+    - [x] `Dropdown` molecule (styled)
+    - [ ] `Modal` organism (styled)
+- [ ] Create Day 08 Route Page
+    - [ ] Design Token showcase
+    - [ ] Component demonstration
+    - [ ] Storybook integration (iFrame)
+- [ ] Accessibility and Testing
+    - [ ] Validate with `axe-core` / `jest-axe`
+    - [ ] WCAG AA compliance check
+- [ ] Storybook Documentation
+    - [ ] Install and configure Storybook
+    - [ ] Write stories for Atoms and Molecules
