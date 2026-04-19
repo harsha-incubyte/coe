@@ -90,6 +90,12 @@ const Message = styled.p<{ $variant: 'error' | 'helper' }>`
 `;
 Message.defaultProps = { theme };
 
+const RequiredAsterisk = styled.span.attrs({ 'aria-hidden': 'true' })`
+  color: ${({ theme }) => theme.colors.error};
+  margin-left: 2px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+`;
+RequiredAsterisk.defaultProps = { theme };
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, fullWidth = false, hideLabel = false, id: providedId, ...props }, ref) => {
@@ -107,7 +113,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <InputContainer $fullWidth={fullWidth}>
         <StyledLabel htmlFor={id} $hideLabel={hideLabel}>
           {label}
-          {props.required && <span aria-hidden="true" style={{ color: 'red', marginLeft: '2px' }}>*</span>}
+          {props.required && <RequiredAsterisk>*</RequiredAsterisk>}
         </StyledLabel>
         <InputWrapper $error={!!error}>
           <StyledInput

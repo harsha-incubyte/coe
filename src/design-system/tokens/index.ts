@@ -44,7 +44,7 @@ export const colors = {
   // Semantic Colors
   success: '#10b981',
   warning: '#f59e0b',
-  error: '#ef4444',
+  error: '#fb7185', // Brighter rose-red for better contrast (meets 4.5:1 on dark)
   info: '#3b82f6',
 
   // Dark Theme Oriented Semantic Tokens

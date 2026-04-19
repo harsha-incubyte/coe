@@ -16,7 +16,7 @@ describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
     cy.visit('/day-03');
     // Ensure the main content is loaded AND wait for animations to finish
     cy.get('main').should('be.visible');
-    cy.wait(500); // Wait for PageLayout animations
+    cy.wait(1000); // 1s is enough for the 0.4s animation
     // Inject axe-core
     cy.injectAxe();
   });
