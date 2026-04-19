@@ -6,8 +6,10 @@ import { Input } from '@/design-system/atoms/Input';
 import { Checkbox } from '@/design-system/atoms/Checkbox';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
+import { useDropdown } from '@/hooks/useDropdown';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { PageLayout } from '@/design-system/layout/PageLayout';
+import { Dropdown } from '@/design-system/molecules/Dropdown';
 
 const HookCard = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
@@ -46,6 +48,19 @@ const MediaQueryDemo = () => {
     }}>
       {isMobile ? 'Mobile View: ON' : 'Desktop View: ON'}
     </div>
+  );
+};
+
+const DropdownDemo = () => {
+  return (
+    <Dropdown 
+      label="Account Settings" 
+      items={[
+        { label: 'Profile', onClick: () => alert('Profile clicked') },
+        { label: 'Security', onClick: () => alert('Security clicked') },
+        { label: 'Logout', onClick: () => alert('Logout clicked') },
+      ]} 
+    />
   );
 };
 
@@ -207,6 +222,12 @@ const Day08: React.FC = () => {
             <Heading $level={3}>useMediaQuery</Heading>
             <p>Type-safe responsive logic that tracks viewport changes.</p>
             <MediaQueryDemo />
+          </HookCard>
+
+          <HookCard>
+            <Heading $level={3}>useDropdown</Heading>
+            <p>Manages overlay visibility, click-outside behavior, and Esc-key dismissal.</p>
+            <DropdownDemo />
           </HookCard>
         </div>
       </Section>
