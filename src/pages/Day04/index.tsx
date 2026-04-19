@@ -3,13 +3,13 @@ import Modal from '@/components/Modal/Modal';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
-import { useDisclosure } from '@/hooks/useDisclosure';
+import { useModal } from '@/hooks/useModal';
 import { useBoolean } from '@/hooks/useBoolean';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day04.css';
 
 const Day04: React.FC = () => {
-  const { isOpen: isModalOpen, onOpen: openModal, onClose: handleModalClose } = useDisclosure();
+  const { isOpen: isModalOpen, onOpen: openModal, onClose: handleModalClose } = useModal();
   const [announcement, setAnnouncement] = useState('');
   const [isSubmitting, { setTrue: startSubmitting, setFalse: stopSubmitting }] = useBoolean(false);
   const { showToast } = useToast();

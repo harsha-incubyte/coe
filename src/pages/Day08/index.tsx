@@ -7,9 +7,11 @@ import { Checkbox } from '@/design-system/atoms/Checkbox';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useDropdown } from '@/hooks/useDropdown';
+import { useModal } from '@/hooks/useModal';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Dropdown } from '@/design-system/molecules/Dropdown';
+import Modal from '@/components/Modal/Modal';
 
 const HookCard = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
@@ -48,6 +50,23 @@ const MediaQueryDemo = () => {
     }}>
       {isMobile ? 'Mobile View: ON' : 'Desktop View: ON'}
     </div>
+  );
+};
+
+const ModalDemo = () => {
+  const { isOpen, onOpen, onClose } = useModal();
+  return (
+    <>
+      <Button $variant="primary" $size="sm" onClick={onOpen}>
+        Open Modal Showcase
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose} title="Design System Modal">
+        <p>This modal is managed by the new <code>useModal</code> hook, which automatically handles body scroll locking.</p>
+        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
+          <Button $variant="secondary" onClick={onClose}>Close Modal</Button>
+        </div>
+      </Modal>
+    </>
   );
 };
 
@@ -222,6 +241,12 @@ const Day08: React.FC = () => {
             <Heading $level={3}>useMediaQuery</Heading>
             <p>Type-safe responsive logic that tracks viewport changes.</p>
             <MediaQueryDemo />
+          </HookCard>
+
+          <HookCard>
+            <Heading $level={3}>useModal</Heading>
+            <p>Extends disclosure with scroll locking and modal-specific behavior.</p>
+            <ModalDemo />
           </HookCard>
 
           <HookCard>
