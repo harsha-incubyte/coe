@@ -1,7 +1,7 @@
 import React from 'react';
 import Sun from './Sun';
 import Cloud from './Cloud';
-import './WeatherIllustration.css';
+import * as S from './WeatherIllustration.styles';
 
 interface WeatherIllustrationProps {
   weatherCode: number;
@@ -19,17 +19,17 @@ const WeatherIllustration: React.FC<WeatherIllustrationProps> = ({ weatherCode, 
   };
 
   return (
-    <div className="weather-canvas" style={{ background: getSkyColor() }}>
-      <div className="illustration-container">
-        <div className="sun-layer">
+    <S.WeatherCanvas $skyColor={getSkyColor()}>
+      <S.IllustrationContainer>
+        <S.SunLayer>
           <Sun 
             isNight={!isDay} 
             opacity={weatherCode >= 3 ? 0.3 : 1}
             scale={weatherCode >= 3 ? 0.8 : 1.2}
           />
-        </div>
+        </S.SunLayer>
 
-        <div className="clouds-layer">
+        <S.CloudsLayer>
           {weatherCode === 0 && (
             <Cloud opacity={0.3} scale={1.8} style={{ top: '15%', left: '5%' }} />
           )}
@@ -57,13 +57,13 @@ const WeatherIllustration: React.FC<WeatherIllustrationProps> = ({ weatherCode, 
               <Cloud color="#e2e8f0" opacity={0.9} scale={2.8} style={{ top: '45%', left: '10%' }} />
             </>
           )}
-        </div>
-      </div>
+        </S.CloudsLayer>
+      </S.IllustrationContainer>
       
-      <div className="canvas-content-overlay">
+      <S.CanvasContentOverlay>
         {children}
-      </div>
-    </div>
+      </S.CanvasContentOverlay>
+    </S.WeatherCanvas>
   );
 };
 

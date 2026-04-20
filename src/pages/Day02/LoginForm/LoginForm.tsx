@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input } from '@/design-system/atoms/Input';
+import { Button } from '@/design-system/atoms/Button';
 import { useBoolean } from '@/hooks/useBoolean';
-import './LoginForm.css';
+import * as S from './LoginForm.styles';
 
 interface LoginData {
   email: string;
@@ -95,18 +96,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <div className="login-box">
+    <S.LoginBox>
       {error && (
-        <div className="message message-error" role="alert">
+        <S.Message $variant="error" role="alert">
           {error}
-        </div>
+        </S.Message>
       )}
       {success && (
-        <div className="message message-success">
+        <S.Message $variant="success">
           {success}
-        </div>
+        </S.Message>
       )}
-      <form onSubmit={handleSubmit} className="login-form" noValidate>
+      <S.LoginFormContainer onSubmit={handleSubmit} noValidate>
         <Input
           id="email"
           label="Email"
@@ -115,6 +116,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          fullWidth
         />
         <Input
           id="password"
@@ -124,13 +126,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          fullWidth
         />
 
-        <button type="submit" className="login-submit" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          disabled={isLoading} 
+          $variant="accent" 
+          $fullWidth 
+          $size="lg"
+        >
           {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-    </div>
+        </Button>
+      </S.LoginFormContainer>
+    </S.LoginBox>
   );
 };
 

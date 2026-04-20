@@ -8,7 +8,7 @@ import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import WeatherIllustration from './components/WeatherIllustration';
 import { WeatherTabs } from './components/WeatherTabs';
 import { mapWeatherCode } from './WeatherUtils';
-import './Weather.css';
+import * as S from './Weather.styles';
 
 interface WeatherData {
   city: string;
@@ -190,12 +190,11 @@ export const Weather: React.FC = () => {
 
 
   return (
-    <div className="weather-dashboard-unified">
-      <div className="search-section">
-        <div className="search-container" ref={searchContainerRef}>
-          <form className="search-form" onSubmit={(e) => e.preventDefault()}>
+    <S.DashboardContainer>
+      <S.SearchSection>
+        <S.SearchContainer ref={searchContainerRef}>
+          <form onSubmit={(e) => e.preventDefault()}>
             <Input
-
               label="Search for a city"
               hideLabel
               type="text"
@@ -219,55 +218,54 @@ export const Weather: React.FC = () => {
           </form>
 
           {showSuggestions && suggestions.length > 0 && (
-            <ul 
+            <S.SuggestionsList 
               id="suggestions-listbox"
-              className="suggestions-list"
               role="listbox"
             >
               {suggestions.map((s, index) => (
-                <li 
+                <S.SuggestionItem 
                   key={s.id} 
                   id={`suggestion-${s.id}`}
                   onClick={() => handleSelectSuggestion(s)}
                   role="option"
                   aria-selected={index === activeSuggestionIndex}
-                  className={index === activeSuggestionIndex ? 'active' : ''}
+                  $isActive={index === activeSuggestionIndex}
                 >
-                  <span className="suggestion-name">{s.name}</span>
-                  <span className="suggestion-meta">{s.admin1 ? `${s.admin1}, ` : ''}{s.country}</span>
-                </li>
+                  <S.SuggestionName>{s.name}</S.SuggestionName>
+                  <S.SuggestionMeta>{s.admin1 ? `${s.admin1}, ` : ''}{s.country}</S.SuggestionMeta>
+                </S.SuggestionItem>
               ))}
-            </ul>
+            </S.SuggestionsList>
           )}
-        </div>
-      </div>
+        </S.SearchContainer>
+      </S.SearchSection>
 
-      {loading && <div className="status-overlay">Updating weather...</div>}
-      {error && <div className="error-overlay">{error}</div>}
+      {loading && <S.StatusOverlay>Updating weather...</S.StatusOverlay>}
+      {error && <S.ErrorOverlay>{error}</S.ErrorOverlay>}
 
       {weather && !loading && (
         <WeatherTabs>
           <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
-            <div className="weather-overlay-data">
-              <div className="data-header">
-                <div className="city-info">
-                  <h2 className="city-name">{weather.city}</h2>
-                  <p className="city-meta">{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</p>
-                </div>
-                <div className="time-pill">{localTime}</div>
-              </div>
+            <S.WeatherOverlayData>
+              <S.DataHeader>
+                <S.CityInfo>
+                  <S.CityName>{weather.city}</S.CityName>
+                  <S.CityMeta>{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</S.CityMeta>
+                </S.CityInfo>
+                <S.TimePill>{localTime}</S.TimePill>
+              </S.DataHeader>
 
-              <div className="data-footer">
-                <div className="temp-display">
-                  <span className="temp-value">{Math.round(weather.temperature)}</span>
-                  <span className="temp-unit">°C</span>
-                </div>
-                <div className="condition-label">{weather.condition}</div>
-              </div>
-            </div>
+              <S.DataFooter>
+                <S.TempDisplay>
+                  <S.TempValue>{Math.round(weather.temperature)}</S.TempValue>
+                  <S.TempUnit>°C</S.TempUnit>
+                </S.TempDisplay>
+                <S.ConditionLabel>{weather.condition}</S.ConditionLabel>
+              </S.DataFooter>
+            </S.WeatherOverlayData>
           </WeatherIllustration>
         </WeatherTabs>
       )}
-    </div>
+    </S.DashboardContainer>
   );
 };
