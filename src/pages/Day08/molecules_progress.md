@@ -18,7 +18,7 @@ This document tracks the migration and creation of Molecule components within ou
 - [ ] **Badge / Tag**: Small status indicators or category labels.
 
 ## 🟠 Forms & Search
-- [ ] **SearchBar**: Combination of `Input` and search icon/button.
+- [x] **SearchBar**: Combination of `Input` and search icon/button.
 - [ ] **InputGroup**: Inputs with prefixes or suffixes (e.g., currency, units).
 - [ ] **CheckboxGroup / RadioGroup**: Logical groupings for selection inputs.
 
@@ -30,7 +30,7 @@ This document tracks the migration and creation of Molecule components within ou
 ---
 
 ### Progress Summary
-- **Total Molecules Identified**: 14
-- **Completed**: 1
+- **Total Molecules Identified**: 15
+- **Completed**: 5
 - **In Progress**: 0
-- **Pending**: 13
+- **Pending**: 10
