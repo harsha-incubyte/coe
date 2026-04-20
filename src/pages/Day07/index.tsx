@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, type Task } from '@/hooks/queries/useTasks';
 import { useAppStore } from '@/store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Input } from '@/design-system/atoms/Input';
-import { Checkbox } from '@/design-system/atoms/Checkbox';
-import { Button } from '@/design-system/atoms/Button';
-import { Spinner } from '@/design-system/atoms/Spinner';
+import { Button, Checkbox, Input, Spinner } from '@/design-system/atoms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Day07.styles';
 

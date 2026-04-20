@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@/design-system/atoms/Button';
+import { Button } from '@/design-system/atoms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Day05.styles';
 

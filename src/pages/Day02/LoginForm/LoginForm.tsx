@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
-import { Input } from '@/design-system/atoms/Input';
-import { Button } from '@/design-system/atoms/Button';
+import { Button, Input } from '@/design-system/atoms';
 import { useBoolean } from '@/hooks/useBoolean';
 import * as S from './LoginForm.styles';
 

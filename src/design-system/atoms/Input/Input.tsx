@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
-import { FormGroup } from '@/design-system/molecules/FormGroup';
+import { FormGroup } from '@/design-system/molecules';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

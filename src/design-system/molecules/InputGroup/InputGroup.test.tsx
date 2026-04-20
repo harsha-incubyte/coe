@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { InputGroup } from './InputGroup';
-import { Input } from '@/design-system/atoms/Input';
+import { Input } from '@/design-system/atoms';
 
 describe('InputGroup Molecule', () => {
   it('renders input with prefix and suffix', () => {

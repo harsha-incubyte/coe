@@ -1,6 +1,7 @@
+import { FormGroup } from '@/design-system/molecules/FormGroup';
 import React from 'react';
 import styled from 'styled-components';
-import { FormGroup } from '@/design-system/molecules/FormGroup';
+
 import { theme } from '@/design-system/theme';
 
 export interface RadioOption {

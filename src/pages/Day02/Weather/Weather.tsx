@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
-import { Input } from '@/design-system/atoms/Input';
-import { Badge } from '@/design-system/molecules/Badge';
-import { Alert } from '@/design-system/molecules/Alert';
+import { Input } from '@/design-system/atoms';
+import { Alert, Badge } from '@/design-system/molecules';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';

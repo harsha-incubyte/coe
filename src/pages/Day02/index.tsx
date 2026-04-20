@@ -1,8 +1,9 @@
+import { Spinner } from '@/design-system/atoms';
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { withAuth } from '@/components/withAuth/withAuth'
 import { PageLayout } from '@/design-system/layout/PageLayout'
-import { Spinner } from '@/design-system/atoms/Spinner'
+
 
 const LoginForm = lazy(() => import('./LoginForm/LoginForm').then(m => ({ default: m.LoginForm })))
 const Weather = lazy(() => import('./Weather/Weather').then(m => ({ default: m.Weather })))

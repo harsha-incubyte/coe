@@ -3,9 +3,8 @@ import { useWizard, useWizardActions } from './useWizard';
 import { useWizardState, useWizardDispatch, WIZARD_STEPS } from './WizardContext';
 import { WizardProvider } from './WizardProvider';
 import { Wizard as GenericWizard, WizardStep } from '@/components/Wizard';
-import { Input } from '@/design-system/atoms/Input';
-import { Button } from '@/design-system/atoms/Button';
-import { StepIndicator as MoleculeStepIndicator } from '@/design-system/molecules/StepIndicator';
+import { Button, Input } from '@/design-system/atoms';
+import { StepIndicator as MoleculeStepIndicator } from '@/design-system/molecules';
 import * as S from './Wizard.styles';
 
 const StepIndicator: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardHeader } from '@/design-system/molecules/CardHeader';
+import { CardHeader } from '@/design-system/molecules';
 import * as S from './ArticleCard.styles';
 
 interface ArticleCardProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDropdown } from '@/hooks/useDropdown';
-import { Button } from '@/design-system/atoms/Button';
+import { Button } from '@/design-system/atoms';
 import { theme } from '@/design-system/theme';
 
 const DropdownContainer = styled.div`

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as S from './CounterUI.styles';
-import { Heading } from '@/design-system/atoms/Heading';
+import { Heading } from '@/design-system/atoms';
 
 export default function CounterUI() {
   const [count, setCount] = useState(0);

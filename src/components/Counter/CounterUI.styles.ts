@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { theme } from '@/design-system/theme';
-import { Button } from '@/design-system/atoms/Button';
+import { Button } from '@/design-system/atoms';
 
 export const countChange = keyframes`
   0% { transform: scale(0.9); opacity: 0.7; }

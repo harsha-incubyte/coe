@@ -1,28 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Heading } from '@/design-system/atoms/Heading';
-import { Button } from '@/design-system/atoms/Button';
-import { Input } from '@/design-system/atoms/Input';
-import { Checkbox } from '@/design-system/atoms/Checkbox';
+import { Button, Checkbox, Heading, Input } from '@/design-system/atoms';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useModal } from '@/hooks/useModal';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import { Dropdown } from '@/design-system/molecules/Dropdown';
-import { Alert } from '@/design-system/molecules/Alert';
-import { Badge } from '@/design-system/molecules/Badge';
-import { StepIndicator } from '@/design-system/molecules/StepIndicator';
-import { Pagination } from '@/design-system/molecules/Pagination';
-import { Breadcrumbs } from '@/design-system/molecules/Breadcrumbs';
-import { SearchBar } from '@/design-system/molecules/SearchBar';
-import { StatBlock } from '@/design-system/molecules/StatBlock';
-import { CheckboxGroup } from '@/design-system/molecules/CheckboxGroup';
-import { RadioGroup } from '@/design-system/molecules/RadioGroup';
-import { InputGroup } from '@/design-system/molecules/InputGroup';
-import { Tabs } from '@/design-system/molecules/Tabs/Tabs';
+import { Alert, Badge, Breadcrumbs, CheckboxGroup, Dropdown, InputGroup, Modal, Pagination, RadioGroup, SearchBar, StatBlock, StepIndicator, Tabs } from '@/design-system/molecules';
 import { useToast } from '@/hooks/useToast';
-import { Modal } from '@/design-system/molecules/Modal';
 
 const HookCard = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};

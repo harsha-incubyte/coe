@@ -12,11 +12,6 @@ interface StyledButtonProps {
   $isLoading?: boolean;
 }
 
-const rotate = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
 const dotPulse = keyframes`
   0%, 80%, 100% { opacity: 0.4; transform: scale(0.8); }
   40% { opacity: 1; transform: scale(1.1); }

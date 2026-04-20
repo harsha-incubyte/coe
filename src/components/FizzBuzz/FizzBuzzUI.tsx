@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { fizzBuzz } from '@/lib/fizzbuzz';
-import { Input } from '@/design-system/atoms/Input';
-import { Heading } from '@/design-system/atoms/Heading';
+import { Heading, Input } from '@/design-system/atoms';
 import * as S from './FizzBuzzUI.styles';
 
 const FizzBuzzUI: React.FC = () => {

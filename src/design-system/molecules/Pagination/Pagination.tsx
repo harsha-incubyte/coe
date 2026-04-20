@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from '@/design-system/atoms/Button';
+import { Button } from '@/design-system/atoms';
 import { theme } from '@/design-system/theme';
 
 export interface PaginationProps {

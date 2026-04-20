@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
 import { queryClient } from '@/lib/queryClient';
 import { fetchTasks, tasksQueryKey } from '@/hooks/queries/useTasks';
-import { Dropdown } from '@/design-system/molecules/Dropdown';
+import { Dropdown } from '@/design-system/molecules';
 import { theme } from '@/design-system/theme';
 
 const Header = styled.header`

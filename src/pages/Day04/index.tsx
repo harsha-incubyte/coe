@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Modal } from '@/design-system/molecules/Modal';
-import { Button } from '@/design-system/atoms/Button';
-import { Badge } from '@/design-system/molecules/Badge';
+import { Badge, Modal } from '@/design-system/molecules';
+import { Button } from '@/design-system/atoms';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';
