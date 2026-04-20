@@ -23,14 +23,14 @@ This document tracks the migration and creation of Molecule components within ou
 - [x] **CheckboxGroup / RadioGroup**: Logical groupings for selection inputs.
 
 ## 🟣 Content Composition
-- [ ] **CardHeader**: Standardized header block for Cards (Heading + Meta + Actions).
-- [ ] **ModalHeader / ModalFooter**: Building blocks for the `Modal` organism.
+- [x] **CardHeader**: Standardized header block for Cards (Heading + Meta + Actions).
+- [x] **ModalHeader / ModalFooter**: Building blocks for the `Modal` organism.
 - [x] **StatBlock**: Highlighted key metrics (Value + Label).
 
 ---
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 13
+- **Completed**: 15
 - **In Progress**: 0
-- **Pending**: 2
+- **Pending**: 0
