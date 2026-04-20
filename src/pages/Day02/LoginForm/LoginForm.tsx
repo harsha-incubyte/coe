@@ -132,9 +132,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         <Button 
           type="submit" 
           disabled={isLoading} 
-          $variant="accent" 
-          $fullWidth 
-          $size="lg"
+          variant="accent" 
+          fullWidth 
+          size="lg"
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </Button>

@@ -72,7 +72,7 @@ export const Dropdown = ({ label, trigger, items, children, menuId }: DropdownPr
         trigger({ isOpen, onToggle })
       ) : (
         <Button 
-          $variant="secondary" 
+          variant="secondary" 
           onClick={onToggle}
           aria-haspopup="true"
           aria-expanded={isOpen}

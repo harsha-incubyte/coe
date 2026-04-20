@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
-import Button from '@/components/Button/Button';
+import { Button } from '@/design-system/atoms/Button';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';

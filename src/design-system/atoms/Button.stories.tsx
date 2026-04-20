@@ -8,15 +8,18 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   argTypes: {
-    $variant: {
+    variant: {
       control: 'select',
       options: ['primary', 'secondary', 'accent', 'ghost', 'danger'],
     },
-    $size: {
+    size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
-    $fullWidth: {
+    fullWidth: {
+      control: 'boolean',
+    },
+    isLoading: {
       control: 'boolean',
     },
     disabled: {
@@ -33,56 +36,71 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    $variant: 'primary',
+    variant: 'primary',
     children: 'Primary Button',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    $variant: 'secondary',
+    variant: 'secondary',
     children: 'Secondary Button',
   },
 };
 
 export const Accent: Story = {
   args: {
-    $variant: 'accent',
+    variant: 'accent',
     children: 'Accent Button',
   },
 };
 
 export const Ghost: Story = {
   args: {
-    $variant: 'ghost',
+    variant: 'ghost',
     children: 'Ghost Button',
   },
 };
 
 export const Danger: Story = {
   args: {
-    $variant: 'danger',
+    variant: 'danger',
     children: 'Danger Button',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+    children: 'Loading State',
+  },
+};
+
+export const WithIcons: Story = {
+  args: {
+    leftIcon: <span>🚀</span>,
+    rightIcon: <span>✨</span>,
+    children: 'With Icons',
   },
 };
 
 export const Small: Story = {
   args: {
-    $size: 'sm',
+    size: 'sm',
     children: 'Small Button',
   },
 };
 
 export const Large: Story = {
   args: {
-    $size: 'lg',
+    size: 'lg',
     children: 'Large Button',
   },
 };
 
 export const FullWidth: Story = {
   args: {
-    $fullWidth: true,
+    fullWidth: true,
     children: 'Full Width Button',
   },
   parameters: {

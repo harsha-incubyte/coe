@@ -13,15 +13,15 @@ export default function CounterUI() {
       </S.CounterDisplay>
       <S.ControlsContainer>
         <S.AnimatedButton
-          $variant="danger"
-          $size="lg"
+          variant="danger"
+          size="lg"
           onClick={() => setCount(count - 1)}
         >
           Decrement
         </S.AnimatedButton>
         <S.AnimatedButton
-          $variant="accent"
-          $size="lg"
+          variant="accent"
+          size="lg"
           onClick={() => setCount(count + 1)}
         >
           Increment
@@ -29,8 +29,8 @@ export default function CounterUI() {
       </S.ControlsContainer>
       <S.ResetContainer>
         <S.AnimatedButton
-          $variant="ghost"
-          $size="md"
+          variant="ghost"
+          size="md"
           onClick={() => setCount(0)}
         >
           Reset

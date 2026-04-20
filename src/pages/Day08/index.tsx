@@ -35,7 +35,7 @@ const DisclosureDemo = () => {
   const { isOpen, onToggle } = useDisclosure();
   return (
     <div>
-      <Button $variant="accent" $size="sm" onClick={onToggle}>
+      <Button variant="accent" size="sm" onClick={onToggle}>
         {isOpen ? 'Close' : 'Show'} Secret Message
       </Button>
       {isOpen && (
@@ -68,13 +68,13 @@ const ModalDemo = () => {
   const { isOpen, onOpen, onClose } = useModal();
   return (
     <>
-      <Button $variant="primary" $size="sm" onClick={onOpen}>
+      <Button variant="primary" size="sm" onClick={onOpen}>
         Open Modal Showcase
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} title="Design System Modal">
         <p>This modal is managed by the new <code>useModal</code> hook, which automatically handles body scroll locking.</p>
         <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button $variant="secondary" onClick={onClose}>Close Modal</Button>
+          <Button variant="secondary" onClick={onClose}>Close Modal</Button>
         </div>
       </Modal>
     </>
@@ -114,10 +114,10 @@ const MoleculesShowcase = () => {
           <Badge variant="info" label="v2.4.0" size="sm" />
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <Button $variant="secondary" $size="sm" onClick={() => showToast('Toast triggered from showcase!', 'success')}>
+          <Button variant="secondary" size="sm" onClick={() => showToast('Toast triggered from showcase!', 'success')}>
             Test Success Toast
           </Button>
-          <Button $variant="secondary" $size="sm" onClick={() => showToast('Something went wrong.', 'error')}>
+          <Button variant="secondary" size="sm" onClick={() => showToast('Something went wrong.', 'error')}>
             Test Error Toast
           </Button>
         </div>
@@ -271,18 +271,18 @@ const Day08: React.FC = () => {
         
         <Heading $level={3}>Buttons</Heading>
         <ComponentShowcase>
-          <Button $variant="primary">Primary Action</Button>
-          <Button $variant="secondary">Secondary Action</Button>
-          <Button $variant="accent">Accent Action</Button>
-          <Button $variant="ghost">Ghost Button</Button>
-          <Button $variant="danger">Danger Zone</Button>
+          <Button variant="primary">Primary Action</Button>
+          <Button variant="secondary">Secondary Action</Button>
+          <Button variant="accent">Accent Action</Button>
+          <Button variant="ghost">Ghost Button</Button>
+          <Button variant="danger">Danger Zone</Button>
         </ComponentShowcase>
 
         <Heading $level={3} style={{ marginTop: '2rem' }}>Button Sizes</Heading>
         <ComponentShowcase>
-          <Button $size="sm">Small</Button>
-          <Button $size="md">Medium (Default)</Button>
-          <Button $size="lg">Large</Button>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium (Default)</Button>
+          <Button size="lg">Large</Button>
         </ComponentShowcase>
 
         <Heading $level={3} style={{ marginTop: '2rem' }}>Form Elements</Heading>

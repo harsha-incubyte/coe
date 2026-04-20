@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@/components/Button/Button';
+import { Button } from '@/design-system/atoms/Button';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import './Day05.css';
 
