@@ -205,12 +205,12 @@ export const Button = <T extends ElementType = 'button'>({
 
   return (
     <StyledButton
-      as={as as any}
+      as={as as React.ElementType}
       $variant={finalVariant}
       $size={finalSize}
       $fullWidth={finalFullWidth}
       $isLoading={isLoading}
-      disabled={isLoading || (props as any).disabled}
+      disabled={isLoading || (props as { disabled?: boolean }).disabled}
       aria-busy={isLoading}
       aria-live={isLoading ? 'polite' : undefined}
       {...props}

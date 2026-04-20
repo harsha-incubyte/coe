@@ -36,7 +36,8 @@ export const Heading = styled.h1.attrs<StyledHeadingProps>(({ $level = 1 }) => (
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   color: ${({ theme }) => theme.colors.text};
   line-height: ${({ theme }) => theme.typography.lineHeight.tight};
-
+  text-align: center;
+  
   ${({ $level = 1 }) => levelStyles[$level]}
 `;
 
