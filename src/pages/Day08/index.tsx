@@ -287,11 +287,10 @@ const Day08: React.FC = () => {
 
         <Heading $level={3} style={{ marginTop: '2rem' }}>Button States</Heading>
         <ComponentShowcase>
-          <Button disabled>Disabled Primary</Button>
-          <Button variant="secondary" disabled>Disabled Secondary</Button>
-          <Button isLoading>Loading State</Button>
-          <Button variant="accent" isLoading>Loading Accent</Button>
-          <Button variant="danger" isLoading>Loading Danger</Button>
+          <Button disabled>Disabled State</Button>
+          <Button isLoading>Loading (Dots)</Button>
+          <Button variant="accent" isLoading loadingText="Saving...">Loading Text</Button>
+          <Button variant="danger" isLoading loadingText="Deleting...">Loading Text</Button>
         </ComponentShowcase>
         
         <Heading $level={3} style={{ marginTop: '2rem' }}>Buttons with Icons</Heading>
