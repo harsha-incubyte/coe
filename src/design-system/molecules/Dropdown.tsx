@@ -61,9 +61,11 @@ interface DropdownProps {
   items?: Array<{ label: string; onClick: () => void; variant?: 'default' | 'danger' }>;
   children?: React.ReactNode;
   menuId?: string;
+  /** ID of the trigger element for aria-labelledby */
+  triggerId?: string;
 }
 
-export const Dropdown = ({ label, trigger, items, children, menuId }: DropdownProps) => {
+export const Dropdown = ({ label, trigger, items, children, menuId, triggerId }: DropdownProps) => {
   const { isOpen, onToggle, containerRef, onClose } = useDropdown();
 
   return (
@@ -77,13 +79,14 @@ export const Dropdown = ({ label, trigger, items, children, menuId }: DropdownPr
           aria-haspopup="true"
           aria-expanded={isOpen}
           aria-controls={menuId}
+          id={triggerId}
         >
           {label} ▾
         </Button>
       )}
       
       {isOpen && (
-        <DropdownMenu id={menuId} role="menu">
+        <DropdownMenu id={menuId} role="menu" aria-labelledby={triggerId}>
           {children}
           {items?.map((item, index) => (
             <DropdownItem
