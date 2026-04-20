@@ -21,10 +21,11 @@ This project is a collection of React + TypeScript Katas, developed following st
 
 ### Running the Project
 - **Development Server**: `npm run dev`
+- **Storybook**: `npm run storybook` (Design System documentation)
 - **Run Tests**: `npm run test`
 - **Linting**: `npm run lint`
 - **Accessibility Audit**: `npm run test:a11y:ci`
-- **Full Quality Check**: `npm run test:all` (Lints + Unit Tests + E2E + Pa11y)
+- **Full Quality Check**: `npm run test:all` (Lints + Unit Tests + E2E + Pa11y + Storybook Audit)
 
 ## 🛠 Project Architecture
 
@@ -33,11 +34,14 @@ The application is designed to showcase daily progress. Each "Day" is isolated w
 ### Directory Structure
 ```text
 src/
-├── components/     # Shared UI components (Atomic + Patterns like Wizard)
-├── hooks/          # Domain-agnostic utility hooks (Wizard, LocalStorage)
+├── design-system/  # Atomic Design implementation (Atoms, Molecules, Organisms)
+│   ├── atoms/      # Basic blocks (Button, Input, Heading)
+│   ├── molecules/  # Compound components (SearchBar, Modal, Tabs)
+│   └── theme/      # Design tokens and Global Styles
+├── hooks/          # Domain-agnostic utility hooks
 ├── layouts/        # Page layouts (e.g., MainLayout with Navbar)
 ├── lib/            # External library configurations (MSW, etc.)
-├── pages/          # Daily Kata challenges (Day01 - Day07)
+├── pages/          # Daily Kata challenges (Day01 - Day08)
 ├── setupTests.ts   # Vitest setup
 └── main.tsx        # Application entry point with MSW init
 ```
@@ -54,6 +58,7 @@ We follow a strict **Red-Green-Refactor** cycle using standardized commit marker
   - **`cypress-axe`**: Dynamic E2E auditing to catch regressions during interaction (e.g., expanded dropdowns).
   - **`Pa11y`**: Global, URL-based accessibility auditing against WCAG 2.1 AA standards, integrated into the CI pipeline.
 - **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
+- **Visual Regression (Storybook)**: Using Storybook to document and visually verify component states in isolation, ensuring consistency across the Atomic System.
 
 ## 🤖 Continuous Integration (GitHub Actions)
 
@@ -108,12 +113,15 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - *Focus*: Synchronization of client vs. server state, optimistic mutation patterns, and maintaining UI responsiveness during long-running asynchronous operations.
 
 ### Day 08: Premium Design System & Architecture Foundations
-- **Design Tokens**: Centralized HSL-based color palette, spacing scale, and typography tokens using `styled-components` ThemeProvider globally.
-- **Atomic Atoms**: Implementation of reusable, type-safe, and WCAG-compliant `Heading`, `Button`, `Input`, and `Checkbox` components.
-- **Custom Hooks Collection**: Reusable, domain-agnostic hooks (`useDisclosure`, `useMediaQuery`, `useOnClickOutside`, `useBoolean`) streamlining interactive states.
-- **Standardized Routing Layouts**: Global `PageLayout` integrating `framer-motion` to provide a premium, consistent page transition experience across all routes.
-- **Accessibility Logic**: Atomic components feature built-in `aria-` attributes, focus management, and automatic ID generation for labels and error messages.
-- *Focus*: Scalable component architecture, Custom Hooks, Design Systems, and robust Accessibility (WCAG 2.1 AA).
+- **Atomic Particles**: Established a centralized HSL-based color palette and spacing scale using `styled-components` ThemeProvider.
+- **Design System Implementation**:
+    - **Atoms**: Type-safe, WCAG-compliant `Heading`, `Button`, `Input`, and `Checkbox`.
+    - **Molecules**: Completed 15 core molecules including `Modal`, `Tabs`, `Toast`, `SearchBar`, `Breadcrumbs`, `Pagination`, and `StepIndicator`.
+- **Custom Hooks Collection**: Reusable, domain-agnostic hooks (`useDisclosure`, `useMediaQuery`, `useOnClickOutside`, `useBoolean`, `useDropdown`, `useModal`).
+- **Performance & Navigation**:
+    - **Lazy Loading**: Implemented route-based code splitting for all daily pages to optimize initial bundle size.
+    - **Page Transitions**: Global `PageLayout` integrating `framer-motion` for premium UX.
+- *Focus*: Scalable Atomic Design, Storybook Documentation, Performance Optimization, and robust Accessibility (WCAG 2.1 AA).
 
 ## 📝 TODOs
 

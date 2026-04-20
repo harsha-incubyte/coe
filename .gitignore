@@ -34,3 +34,5 @@ docs/
 
 *storybook.log
 storybook-static
+auth_flow_output.txt
+scratch/cypress_output.txt
