@@ -5,9 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { queryClient } from '@/lib/queryClient'
 import { ThemeManager } from '@/design-system/theme/ThemeManager'
 import MainLayout from '@/layouts/MainLayout'
-import { Spinner } from '@/components/Spinner/Spinner'
+import { Spinner } from '@/design-system/atoms/Spinner'
 import ToastContainer from '@/components/Toast/ToastContainer'
-import '@/App.css'
 
 const Day01 = lazy(() => import('@/pages/Day01'))
 const Day02 = lazy(() => import('@/pages/Day02'))
