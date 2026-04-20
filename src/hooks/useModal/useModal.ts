@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDisclosure, UseDisclosureProps } from '../useDisclosure';
+import { useDisclosure, type UseDisclosureProps } from '../useDisclosure';
 
 export interface UseModalProps extends UseDisclosureProps {
   /**
