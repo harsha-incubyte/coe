@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/design-system/atoms/Button';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import './Day05.css';
+import * as S from './Day05.styles';
 
 const Day05: React.FC = () => {
   return (
@@ -9,111 +9,111 @@ const Day05: React.FC = () => {
       title="Automation & UI Sanity"
       description="Hardening the application with automated accessibility audits and mobile ergonomics."
     >
-      <div className="day-05-grid">
+      <S.Day05Grid>
         {/* Section 1: Automated Audits */}
-        <section className="demo-section card-glass">
-          <div className="section-icon">🧪</div>
+        <S.DemoSection $glass>
+          <S.SectionIcon>🧪</S.SectionIcon>
           <h2>Automated A11y Pipeline</h2>
           <p>
             We've integrated <code>jest-axe</code> for unit tests and <code>cypress-axe</code> for dynamic 
             E2E flows, ensuring zero accessibility regressions.
           </p>
-          <div className="audit-status">
-            <div className="status-item">
-              <span className="status-dot green"></span>
+          <S.AuditStatus>
+            <S.StatusItem>
+              <S.StatusDot $color="#10b981" $glow />
               <span><strong>Unit Tests:</strong> jest-axe integrated</span>
-            </div>
-            <div className="status-item">
-              <span className="status-dot green"></span>
+            </S.StatusItem>
+            <S.StatusItem>
+              <S.StatusDot $color="#10b981" $glow />
               <span><strong>E2E Tests:</strong> cypress-axe configured</span>
-            </div>
-          </div>
-        </section>
+            </S.StatusItem>
+          </S.AuditStatus>
+        </S.DemoSection>
 
         {/* Section 2: Pa11y CI */}
-        <section className="demo-section card-glass">
-          <div className="section-icon">🤖</div>
+        <S.DemoSection $glass>
+          <S.SectionIcon>🤖</S.SectionIcon>
           <h2>Pa11y Headless CI</h2>
           <p>
             Automated command-line audits that run against production-like builds to catch issues 
             that only appear in deep page crawls.
           </p>
-          <div className="pa11y-report">
-            <div className="pa11y-header">
-              <span className="terminal-dot"></span>
-              <span className="terminal-dot"></span>
-              <span className="terminal-dot"></span>
-              <span className="terminal-title">pa11y-ci report</span>
-            </div>
-            <div className="pa11y-body">
-              <div className="pa11y-line success">✔ http://localhost:4173/day-01 - 0 errors</div>
-              <div className="pa11y-line success">✔ http://localhost:4173/day-02 - 0 errors</div>
-              <div className="pa11y-line success">✔ http://localhost:4173/day-05 - 0 errors</div>
-            </div>
-          </div>
-        </section>
+          <S.Pa11yReport>
+            <S.Pa11yHeader>
+              <S.TerminalDot $color="#ff5f56" />
+              <S.TerminalDot $color="#ffbd2e" />
+              <S.TerminalDot $color="#27c93f" />
+              <S.TerminalTitle>pa11y-ci report</S.TerminalTitle>
+            </S.Pa11yHeader>
+            <S.Pa11yBody>
+              <S.Pa11yLine $variant="success">✔ http://localhost:4173/day-01 - 0 errors</S.Pa11yLine>
+              <S.Pa11yLine $variant="success">✔ http://localhost:4173/day-02 - 0 errors</S.Pa11yLine>
+              <S.Pa11yLine $variant="success">✔ http://localhost:4173/day-05 - 0 errors</S.Pa11yLine>
+            </S.Pa11yBody>
+          </S.Pa11yReport>
+        </S.DemoSection>
 
         {/* Section 3: Touch Targets */}
-        <section className="demo-section card-glass">
-          <div className="section-icon">📱</div>
+        <S.DemoSection $glass>
+          <S.SectionIcon>📱</S.SectionIcon>
           <h2>Mobile Ergonomics</h2>
           <p>
             All interactive elements now follow the WCAG 2.1 AAA success criterion for a minimum 
             <strong> 44x44px</strong> hit area.
           </p>
-          <div className="touch-comparison">
-            <div className="comparison-item">
+          <S.TouchComparison>
+            <S.ComparisonItem>
               <label>Default (Small)</label>
-              <button className="touch-btn-bad" aria-hidden="true">
+              <S.TouchBtnBad aria-hidden="true">
                 ×
-              </button>
-              <span className="label-err">Too Small</span>
-            </div>
-            <div className="comparison-item">
+              </S.TouchBtnBad>
+              <span style={{ color: '#ef4444', fontSize: '0.8125rem' }}>Too Small</span>
+            </S.ComparisonItem>
+            <S.ComparisonItem>
               <label>Hardened (44px+)</label>
               <Button variant="secondary" size="lg" aria-label="Accessible close">
                 ×
               </Button>
-              <span className="label-success">Passes Audit</span>
-            </div>
-          </div>
-        </section>
+              <span style={{ color: '#10b981', fontSize: '0.8125rem' }}>Passes Audit</span>
+            </S.ComparisonItem>
+          </S.TouchComparison>
+        </S.DemoSection>
 
         {/* Section 3: Contrast Polish */}
-        <section className="demo-section card-glass full-width">
-          <div className="section-icon">🎨</div>
+        <S.DemoSection $glass $fullWidth>
+          <S.SectionIcon>🎨</S.SectionIcon>
           <h2>Contrast Polish (4.5:1)</h2>
           <p>
             Refined our color palette to ensure all critical text and icons meet the AA standard for 
             high-contrast readability.
           </p>
-          <div className="contrast-grid">
-            <div className="contrast-card bad">
-              <span className="contrast-text">Low Contrast Text</span>
-              <div className="contrast-meta">
+          <S.ContrastGrid>
+            <S.ContrastCard $variant="bad">
+              <span>Low Contrast Text</span>
+              <S.ContrastMeta>
                 <span>Ratio: 2.1:1</span>
                 <span>🔴 Fail</span>
-              </div>
-            </div>
-            <div className="contrast-card good">
-              <span className="contrast-text">High Contrast Text</span>
-              <div className="contrast-meta">
+              </S.ContrastMeta>
+            </S.ContrastCard>
+            <S.ContrastCard $variant="good">
+              <span>High Contrast Text</span>
+              <S.ContrastMeta>
                 <span>Ratio: 7.5:1</span>
                 <span>🟢 Pass</span>
-              </div>
-            </div>
-            <div className="contrast-card hardened">
-              <span className="contrast-text">Day 05 Hardened</span>
-              <div className="contrast-meta">
+              </S.ContrastMeta>
+            </S.ContrastCard>
+            <S.ContrastCard $variant="hardened">
+              <span>Day 05 Hardened</span>
+              <S.ContrastMeta>
                 <span>Ratio: 12:1</span>
                 <span>💎 Premium</span>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+              </S.ContrastMeta>
+            </S.ContrastCard>
+          </S.ContrastGrid>
+        </S.DemoSection>
+      </S.Day05Grid>
 
-      <footer className="day-05-footer" style={{ marginTop: '2rem' }}>
+      <footer style={{ marginTop: '2rem', textAlign: 'center', color: '#9ca3af', fontSize: '0.875rem' }}>
         <p>Verified with AXE Core Engine and Pa11y CI</p>
       </footer>
     </PageLayout>
