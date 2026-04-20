@@ -126,29 +126,7 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
-  margin-top: 2rem;
-}
 
-.gallery-item h3 {
-  font-size: 0.8125rem;
-  color: var(--text, #9ca3af);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 1.5rem;
-  border-left: 3px solid var(--accent);
-  padding-left: 0.75rem;
-}
-
-.gallery-flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  align-items: center;
-}
 
 @media (max-width: 1024px) {
   .day-04-container { padding-top: 2rem; }

@@ -130,30 +130,7 @@ const Day04: React.FC = () => {
         </S.ExerciseSection>
       </S.PlaygroundGrid>
 
-      <S.ExerciseSection>
-        <S.CardHeader>
-          <Badge>Preview</Badge>
-          <h2>Atomic Library Gallery</h2>
-        </S.CardHeader>
-        <S.GalleryGrid>
-          <S.GalleryItem>
-            <h3>Button Variants</h3>
-            <S.GalleryFlex>
-              <Button variant="primary">Primary</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="danger">Danger</Button>
-            </S.GalleryFlex>
-          </S.GalleryItem>
-          <S.GalleryItem>
-            <h3>Loading States</h3>
-            <S.GalleryFlex>
-              <Button isLoading>Loading</Button>
-              <Button variant="secondary" isLoading>Loading</Button>
-            </S.GalleryFlex>
-          </S.GalleryItem>
-        </S.GalleryGrid>
-      </S.ExerciseSection>
+
     </PageLayout>
   );
 };

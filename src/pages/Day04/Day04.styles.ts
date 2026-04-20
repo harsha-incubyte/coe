@@ -103,29 +103,4 @@ export const AnnouncementBox = styled.div`
 `;
 AnnouncementBox.defaultProps = { theme };
 
-export const GalleryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
-  margin-top: 2rem;
-`;
 
-export const GalleryItem = styled.div`
-  h3 {
-    font-size: 0.8125rem;
-    color: ${({ theme }) => theme.colors.textSecondary};
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1.5rem;
-    border-left: 3px solid ${({ theme }) => theme.colors.primary[500]};
-    padding-left: 0.75rem;
-  }
-`;
-GalleryItem.defaultProps = { theme };
-
-export const GalleryFlex = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  align-items: center;
-`;
