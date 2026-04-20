@@ -218,6 +218,7 @@
 }
 
 .login-nav-btn:hover {
+  color: var(--bg);
   filter: brightness(1.1);
   box-shadow: 0 4px 12px var(--accent-bg);
 }
