@@ -1,5 +1,5 @@
 import React from 'react';
-import './ArticleCard.css';
+import * as S from './ArticleCard.styles';
 
 interface ArticleCardProps {
   title: string;
@@ -9,26 +9,22 @@ interface ArticleCardProps {
 
 const ArticleCardBad: React.FC<ArticleCardProps> = ({ title, date, content }) => {
   return (
-    <div className="article-card">
-      <div className="card-header">
-        <div className="title-text">{title}</div>
-        <div className="card-meta">
-          <span className="date">{date}</span>
-        </div>
-      </div>
-      <div className="card-content">
+    <S.NonSemanticCard>
+      <S.NonSemanticHeader>
+        <S.NonSemanticTitle>{title}</S.NonSemanticTitle>
+        <S.NonSemanticDate>{date}</S.NonSemanticDate>
+      </S.NonSemanticHeader>
+      <S.NonSemanticContent>
         <p>{content}</p>
-      </div>
-      <div className="card-footer">
-        <div 
-          className="read-more-btn" 
-          onClick={() => window.location.href = '#'}
-        >
+      </S.NonSemanticContent>
+      <S.NonSemanticFooter>
+        <S.NonSemanticBtn onClick={() => window.location.href = '#'}>
           Read More
-        </div>
-      </div>
-    </div>
+        </S.NonSemanticBtn>
+      </S.NonSemanticFooter>
+    </S.NonSemanticCard>
   );
 };
 
 export default ArticleCardBad;
+

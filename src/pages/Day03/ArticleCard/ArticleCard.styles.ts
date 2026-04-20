@@ -16,7 +16,11 @@ export const StyledArticleCard = styled.article`
     box-shadow: ${({ theme }) => theme.shadows.lg};
     border-color: ${({ theme }) => theme.colors.primary[500]};
   }
+
+  border-left: 4px solid ${({ theme }) => theme.colors.success};
 `;
+
+
 StyledArticleCard.defaultProps = { theme };
 
 export const DateText = styled.time`
@@ -25,6 +29,18 @@ export const DateText = styled.time`
   font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
 `;
 DateText.defaultProps = { theme };
+
+export const HeaderWrapper = styled.div`
+  padding: ${({ theme }) => theme.spacing.lg};
+  padding-bottom: 0;
+
+  header {
+    margin-bottom: 0;
+    padding-bottom: ${({ theme }) => theme.spacing.lg};
+  }
+`;
+HeaderWrapper.defaultProps = { theme };
+
 
 export const CardContent = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
@@ -68,7 +84,9 @@ export const NonSemanticCard = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-left: 4px solid #ef4444;
 `;
+
 
 export const NonSemanticHeader = styled.div`
   padding: 1.5rem;
@@ -94,3 +112,20 @@ export const NonSemanticBtn = styled.div`
   cursor: pointer;
   font-size: 0.875rem;
 `;
+
+export const NonSemanticContent = styled.div`
+  padding: 1.5rem;
+  flex-grow: 1;
+
+  p {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+`;
+
+export const NonSemanticFooter = styled.div`
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #334155;
+`;
+

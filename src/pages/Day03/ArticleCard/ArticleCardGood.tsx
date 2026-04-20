@@ -11,11 +11,13 @@ interface ArticleCardProps {
 const ArticleCardGood: React.FC<ArticleCardProps> = ({ title, date, content }) => {
   return (
     <S.StyledArticleCard>
-      <CardHeader 
-        title={title} 
-        subtitle={<S.DateText dateTime={date}>{date}</S.DateText>}
-        titleLevel={2}
-      />
+      <S.HeaderWrapper>
+        <CardHeader 
+          title={title} 
+          subtitle={<S.DateText dateTime={date}>{date}</S.DateText>}
+          titleLevel={2}
+        />
+      </S.HeaderWrapper>
       <S.CardContent>
         <p>{content}</p>
       </S.CardContent>
@@ -27,5 +29,6 @@ const ArticleCardGood: React.FC<ArticleCardProps> = ({ title, date, content }) =
     </S.StyledArticleCard>
   );
 };
+
 
 export default ArticleCardGood;

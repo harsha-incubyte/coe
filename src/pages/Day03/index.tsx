@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ArticleCardBad from './ArticleCard/ArticleCardBad';
 import ArticleCardGood from './ArticleCard/ArticleCardGood';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import './Day03.css';
+import * as S from './Day03.styles';
 
 const Day03: React.FC = () => {
   const [useSemantic, setUseSemantic] = useState(true);
@@ -36,36 +36,35 @@ const Day03: React.FC = () => {
         </span>
       }
     >
-      <div className="toggle-container" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center' }}>
-        <label className="switch-label">
+      <S.ToggleContainer>
+        <S.SwitchLabel>
           <span className={!useSemantic ? 'active' : ''}>Non-Semantic</span>
-          <div 
-            className="switch" 
+          <S.Switch 
             onClick={() => setUseSemantic(!useSemantic)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setUseSemantic(!useSemantic); }}
             aria-label="Toggle Semantic HTML"
           >
-            <div className={`slider ${useSemantic ? 'on' : ''}`}></div>
-          </div>
+            <S.Slider $isOn={useSemantic} />
+          </S.Switch>
           <span className={useSemantic ? 'active' : ''}>Semantic</span>
-        </label>
-      </div>
+        </S.SwitchLabel>
+      </S.ToggleContainer>
 
-      <div className="comparison-grid">
+      <S.ComparisonGrid>
         {articles.map((article, index) => (
-          <div key={index} className="card-wrapper">
+          <S.CardWrapper key={index}>
             {useSemantic ? (
               <ArticleCardGood {...article} />
             ) : (
               <ArticleCardBad {...article} />
             )}
-          </div>
+          </S.CardWrapper>
         ))}
-      </div>
+      </S.ComparisonGrid>
 
-      <section className="audit-notes" style={{ marginTop: '2rem' }}>
+      <S.AuditNotes>
         <h2>Semantic Audit Notes</h2>
         <ul>
           <li><strong>Article Container:</strong> Using <code>&lt;article&gt;</code> instead of <code>&lt;div&gt;</code> marks the content as independently distributable.</li>
@@ -73,9 +72,10 @@ const Day03: React.FC = () => {
           <li><strong>Machine-Readable Dates:</strong> The <code>&lt;time&gt;</code> element with <code>dateTime</code> attribute allows robots to parse dates accurately.</li>
           <li><strong>Interactive Elements:</strong> Using <code>&lt;a&gt;</code> for navigation links provides free keyboard support (Enter key) and correct role announcement.</li>
         </ul>
-      </section>
+      </S.AuditNotes>
     </PageLayout>
   );
 };
 
 export default Day03;
+
