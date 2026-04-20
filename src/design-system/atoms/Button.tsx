@@ -17,6 +17,30 @@ const rotate = keyframes`
   to { transform: rotate(360deg); }
 `;
 
+const dotPulse = keyframes`
+  0%, 80%, 100% { opacity: 0.4; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1.1); }
+`;
+
+const LoadingDots = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  
+  span {
+    width: 4px;
+    height: 4px;
+    background-color: currentColor;
+    border-radius: 50%;
+    display: inline-block;
+    animation: ${dotPulse} 1s infinite ease-in-out both;
+    
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+    &:nth-child(3) { animation-delay: 0s; }
+  }
+`;
+
 const variantStyles = {
   primary: css`
     background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary[400]} 0%, ${({ theme }) => theme.colors.primary[600]} 100%);
@@ -120,7 +144,6 @@ const StyledButton = styled.button<StyledButtonProps>`
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    pointer-events: none;
   }
 
   &:focus-visible {
@@ -131,29 +154,12 @@ const StyledButton = styled.button<StyledButtonProps>`
   ${({ $size = 'md' }) => sizeStyles[$size]}
 
   ${({ $isLoading }) => $isLoading && css`
-    color: transparent !important;
-    & > *:not(.btn-spinner) {
+    cursor: wait;
+    & > *:not(.btn-spinner):not(.btn-content) {
       visibility: hidden;
+      opacity: 0;
     }
   `}
-`;
-
-const SpinnerOverlay = styled.span`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    animation: ${rotate} 1s linear infinite;
-    width: 1.5rem;
-    height: 1.5rem;
-    stroke: currentColor;
-    fill: none;
-  }
 `;
 
 const IconWrapper = styled.span`
@@ -171,6 +177,7 @@ interface BaseButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
+  loadingText?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
@@ -189,6 +196,7 @@ export const Button = <T extends ElementType = 'button'>({
   variant,
   size,
   isLoading = false,
+  loadingText,
   leftIcon,
   rightIcon,
   fullWidth,
@@ -215,16 +223,20 @@ export const Button = <T extends ElementType = 'button'>({
       aria-live={isLoading ? 'polite' : undefined}
       {...props}
     >
-      {isLoading && (
-        <SpinnerOverlay className="btn-spinner">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.2 }} />
-            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-          </svg>
-        </SpinnerOverlay>
-      )}
       {!isLoading && leftIcon && <IconWrapper>{leftIcon}</IconWrapper>}
-      <span className="btn-content">{children}</span>
+      <span className="btn-content">
+        {isLoading ? (
+          loadingText || (
+            <LoadingDots aria-label="Loading">
+              <span />
+              <span />
+              <span />
+            </LoadingDots>
+          )
+        ) : (
+          children
+        )}
+      </span>
       {!isLoading && rightIcon && <IconWrapper>{rightIcon}</IconWrapper>}
     </StyledButton>
   );
