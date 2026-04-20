@@ -3,6 +3,7 @@ import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input } from '@/design-system/atoms/Input';
 import { Badge } from '@/design-system/molecules/Badge';
+import { Alert } from '@/design-system/molecules/Alert';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
@@ -241,8 +242,8 @@ export const Weather: React.FC = () => {
         </S.SearchContainer>
       </S.SearchSection>
 
-      {loading && <S.StatusOverlay>Updating weather...</S.StatusOverlay>}
-      {error && <S.ErrorOverlay>{error}</S.ErrorOverlay>}
+      {loading && <Alert variant="info" message="Updating weather..." className="weather-status" />}
+      {error && <Alert variant="error" message={error} className="weather-error" />}
 
       {weather && !loading && (
         <WeatherTabs>

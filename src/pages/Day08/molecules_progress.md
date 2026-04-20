@@ -14,7 +14,7 @@ This document tracks the migration and creation of Molecule components within ou
 
 ## 🟡 Feedback & Communication
 - [x] **Toast (Refactor)**: Standardizing the `src/components/Toast` as a design system molecule.
-- [ ] **Alert / InlineBanner**: Contextual feedback messages (Success, Warning, Error).
+- [x] **Alert / InlineBanner**: Contextual feedback messages (Success, Warning, Error).
 - [x] **Badge / Tag**: Small status indicators or category labels.
 
 ## 🟠 Forms & Search
@@ -31,6 +31,6 @@ This document tracks the migration and creation of Molecule components within ou
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 8
+- **Completed**: 9
 - **In Progress**: 0
-- **Pending**: 7
+- **Pending**: 6

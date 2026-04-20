@@ -135,25 +135,10 @@ export const TempUnit = styled.span`
   opacity: 0.7;
 `;
 
-const statusBase = css`
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.md};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
+export const AlertWrapper = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.md};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
 `;
-
-export const StatusOverlay = styled.div`
-  ${statusBase}
-  background: ${({ theme }) => `${theme.colors.info}1a`};
-  color: ${({ theme }) => theme.colors.info};
-`;
-
-export const ErrorOverlay = styled.div`
-  ${statusBase}
-  background: ${({ theme }) => `${theme.colors.error}1a`};
-  color: ${({ theme }) => theme.colors.error};
-`;
+AlertWrapper.defaultProps = { theme };
 
 DashboardContainer.defaultProps = { theme };
 SearchSection.defaultProps = { theme };
@@ -172,5 +157,3 @@ DataFooter.defaultProps = { theme };
 TempDisplay.defaultProps = { theme };
 TempValue.defaultProps = { theme };
 TempUnit.defaultProps = { theme };
-StatusOverlay.defaultProps = { theme };
-ErrorOverlay.defaultProps = { theme };
