@@ -117,5 +117,21 @@ export const borderRadius = {
   lg: '0.5rem',
   xl: '0.75rem',
   '2xl': '1rem',
+  '3xl': '1.5rem',
   full: '9999px',
+};
+
+export const zIndices = {
+  hide: -1,
+  base: 0,
+  docked: 10,
+  dropdown: 1000,
+  sticky: 1100,
+  banner: 1200,
+  overlay: 1300,
+  modal: 1400,
+  popover: 1500,
+  skipLink: 1600,
+  toast: 1700,
+  tooltip: 1800,
 };

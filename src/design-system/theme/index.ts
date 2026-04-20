@@ -1,4 +1,4 @@
-import { colors, spacing, typography, shadows, borderRadius } from '@/design-system/tokens';
+import { colors, spacing, typography, shadows, borderRadius, zIndices } from '@/design-system/tokens';
 
 export const theme = {
   colors,
@@ -6,6 +6,7 @@ export const theme = {
   typography,
   shadows,
   borderRadius,
+  zIndices,
 } as const;
 
 export type Theme = typeof theme;
