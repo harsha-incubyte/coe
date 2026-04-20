@@ -4,8 +4,9 @@ import { useWizardState, useWizardDispatch, WIZARD_STEPS } from './WizardContext
 import { WizardProvider } from './WizardProvider';
 import { Wizard as GenericWizard, WizardStep } from '@/components/Wizard';
 import { Input } from '@/design-system/atoms/Input';
+import { Button } from '@/design-system/atoms/Button';
 import { StepIndicator as MoleculeStepIndicator } from '@/design-system/molecules/StepIndicator';
-import './Wizard.css';
+import * as S from './Wizard.styles';
 
 const StepIndicator: React.FC = () => {
   const { steps, currentStepIndex } = useWizard();
@@ -21,23 +22,20 @@ const StepIndicator: React.FC = () => {
   );
 };
 
-
 // PERFORMANCE PROOF COMPONENT
-// This button only consumes Dispatch, so it should NOT re-render when state strings change.
 const NextButton = memo(() => {
   const { next } = useWizardActions();
-  console.log('NextButton rendered'); // The performance proof
+  console.log('NextButton rendered');
 
   return (
-    <button 
-      className="wizard-btn primary"
+    <Button 
+      variant="primary"
       onClick={next}
     >
       Next Step
-    </button>
+    </Button>
   );
 });
-
 
 const PrevButton: React.FC = () => {
   const { isFirstStep, prev } = useWizard();
@@ -45,22 +43,21 @@ const PrevButton: React.FC = () => {
   if (isFirstStep) return null;
 
   return (
-    <button 
-      className="wizard-btn secondary"
+    <Button 
+      variant="secondary"
       onClick={prev}
     >
       Previous
-    </button>
+    </Button>
   );
 };
-
 
 const ScanStep: React.FC = () => {
   const { deviceId } = useWizardState();
   const dispatch = useWizardDispatch();
 
   return (
-    <div className="wizard-step-content">
+    <S.StepContent>
       <h2>Scan for Devices</h2>
       <p>Enter the Device ID found on your hardware sticker.</p>
       <Input
@@ -72,7 +69,7 @@ const ScanStep: React.FC = () => {
         onChange={(e) => dispatch({ type: 'SET_DEVICE_ID', payload: e.target.value })}
         fullWidth
       />
-    </div>
+    </S.StepContent>
   );
 };
 
@@ -81,7 +78,7 @@ const NetworkStep: React.FC = () => {
   const dispatch = useWizardDispatch();
 
   return (
-    <div className="wizard-step-content">
+    <S.StepContent>
       <h2>Network Settings</h2>
       <Input
         label="SSID"
@@ -90,31 +87,30 @@ const NetworkStep: React.FC = () => {
         onChange={(e) => dispatch({ type: 'SET_NETWORK_CONFIG', payload: { ssid: e.target.value } })}
         fullWidth
       />
-    </div>
+    </S.StepContent>
   );
 };
 
-
 const ConfigureStep: React.FC = () => (
-  <div className="wizard-step-content">
+  <S.StepContent>
     <h2>Configuration</h2>
     <p>Applying settings to selected device...</p>
-    <div className="mock-progress-bar">
-      <div className="progress-fill" style={{ width: '65%' }}></div>
-    </div>
-  </div>
+    <S.MockProgressBar>
+      <S.ProgressFill $width="65%" />
+    </S.MockProgressBar>
+  </S.StepContent>
 );
 
 const TestStep: React.FC = () => (
-  <div className="wizard-step-content">
+  <S.StepContent>
     <h2>Test Connection</h2>
-    <p className="status-success">✓ Device connected successfully!</p>
-  </div>
+    <S.StatusSuccess>✓ Device connected successfully!</S.StatusSuccess>
+  </S.StepContent>
 );
 
 const WizardContent: React.FC = () => {
   return (
-    <div className="wizard-container">
+    <S.WizardContainer>
       <StepIndicator />
       <div className="wizard-body">
         <WizardStep index={0}><ScanStep /></WizardStep>
@@ -123,15 +119,13 @@ const WizardContent: React.FC = () => {
         <WizardStep index={3}><TestStep /></WizardStep>
       </div>
 
-
-      <div className="wizard-footer">
+      <S.WizardFooter>
         <PrevButton />
         <NextButtonWrapper />
-      </div>
-    </div>
+      </S.WizardFooter>
+    </S.WizardContainer>
   );
 };
-
 
 const NextButtonWrapper: React.FC = () => {
   const { isLastStep } = useWizard();

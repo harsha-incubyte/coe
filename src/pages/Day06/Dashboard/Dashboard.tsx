@@ -2,8 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { Tabs } from '@/design-system/molecules/Tabs';
 import { DeviceConfigurationWizard as Wizard } from '@/pages/Day06/components/Wizard/Wizard';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import { Spinner } from '@/components/Spinner/Spinner';
-import './Dashboard.css';
+import { Spinner } from '@/design-system/atoms/Spinner';
+import * as S from './Dashboard.styles';
 
 // KATA 4: Code Splitting
 const RealTimeDataChart = lazy(() => import('@/pages/Day06/components/RealTimeDataChart/RealTimeDataChart'));
@@ -23,37 +23,37 @@ export const Dashboard: React.FC = () => {
           <Tabs.Tab id="docs">Documentation</Tabs.Tab>
         </Tabs.List>
 
-        <section className="dashboard-main-content">
+        <S.DashboardMainContent>
           <Tabs.Panel id="device-setup">
-            <div className="panel-inner">
+            <S.PanelInner>
               <h3>Configuration Wizard</h3>
               <p>Follow the steps below to pair and configure your edge device.</p>
               {/* KATA 2: Multi-Step Wizard */}
               <Wizard />
-            </div>
+            </S.PanelInner>
           </Tabs.Panel>
 
           <Tabs.Panel id="real-time">
-            <div className="panel-inner">
+            <S.PanelInner>
               {/* KATA 4: Suspense Boundary */}
               <Suspense fallback={<Spinner />}>
                 <RealTimeDataChart />
               </Suspense>
-            </div>
+            </S.PanelInner>
           </Tabs.Panel>
 
           <Tabs.Panel id="docs">
-            <div className="panel-inner">
+            <S.PanelInner>
               <h3>Implementation Details</h3>
-              <ul className="docs-list">
+              <S.DocsList>
                 <li><strong>Compound Components:</strong> Used for the Tabs API to avoid "div soup" and props drilling.</li>
                 <li><strong>Split Context:</strong> The Wizard uses separate State and Dispatch contexts to optimize re-renders.</li>
                 <li><strong>HOC (withAuth):</strong> This entire page is protected by a higher-order component.</li>
                 <li><strong>Code Splitting:</strong> The Telemetry chart is lazy-loaded to reduce initial bundle size.</li>
-              </ul>
-            </div>
+              </S.DocsList>
+            </S.PanelInner>
           </Tabs.Panel>
-        </section>
+        </S.DashboardMainContent>
       </Tabs>
     </PageLayout>
   );

@@ -4,8 +4,10 @@ import { useAppStore } from '@/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/design-system/atoms/Input';
 import { Checkbox } from '@/design-system/atoms/Checkbox';
+import { Button } from '@/design-system/atoms/Button';
+import { Spinner } from '@/design-system/atoms/Spinner';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import './Day07.css';
+import * as S from './Day07.styles';
 
 const Day07: React.FC = () => {
   const { data: tasks, isLoading, isError, error } = useTasksQuery();
@@ -14,7 +16,7 @@ const Day07: React.FC = () => {
   const { user } = useAppStore();
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  const handleAddTask = (e: React.SubmitEvent) => {
+  const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
     createTask.mutate(newTaskTitle, {
@@ -32,17 +34,17 @@ const Day07: React.FC = () => {
         </span>
       }
     >
-      <div className="tasks-section">
-        <div className="section-header">
+      <S.TasksSection>
+        <S.SectionHeader>
           <h2>Task Board</h2>
           <div className="status-pills">
-            <span className="pill loading-pill" style={{ opacity: isLoading || createTask.isPending ? 1 : 0 }}>
+            <S.LoadingPill style={{ opacity: isLoading || createTask.isPending ? 1 : 0 }}>
               {createTask.isPending ? 'Adding task...' : 'Syncing...'}
-            </span>
+            </S.LoadingPill>
           </div>
-        </div>
+        </S.SectionHeader>
 
-        <form className="add-task-form" onSubmit={handleAddTask}>
+        <S.AddTaskForm onSubmit={handleAddTask}>
           <Input
             label="New Task"
             hideLabel
@@ -54,58 +56,63 @@ const Day07: React.FC = () => {
             required
             fullWidth
           />
-          <button type="submit" disabled={createTask.isPending || !newTaskTitle.trim()}>
-            {createTask.isPending ? '...' : 'Add Task'}
-          </button>
-        </form>
+          <Button 
+            type="submit" 
+            isLoading={createTask.isPending}
+            disabled={!newTaskTitle.trim()}
+            variant="primary"
+          >
+            Add Task
+          </Button>
+        </S.AddTaskForm>
 
         <div className="tasks-list-container">
           {isLoading ? (
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Fetching your tasks...</p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0' }}>
+              <Spinner />
+              <p style={{ color: '#94a3b8', marginTop: '1rem' }}>Fetching your tasks...</p>
             </div>
           ) : isError ? (
-            <div className="error-state">
+            <div style={{ color: '#ef4444', padding: '1rem' }}>
               <p>Error: {(error as Error).message}</p>
             </div>
           ) : (
-            <ul className="tasks-list">
+            <S.TasksList>
               <AnimatePresence>
                 {tasks?.map((task: Task) => (
-                  <motion.li
+                  <motion.div
                     key={task.id}
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className={`task-item ${task.completed ? 'completed' : ''}`}
                   >
-                    <Checkbox
-                      label={task.title}
-                      checked={task.completed}
-                      onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
-                    />
-                  </motion.li>
-
+                    <S.TaskItem $completed={task.completed}>
+                      <Checkbox
+                        label={task.title}
+                        checked={task.completed}
+                        onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
+                      />
+                    </S.TaskItem>
+                  </motion.div>
                 ))}
               </AnimatePresence>
-            </ul>
+            </S.TasksList>
           )}
         </div>
-      </div>
+      </S.TasksSection>
 
-      <footer className="day07-footer" style={{ marginTop: '2rem' }}>
-        <div className="concept-card">
+      <S.Day07Footer>
+        <S.ConceptCard>
           <h3>Zustand Auth State</h3>
           <p>Auth state is persisted in localStorage. Refresh the page to see it persist!</p>
           <pre>{JSON.stringify({ user, authenticated: !!user }, null, 2)}</pre>
-        </div>
-        <div className="concept-card">
+        </S.ConceptCard>
+        <S.ConceptCard>
           <h3>React Query Cache</h3>
           <p>Open the devtools (bottom right) to inspect the 'tasks' query and cache behavior.</p>
-        </div>
-      </footer>
+        </S.ConceptCard>
+      </S.Day07Footer>
     </PageLayout>
   );
 };

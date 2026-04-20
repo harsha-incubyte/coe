@@ -22,7 +22,7 @@ import { RadioGroup } from '@/design-system/molecules/RadioGroup';
 import { InputGroup } from '@/design-system/molecules/InputGroup';
 import { Tabs } from '@/design-system/molecules/Tabs/Tabs';
 import { useToast } from '@/hooks/useToast';
-import Modal from '@/components/Modal/Modal';
+import { Modal } from '@/design-system/molecules/Modal';
 
 const HookCard = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
