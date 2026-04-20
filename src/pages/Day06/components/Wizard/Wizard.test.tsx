@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
+import { render } from '@/design-system/test-utils';
 import { describe, it, expect, vitest, beforeEach } from 'vitest';
 import { DeviceConfigurationWizard } from './Wizard';
 
