@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ToastData } from '@/hooks/useToast';
 import { SHOW_TOAST_EVENT } from '@/hooks/useToast';
-import { Toast } from '@/design-system/molecules/Toast';
+import { Toast, type ToastType } from '@/design-system/molecules/Toast';
 import styled from 'styled-components';
 
 const StyledToastContainer = styled.div`
@@ -57,7 +57,7 @@ const ToastContainer: React.FC = () => {
           >
             <Toast
               message={toast.message}
-              type={toast.type as any}
+              type={toast.type as ToastType}
               onClose={() => removeToast(toast.id)}
             />
           </motion.div>

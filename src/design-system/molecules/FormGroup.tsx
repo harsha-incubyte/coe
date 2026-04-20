@@ -97,7 +97,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
                 id: child.props.id || id,
                 'aria-invalid': child.props['aria-invalid'] ?? isInvalid,
                 'aria-describedby': [child.props['aria-describedby'], describedBy].filter(Boolean).join(' ') || undefined,
-              } as any);
+              } as React.HTMLAttributes<HTMLElement>);
             }
             return child;
           })

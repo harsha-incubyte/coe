@@ -135,13 +135,6 @@ export const TempUnit = styled.span`
   opacity: 0.7;
 `;
 
-export const ConditionLabel = styled.div`
-  font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.primary[400]};
-  text-transform: capitalize;
-`;
-
 const statusBase = css`
   text-align: center;
   padding: ${({ theme }) => theme.spacing.md};
@@ -179,6 +172,5 @@ DataFooter.defaultProps = { theme };
 TempDisplay.defaultProps = { theme };
 TempValue.defaultProps = { theme };
 TempUnit.defaultProps = { theme };
-ConditionLabel.defaultProps = { theme };
 StatusOverlay.defaultProps = { theme };
 ErrorOverlay.defaultProps = { theme };

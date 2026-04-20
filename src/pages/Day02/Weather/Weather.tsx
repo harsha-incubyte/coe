@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input } from '@/design-system/atoms/Input';
+import { Badge } from '@/design-system/molecules/Badge';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
@@ -260,7 +261,9 @@ export const Weather: React.FC = () => {
                   <S.TempValue>{Math.round(weather.temperature)}</S.TempValue>
                   <S.TempUnit>°C</S.TempUnit>
                 </S.TempDisplay>
-                <S.ConditionLabel>{weather.condition}</S.ConditionLabel>
+                <Badge variant="primary" pill size="md">
+                  {weather.condition}
+                </Badge>
               </S.DataFooter>
             </S.WeatherOverlayData>
           </WeatherIllustration>

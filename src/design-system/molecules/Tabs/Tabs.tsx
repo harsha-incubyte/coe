@@ -87,7 +87,7 @@ export interface TabsProps {
   children: ReactNode;
 }
 
-const TabsRoot: React.FC<TabsProps> = ({ defaultValue, children }) => {
+export const TabsRoot: React.FC<TabsProps> = ({ defaultValue, children }) => {
   const [activeTab, setActiveTab] = useState(defaultValue);
 
   return (
@@ -102,7 +102,7 @@ export interface TabsListProps {
   'aria-label'?: string;
 }
 
-const TabsList: React.FC<TabsListProps> = ({ children, 'aria-label': ariaLabel }) => {
+export const TabsList: React.FC<TabsListProps> = ({ children, 'aria-label': ariaLabel }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const tabs = Array.from((e.currentTarget as HTMLElement).querySelectorAll('[role="tab"]')) as HTMLElement[];
     const index = tabs.indexOf(document.activeElement as HTMLElement);
@@ -144,7 +144,7 @@ export interface TabTriggerProps {
   disabled?: boolean;
 }
 
-const TabTrigger: React.FC<TabTriggerProps> = ({ id, children, disabled }) => {
+export const TabTrigger: React.FC<TabTriggerProps> = ({ id, children, disabled }) => {
   const { activeTab, setActiveTab } = useTabsContext();
   const isActive = activeTab === id;
 
@@ -169,7 +169,7 @@ export interface TabPanelProps {
   children: ReactNode;
 }
 
-const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
+export const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
   const { activeTab } = useTabsContext();
   const isActive = activeTab === id;
 
@@ -187,9 +187,12 @@ const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
   );
 };
 
-// Export consolidated object
-export const Tabs = Object.assign(TabsRoot, {
-  List: TabsList,
-  Tab: TabTrigger,
-  Panel: TabPanel,
-});
+export const Tabs: React.FC<TabsProps> & {
+  List: typeof TabsList;
+  Tab: typeof TabTrigger;
+  Panel: typeof TabPanel;
+} = (props) => <TabsRoot {...props} />;
+
+Tabs.List = TabsList;
+Tabs.Tab = TabTrigger;
+Tabs.Panel = TabPanel;
