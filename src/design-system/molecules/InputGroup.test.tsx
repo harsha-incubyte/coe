@@ -7,7 +7,7 @@ describe('InputGroup Molecule', () => {
   it('renders input with prefix and suffix', () => {
     render(
       <InputGroup prefix="$" suffix=".00">
-        <Input placeholder="Amount" />
+        <Input label="Amount" hideLabel placeholder="Amount" />
       </InputGroup>
     );
     
@@ -19,7 +19,7 @@ describe('InputGroup Molecule', () => {
   it('renders correctly with only prefix', () => {
     render(
       <InputGroup prefix="@">
-        <Input placeholder="Username" />
+        <Input label="Username" hideLabel placeholder="Username" />
       </InputGroup>
     );
     
@@ -30,7 +30,7 @@ describe('InputGroup Molecule', () => {
   it('renders correctly with only suffix', () => {
     render(
       <InputGroup suffix="kg">
-        <Input placeholder="Weight" />
+        <Input label="Weight" hideLabel placeholder="Weight" />
       </InputGroup>
     );
     
@@ -41,7 +41,7 @@ describe('InputGroup Molecule', () => {
   it('passes through className', () => {
     const { container } = render(
       <InputGroup className="custom-group">
-        <Input />
+        <Input label="Generic" hideLabel />
       </InputGroup>
     );
     expect(container.firstChild).toHaveClass('custom-group');

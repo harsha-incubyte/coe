@@ -72,7 +72,7 @@ const Message = styled.p`
 `;
 Message.defaultProps = { theme };
 
-const CloseButton = styled.button`
+const CloseButton = styled.button<{ $variant: AlertVariant }>`
   background: none;
   border: none;
   color: inherit;

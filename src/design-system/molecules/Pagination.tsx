@@ -44,7 +44,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={isFirstPage}
         aria-label="Previous page"
-        size="sm"
+        $size="sm"
       >
         ← Prev
       </Button>
@@ -58,7 +58,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={isLastPage}
         aria-label="Next page"
-        size="sm"
+        $size="sm"
       >
         Next →
       </Button>

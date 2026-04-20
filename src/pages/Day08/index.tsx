@@ -126,7 +126,7 @@ const MoleculesShowcase = () => {
       <Heading $level={3} style={{ marginTop: '2rem' }}>Navigation</Heading>
       <ComponentShowcase style={{ flexDirection: 'column', alignItems: 'stretch' }}>
         <Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Library', href: '#' }, { label: 'Showcase' }]} />
-        <StepIndicator currentStep={2} steps={['Discovery', 'Design', 'Development', 'Deployment']} />
+        <StepIndicator activeIndex={2} steps={[{ label: 'Discovery' }, { label: 'Design' }, { label: 'Development' }, { label: 'Deployment' }]} />
         <Tabs defaultValue="concept">
           <Tabs.List>
             <Tabs.Tab id="concept">Concept</Tabs.Tab>
@@ -146,7 +146,7 @@ const MoleculesShowcase = () => {
       <FormShowcase>
         <SearchBar placeholder="Search molecules..." onSearch={(v) => console.log(v)} />
         <InputGroup prefix="$" suffix=".00">
-          <Input placeholder="Enter amount" />
+          <Input label="Amount" hideLabel placeholder="Enter amount" />
         </InputGroup>
         <CheckboxGroup 
           label="Preferred Frameworks" 

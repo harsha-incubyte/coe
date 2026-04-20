@@ -11,6 +11,7 @@ export interface FormGroupProps {
   required?: boolean;
   fullWidth?: boolean;
   hideLabel?: boolean;
+  className?: string;
 }
 
 const Container = styled.div<{ $fullWidth?: boolean }>`
@@ -69,6 +70,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
   required,
   fullWidth = false,
   hideLabel = false,
+  className,
 }) => {
   const generatedId = useId();
   const id = providedId || generatedId;
@@ -83,7 +85,7 @@ export const FormGroup: React.FC<FormGroupProps> = ({
   const isInvalid = !!error;
 
   return (
-    <Container $fullWidth={fullWidth}>
+    <Container $fullWidth={fullWidth} className={className}>
       <StyledLabel htmlFor={id} $hideLabel={hideLabel}>
         {label}
         {required && <RequiredAsterisk>*</RequiredAsterisk>}
@@ -93,11 +95,18 @@ export const FormGroup: React.FC<FormGroupProps> = ({
         : (
           React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
-              return React.cloneElement(child, {
-                id: child.props.id || id,
-                'aria-invalid': child.props['aria-invalid'] ?? isInvalid,
-                'aria-describedby': [child.props['aria-describedby'], describedBy].filter(Boolean).join(' ') || undefined,
-              } as React.HTMLAttributes<HTMLElement>);
+              const childElement = child as React.ReactElement<{
+                id?: string;
+                'aria-invalid'?: boolean | string;
+                'aria-describedby'?: string;
+              }>;
+              return React.cloneElement(childElement, {
+                id: childElement.props.id || id,
+                'aria-invalid': childElement.props['aria-invalid'] ?? isInvalid,
+                'aria-describedby': [childElement.props['aria-describedby'], describedBy]
+                  .filter(Boolean)
+                  .join(' ') || undefined,
+              });
             }
             return child;
           })

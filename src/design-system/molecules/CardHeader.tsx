@@ -58,7 +58,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   className,
   titleLevel = 3,
 }) => {
-  const HeadingTag = `h${titleLevel}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${titleLevel}` as React.ElementType;
 
   return (
     <HeaderContainer className={className}>
