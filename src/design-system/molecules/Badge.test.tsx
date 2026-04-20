@@ -23,4 +23,9 @@ describe('Badge Molecule', () => {
     render(<Badge pill>Pill</Badge>);
     expect(screen.getByText('Pill')).toBeInTheDocument();
   });
+
+  it('renders content from label prop if children is missing', () => {
+    render(<Badge label="Label Content" />);
+    expect(screen.getByText('Label Content')).toBeInTheDocument();
+  });
 });

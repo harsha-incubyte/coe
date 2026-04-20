@@ -10,6 +10,18 @@ import { useModal } from '@/hooks/useModal';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Dropdown } from '@/design-system/molecules/Dropdown';
+import { Alert } from '@/design-system/molecules/Alert';
+import { Badge } from '@/design-system/molecules/Badge';
+import { StepIndicator } from '@/design-system/molecules/StepIndicator';
+import { Pagination } from '@/design-system/molecules/Pagination';
+import { Breadcrumbs } from '@/design-system/molecules/Breadcrumbs';
+import { SearchBar } from '@/design-system/molecules/SearchBar';
+import { StatBlock } from '@/design-system/molecules/StatBlock';
+import { CheckboxGroup } from '@/design-system/molecules/CheckboxGroup';
+import { RadioGroup } from '@/design-system/molecules/RadioGroup';
+import { InputGroup } from '@/design-system/molecules/InputGroup';
+import { Tabs } from '@/design-system/molecules/Tabs/Tabs';
+import { useToast } from '@/hooks/useToast';
 import Modal from '@/components/Modal/Modal';
 
 const HookCard = styled.div`
@@ -79,6 +91,86 @@ const DropdownDemo = () => {
         { label: 'Logout', onClick: () => alert('Logout clicked') },
       ]} 
     />
+  );
+};
+
+const MoleculesShowcase = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [frameworks, setFrameworks] = React.useState(['react']);
+  const [color, setColor] = React.useState('blue');
+  const { showToast } = useToast();
+
+  return (
+    <>
+      <Heading $level={3}>Feedback & Status</Heading>
+      <ComponentShowcase style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+        <Alert variant="success" title="Success!" message="Your profile has been updated." />
+        <Alert variant="info" message="A new version of the dashboard is available." />
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Badge variant="primary" label="New Feature" />
+          <Badge variant="success" label="Active" />
+          <Badge variant="warning" label="Pending" />
+          <Badge variant="error" label="Closed" pill />
+          <Badge variant="info" label="v2.4.0" size="sm" />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <Button $variant="secondary" $size="sm" onClick={() => showToast('Toast triggered from showcase!', 'success')}>
+            Test Success Toast
+          </Button>
+          <Button $variant="secondary" $size="sm" onClick={() => showToast('Something went wrong.', 'error')}>
+            Test Error Toast
+          </Button>
+        </div>
+      </ComponentShowcase>
+
+      <Heading $level={3} style={{ marginTop: '2rem' }}>Navigation</Heading>
+      <ComponentShowcase style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+        <Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Library', href: '#' }, { label: 'Showcase' }]} />
+        <StepIndicator currentStep={2} steps={['Discovery', 'Design', 'Development', 'Deployment']} />
+        <Tabs defaultValue="concept">
+          <Tabs.List>
+            <Tabs.Tab id="concept">Concept</Tabs.Tab>
+            <Tabs.Tab id="execution">Execution</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel id="concept">
+            Molecules are groups of atoms bonded together to take on new properties.
+          </Tabs.Panel>
+          <Tabs.Panel id="execution">
+            We use styled-components and design tokens to ensure visual consistency.
+          </Tabs.Panel>
+        </Tabs>
+        <Pagination currentPage={currentPage} totalPages={10} onPageChange={setCurrentPage} />
+      </ComponentShowcase>
+
+      <Heading $level={3} style={{ marginTop: '2rem' }}>Forms & Search</Heading>
+      <FormShowcase>
+        <SearchBar placeholder="Search molecules..." onSearch={(v) => console.log(v)} />
+        <InputGroup prefix="$" suffix=".00">
+          <Input placeholder="Enter amount" />
+        </InputGroup>
+        <CheckboxGroup 
+          label="Preferred Frameworks" 
+          options={[{label: 'React', value: 'react'}, {label: 'Vue', value: 'vue'}, {label: 'Angular', value: 'angular'}]}
+          value={frameworks}
+          onChange={setFrameworks}
+          variant="horizontal"
+        />
+        <RadioGroup 
+          label="Display Color" 
+          options={[{label: 'Red', value: 'red'}, {label: 'Blue', value: 'blue'}, {label: 'Green', value: 'green'}]}
+          value={color}
+          onChange={setColor}
+          variant="horizontal"
+        />
+      </FormShowcase>
+
+      <Heading $level={3} style={{ marginTop: '2rem' }}>Content Composition</Heading>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '1rem' }}>
+        <StatBlock label="Monthly Revenue" value="$42,500" trend={{ value: '+12.5%', type: 'success' }} />
+        <StatBlock label="Active Users" value="1,240" trend={{ value: '+5%', type: 'success' }} />
+        <StatBlock label="System Health" value="99.9%" trend={{ value: 'Stable', type: 'info' }} />
+      </div>
+    </>
   );
 };
 
@@ -214,7 +306,13 @@ const Day08: React.FC = () => {
       </Section>
 
       <Section>
-        <Heading $level={2}>3. Typography Scale</Heading>
+        <Heading $level={2}>3. Molecule Components</Heading>
+        <p>Combinations of atoms that form modular, functional components.</p>
+        <MoleculesShowcase />
+      </Section>
+
+      <Section>
+        <Heading $level={2}>4. Typography Scale</Heading>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <Heading $level={1}>Heading Level 1 (36px)</Heading>
           <Heading $level={2}>Heading Level 2 (30px)</Heading>
@@ -226,7 +324,7 @@ const Day08: React.FC = () => {
       </Section>
 
       <Section>
-        <Heading $level={2}>4. Custom Hooks</Heading>
+        <Heading $level={2}>5. Custom Hooks</Heading>
         <p>Foundational hooks to power our design system and manage complex UI states.</p>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>

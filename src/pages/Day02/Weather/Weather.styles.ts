@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
 
 export const DashboardContainer = styled.div`

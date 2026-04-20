@@ -5,7 +5,8 @@ import { theme } from '@/design-system/theme';
 export type BadgeVariant = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info';
 
 export interface BadgeProps {
-  children: ReactNode;
+  children?: ReactNode;
+  label?: ReactNode;
   variant?: BadgeVariant;
   pill?: boolean;
   className?: string;
@@ -47,6 +48,7 @@ StyledBadge.defaultProps = { theme };
 
 export const Badge: React.FC<BadgeProps> = ({ 
   children, 
+  label,
   variant = 'default', 
   pill = false, 
   size = 'md',
@@ -54,7 +56,7 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   return (
     <StyledBadge $variant={variant} $pill={pill} $size={size} className={className}>
-      {children}
+      {children || label}
     </StyledBadge>
   );
 };
