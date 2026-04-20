@@ -25,12 +25,12 @@ This document tracks the migration and creation of Molecule components within ou
 ## 🟣 Content Composition
 - [ ] **CardHeader**: Standardized header block for Cards (Heading + Meta + Actions).
 - [ ] **ModalHeader / ModalFooter**: Building blocks for the `Modal` organism.
-- [ ] **StatBlock**: Highlighted key metrics (Value + Label).
+- [x] **StatBlock**: Highlighted key metrics (Value + Label).
 
 ---
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 5
+- **Completed**: 6
 - **In Progress**: 0
-- **Pending**: 10
+- **Pending**: 9

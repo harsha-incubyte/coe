@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from '@/design-system/molecules/Tabs';
+import { StatBlock } from '@/design-system/molecules/StatBlock';
 import * as S from './WeatherTabs.styles';
 
 interface WeatherTabsProps {
@@ -41,22 +42,10 @@ export const WeatherTabs: React.FC<WeatherTabsProps> = ({ children }) => {
             <S.Placeholder>
               <h3>Weather Details</h3>
               <S.DetailsGrid>
-                <S.DetailItem>
-                  <S.DetailLabel>Humidity</S.DetailLabel>
-                  <S.DetailValue>45%</S.DetailValue>
-                </S.DetailItem>
-                <S.DetailItem>
-                  <S.DetailLabel>Wind</S.DetailLabel>
-                  <S.DetailValue>12 km/h</S.DetailValue>
-                </S.DetailItem>
-                <S.DetailItem>
-                  <S.DetailLabel>Pressure</S.DetailLabel>
-                  <S.DetailValue>1012 hPa</S.DetailValue>
-                </S.DetailItem>
-                <S.DetailItem>
-                  <S.DetailLabel>Visibility</S.DetailLabel>
-                  <S.DetailValue>10 km</S.DetailValue>
-                </S.DetailItem>
+                <StatBlock label="Humidity" value="45%" icon="💧" />
+                <StatBlock label="Wind" value="12 km/h" icon="🌬️" />
+                <StatBlock label="Pressure" value="1012 hPa" icon="⏲️" />
+                <StatBlock label="Visibility" value="10 km" icon="👁️" />
               </S.DetailsGrid>
             </S.Placeholder>
           </Tabs.Panel>

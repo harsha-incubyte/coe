@@ -112,28 +112,6 @@ export const DetailsGrid = styled.div`
   }
 `;
 
-export const DetailItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-  padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => `${theme.colors.surfaceLight}80`};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-`;
-
-export const DetailLabel = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-`;
-
-export const DetailValue = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSize.xl};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text};
-`;
-
 export const MockNote = styled.p`
   margin-top: ${({ theme }) => theme.spacing.xl};
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
@@ -147,8 +125,5 @@ Placeholder.defaultProps = { theme };
 ForecastGrid.defaultProps = { theme };
 ForecastDay.defaultProps = { theme };
 DetailsGrid.defaultProps = { theme };
-DetailItem.defaultProps = { theme };
-DetailLabel.defaultProps = { theme };
-DetailValue.defaultProps = { theme };
 MockNote.defaultProps = { theme };
 WeatherTabsContainer.defaultProps = { theme };
