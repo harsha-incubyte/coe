@@ -126,7 +126,7 @@ const Navbar: React.FC = () => {
               menuId="user-menu"
               trigger={({ isOpen, onToggle }) => (
                 <button 
-                  className="user-profile-btn"
+                  id="user-profile-btn" className="user-profile-btn"
                   onClick={onToggle}
                   aria-expanded={isOpen}
                   aria-controls="user-menu"

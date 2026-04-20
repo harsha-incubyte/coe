@@ -42,6 +42,7 @@ const ToastContainer: React.FC = () => {
 
   return createPortal(
     <StyledToastContainer 
+      className="toast-container"
       aria-live="polite" 
       aria-atomic="true"
     >
