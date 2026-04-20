@@ -24,7 +24,10 @@ describe('Authentication Flow', () => {
 
   it('should login, view weather, search and logout', () => {
     // Intercept login request
-    cy.intercept('POST', '**/api/login').as('loginRequest');
+    cy.intercept('POST', '**/api/login', {
+      statusCode: 200,
+      body: { email: 'harsha@incubyte.co', token: 'mock-token' }
+    }).as('loginRequest');
 
     // Visit login page
     cy.visit('/day-02/login');
@@ -36,7 +39,7 @@ describe('Authentication Flow', () => {
 
     // Verify redirection to weather dashboard
     cy.url().should('include', '/day-02/weather');
-    cy.get('.user-profile-btn').should('be.visible');
+    cy.get('#user-profile-btn').should('be.visible');
     cy.get('input[placeholder="Search for a city..."]').should('be.visible');
 
     // Search for a city
@@ -48,7 +51,7 @@ describe('Authentication Flow', () => {
     cy.contains('°C').should('be.visible');
 
     // Logout via Navbar
-    cy.get('.user-profile-btn').click();
+    cy.get('#user-profile-btn').click();
     cy.contains('Logout').click();
 
     

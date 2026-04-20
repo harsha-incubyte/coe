@@ -26,7 +26,7 @@ describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
     cy.checkA11y();
 
     // Open User Profile dropdown
-    cy.get('.user-profile-btn').click();
+    cy.get('#user-profile-btn').click();
 
     // Verify dropdown is visible and wait for animation to finish
     cy.get('#user-menu').should('be.visible');
