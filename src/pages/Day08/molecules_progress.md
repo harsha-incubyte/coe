@@ -20,7 +20,7 @@ This document tracks the migration and creation of Molecule components within ou
 ## 🟠 Forms & Search
 - [x] **SearchBar**: Combination of `Input` and search icon/button.
 - [ ] **InputGroup**: Inputs with prefixes or suffixes (e.g., currency, units).
-- [ ] **CheckboxGroup / RadioGroup**: Logical groupings for selection inputs.
+- [x] **CheckboxGroup / RadioGroup**: Logical groupings for selection inputs.
 
 ## 🟣 Content Composition
 - [ ] **CardHeader**: Standardized header block for Cards (Heading + Meta + Actions).
@@ -31,6 +31,6 @@ This document tracks the migration and creation of Molecule components within ou
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 11
+- **Completed**: 12
 - **In Progress**: 0
-- **Pending**: 4
+- **Pending**: 3
