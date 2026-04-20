@@ -6,7 +6,6 @@ import { Input } from '@/design-system/atoms/Input';
 import { Checkbox } from '@/design-system/atoms/Checkbox';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
-import { useDropdown } from '@/hooks/useDropdown';
 import { useModal } from '@/hooks/useModal';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { PageLayout } from '@/design-system/layout/PageLayout';

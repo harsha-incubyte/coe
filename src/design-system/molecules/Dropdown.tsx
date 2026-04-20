@@ -60,9 +60,10 @@ interface DropdownProps {
   trigger?: (props: { isOpen: boolean; onToggle: () => void }) => React.ReactNode;
   items?: Array<{ label: string; onClick: () => void; variant?: 'default' | 'danger' }>;
   children?: React.ReactNode;
+  menuId?: string;
 }
 
-export const Dropdown = ({ label, trigger, items, children }: DropdownProps) => {
+export const Dropdown = ({ label, trigger, items, children, menuId }: DropdownProps) => {
   const { isOpen, onToggle, containerRef, onClose } = useDropdown();
 
   return (
@@ -75,13 +76,14 @@ export const Dropdown = ({ label, trigger, items, children }: DropdownProps) => 
           onClick={onToggle}
           aria-haspopup="true"
           aria-expanded={isOpen}
+          aria-controls={menuId}
         >
           {label} ▾
         </Button>
       )}
       
       {isOpen && (
-        <DropdownMenu role="menu">
+        <DropdownMenu id={menuId} role="menu">
           {children}
           {items?.map((item, index) => (
             <DropdownItem
@@ -101,4 +103,5 @@ export const Dropdown = ({ label, trigger, items, children }: DropdownProps) => 
     </DropdownContainer>
   );
 };
+
 

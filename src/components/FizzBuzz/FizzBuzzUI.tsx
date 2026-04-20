@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { fizzBuzz } from '@/lib/fizzbuzz';
 import { Input } from '@/design-system/atoms/Input';
-import '@/components/FizzBuzz/FizzBuzzUI.css';
+import { Heading } from '@/design-system/atoms/Heading';
+import * as S from './FizzBuzzUI.styles';
 
 const FizzBuzzUI: React.FC = () => {
   const [limit, setLimit] = useState<number | ''>('');
@@ -21,8 +22,8 @@ const FizzBuzzUI: React.FC = () => {
   };
 
   return (
-    <div className="fizzbuzz-container">
-      <h2 className="fizzbuzz-title">FizzBuzz Generator</h2>
+    <S.Container>
+      <Heading $level={2}>FizzBuzz Generator</Heading>
       <Input
         label="FizzBuzz length"
         hideLabel
@@ -34,19 +35,20 @@ const FizzBuzzUI: React.FC = () => {
         aria-label="FizzBuzz length"
       />
 
-      <div className="fizzbuzz-sequence">
+      <S.Sequence>
         {generateSequence().map(({ num, res }) => (
-          <span 
+          <S.Item 
             key={num} 
-            className={`fizzbuzz-item ${res.toLowerCase()}`}
+            $type={res.toLowerCase() as 'fizz' | 'buzz' | 'fizzbuzz' | undefined}
             title={`Number ${num}`}
           >
             {res}
-          </span>
+          </S.Item>
         ))}
-      </div>
-    </div>
+      </S.Sequence>
+    </S.Container>
   );
 };
 
 export default FizzBuzzUI;
+

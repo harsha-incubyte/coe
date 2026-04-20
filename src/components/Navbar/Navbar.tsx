@@ -123,11 +123,13 @@ const Navbar: React.FC = () => {
         <div className="navbar-actions">
           {isAuthenticated ? (
             <Dropdown
+              menuId="user-menu"
               trigger={({ isOpen, onToggle }) => (
                 <button 
                   className="user-profile-btn"
                   onClick={onToggle}
                   aria-expanded={isOpen}
+                  aria-controls="user-menu"
                   aria-label="User Profile"
                 >
                   <div className="avatar-placeholder">
@@ -138,7 +140,7 @@ const Navbar: React.FC = () => {
               items={[
                 { label: 'Profile', onClick: () => navigate('#profile') },
                 { label: 'Settings', onClick: () => navigate('#settings') },
-                { label: 'Logout', onClick: (e?: any) => handleLogout(e), variant: 'danger' },
+                { label: 'Logout', onClick: (e?: React.MouseEvent) => handleLogout(e), variant: 'danger' },
               ]}
             >
               <UserInfo>
@@ -146,6 +148,7 @@ const Navbar: React.FC = () => {
                 <UserEmail>{user?.email}</UserEmail>
               </UserInfo>
             </Dropdown>
+
           ) : (
             <NavLink to="/day-02/login" className="login-nav-btn">Login</NavLink>
           )}

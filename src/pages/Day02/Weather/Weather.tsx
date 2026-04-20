@@ -109,7 +109,7 @@ export const Weather: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(handler);
-  }, [city]);
+  }, [city, openSuggestions]);
 
   useEffect(() => {
     if (!weather?.timezone) return;

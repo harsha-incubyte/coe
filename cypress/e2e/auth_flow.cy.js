@@ -49,7 +49,8 @@ describe('Authentication Flow', () => {
 
     // Logout via Navbar
     cy.get('.user-profile-btn').click();
-    cy.get('.dropdown-logout-btn').click();
+    cy.contains('Logout').click();
+
     
     // Verify redirection back to login page
     cy.url().should('include', '/day-02/login');
