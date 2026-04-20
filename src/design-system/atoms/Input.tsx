@@ -1,45 +1,15 @@
-import React, { useId, type InputHTMLAttributes } from 'react';
-import styled, { css } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
+import { FormGroup } from '@/design-system/molecules/FormGroup';
 
-
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   helperText?: string;
   fullWidth?: boolean;
   hideLabel?: boolean;
 }
-
-const InputContainer = styled.div<{ $fullWidth?: boolean }>`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
-`;
-InputContainer.defaultProps = { theme };
-
-const StyledLabel = styled.label<{ $hideLabel?: boolean }>`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-
-  ${({ $hideLabel }) =>
-    $hideLabel &&
-    css`
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    `}
-`;
-StyledLabel.defaultProps = { theme };
 
 const InputWrapper = styled.div<{ $error?: boolean }>`
   position: relative;
@@ -83,63 +53,33 @@ const StyledInput = styled.input`
 `;
 StyledInput.defaultProps = { theme };
 
-const Message = styled.p<{ $variant: 'error' | 'helper' }>`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-  color: ${({ theme, $variant }) => ($variant === 'error' ? theme.colors.error : theme.colors.textSecondary)};
-`;
-Message.defaultProps = { theme };
-
-const RequiredAsterisk = styled.span.attrs({ 'aria-hidden': 'true' })`
-  color: ${({ theme }) => theme.colors.error};
-  margin-left: 2px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-`;
-RequiredAsterisk.defaultProps = { theme };
-
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, fullWidth = false, hideLabel = false, id: providedId, ...props }, ref) => {
-    const generatedId = useId();
-    const id = providedId || generatedId;
-    const errorId = `${id}-error`;
-    const helperId = `${id}-helper`;
-
-    const describedBy = [
-      error ? errorId : '',
-      helperText ? helperId : ''
-    ].filter(Boolean).join(' ');
-
+  ({ label, error, helperText, fullWidth = false, hideLabel = false, id, ...props }, ref) => {
     return (
-      <InputContainer $fullWidth={fullWidth}>
-        <StyledLabel htmlFor={id} $hideLabel={hideLabel}>
-          {label}
-          {props.required && <RequiredAsterisk>*</RequiredAsterisk>}
-        </StyledLabel>
-        <InputWrapper $error={!!error}>
-          <StyledInput
-            ref={ref}
-            id={id}
-            aria-invalid={!!error}
-            aria-describedby={describedBy || undefined}
-            aria-required={props.required}
-            {...props}
-          />
-        </InputWrapper>
-        {error && (
-          <Message id={errorId} $variant="error" role="alert">
-            {error}
-          </Message>
+      <FormGroup
+        label={label}
+        error={error}
+        helperText={helperText}
+        fullWidth={fullWidth}
+        hideLabel={hideLabel}
+        required={props.required}
+        id={id}
+      >
+        {({ id: inputId, describedBy, isInvalid }) => (
+          <InputWrapper $error={isInvalid}>
+            <StyledInput
+              ref={ref}
+              id={inputId}
+              aria-invalid={isInvalid}
+              aria-describedby={describedBy}
+              aria-required={props.required}
+              {...props}
+            />
+          </InputWrapper>
         )}
-        {helperText && (
-          <Message id={helperId} $variant="helper">
-            {helperText}
-          </Message>
-        )}
-
-      </InputContainer>
+      </FormGroup>
     );
   }
 );
 
 Input.displayName = 'Input';
-
