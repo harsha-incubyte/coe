@@ -10,7 +10,7 @@ This document tracks the migration and creation of Molecule components within ou
 - [x] **Tabs (Refactor)**: Migrating the existing `src/components/Tabs` into the design system.
 - [x] **StepIndicator**: A visual tracker for multi-step processes (e.g., for the `Wizard`).
 - [x] **Pagination**: Controls for navigating through data sets.
-- [ ] **Breadcrumbs**: Hierarchical navigation path.
+- [x] **Breadcrumbs**: Hierarchical navigation path.
 
 ## 🟡 Feedback & Communication
 - [x] **Toast (Refactor)**: Standardizing the `src/components/Toast` as a design system molecule.
@@ -31,6 +31,6 @@ This document tracks the migration and creation of Molecule components within ou
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 10
+- **Completed**: 11
 - **In Progress**: 0
-- **Pending**: 5
+- **Pending**: 4
