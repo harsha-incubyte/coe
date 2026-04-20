@@ -285,6 +285,43 @@ const Day08: React.FC = () => {
           <Button size="lg">Large</Button>
         </ComponentShowcase>
 
+        <Heading $level={3} style={{ marginTop: '2rem' }}>Button States</Heading>
+        <ComponentShowcase>
+          <Button disabled>Disabled Primary</Button>
+          <Button variant="secondary" disabled>Disabled Secondary</Button>
+          <Button isLoading>Loading State</Button>
+          <Button variant="accent" isLoading>Loading Accent</Button>
+          <Button variant="danger" isLoading>Loading Danger</Button>
+        </ComponentShowcase>
+        
+        <Heading $level={3} style={{ marginTop: '2rem' }}>Buttons with Icons</Heading>
+        <ComponentShowcase>
+          <Button 
+            leftIcon={
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+              </svg>
+            }
+          >
+            Search
+          </Button>
+          <Button 
+            variant="secondary"
+            rightIcon={
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            }
+          >
+            Get Started
+          </Button>
+        </ComponentShowcase>
+
+        <Heading $level={3} style={{ marginTop: '2rem' }}>Full Width Button</Heading>
+        <ComponentShowcase style={{ alignItems: 'stretch' }}>
+          <Button fullWidth>Expand All Options</Button>
+        </ComponentShowcase>
+
         <Heading $level={3} style={{ marginTop: '2rem' }}>Form Elements</Heading>
         <FormShowcase>
           <Input 
