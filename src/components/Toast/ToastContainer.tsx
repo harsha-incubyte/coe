@@ -3,7 +3,19 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ToastData } from '@/hooks/useToast';
 import { SHOW_TOAST_EVENT } from '@/hooks/useToast';
-import './Toast.css';
+import { Toast } from '@/design-system/molecules/Toast';
+import styled from 'styled-components';
+
+const StyledToastContainer = styled.div`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 9999;
+  pointer-events: none;
+`;
 
 const ToastContainer: React.FC = () => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
@@ -29,8 +41,7 @@ const ToastContainer: React.FC = () => {
   }, []);
 
   return createPortal(
-    <div 
-      className="toast-container" 
+    <StyledToastContainer 
       aria-live="polite" 
       aria-atomic="true"
     >
@@ -42,28 +53,17 @@ const ToastContainer: React.FC = () => {
             initial={{ opacity: 0, y: 50, scale: 0.3 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-            className={`toast toast-${toast.type}`}
-            id={`toast-${toast.id}`}
-            role="status"
+            style={{ pointerEvents: 'auto' }}
           >
-            <div className="toast-icon">
-              {toast.type === 'success' && '✓'}
-              {toast.type === 'error' && '!'}
-              {toast.type === 'info' && 'i'}
-              {toast.type === 'warning' && '⚠'}
-            </div>
-            <div className="toast-message">{toast.message}</div>
-            <button
-              className="toast-close"
-              aria-label="Close announcement"
-              onClick={() => removeToast(toast.id)}
-            >
-              &times;
-            </button>
+            <Toast
+              message={toast.message}
+              type={toast.type as any}
+              onClose={() => removeToast(toast.id)}
+            />
           </motion.div>
         ))}
       </AnimatePresence>
-    </div>,
+    </StyledToastContainer>,
     document.body
   );
 };

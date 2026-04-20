@@ -13,7 +13,7 @@ This document tracks the migration and creation of Molecule components within ou
 - [ ] **Breadcrumbs**: Hierarchical navigation path.
 
 ## 🟡 Feedback & Communication
-- [ ] **Toast (Refactor)**: Standardizing the `src/components/Toast` as a design system molecule.
+- [x] **Toast (Refactor)**: Standardizing the `src/components/Toast` as a design system molecule.
 - [ ] **Alert / InlineBanner**: Contextual feedback messages (Success, Warning, Error).
 - [ ] **Badge / Tag**: Small status indicators or category labels.
 
