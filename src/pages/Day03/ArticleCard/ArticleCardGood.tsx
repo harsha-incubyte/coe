@@ -1,6 +1,6 @@
 import React from 'react';
 import { CardHeader } from '@/design-system/molecules/CardHeader';
-import './ArticleCard.css';
+import * as S from './ArticleCard.styles';
 
 interface ArticleCardProps {
   title: string;
@@ -10,24 +10,21 @@ interface ArticleCardProps {
 
 const ArticleCardGood: React.FC<ArticleCardProps> = ({ title, date, content }) => {
   return (
-    <article className="article-card">
+    <S.StyledArticleCard>
       <CardHeader 
         title={title} 
-        subtitle={<time className="date" dateTime={date}>{date}</time>}
+        subtitle={<S.DateText dateTime={date}>{date}</S.DateText>}
         titleLevel={2}
       />
-      <div className="card-content">
+      <S.CardContent>
         <p>{content}</p>
-      </div>
-      <footer className="card-footer">
-        <a 
-          href="#" 
-          className="read-more-btn"
-        >
+      </S.CardContent>
+      <S.CardFooter>
+        <S.ReadMoreButton href="#">
           Read More
-        </a>
-      </footer>
-    </article>
+        </S.ReadMoreButton>
+      </S.CardFooter>
+    </S.StyledArticleCard>
   );
 };
 

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import Modal from '@/components/Modal/Modal';
+import { Modal } from '@/design-system/molecules/Modal';
 import { Button } from '@/design-system/atoms/Button';
+import { Badge } from '@/design-system/molecules/Badge';
 import Input from '@/components/Form/Input';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';
 import { useBoolean } from '@/hooks/useBoolean';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import './Day04.css';
+import * as S from './Day04.styles';
 
 const Day04: React.FC = () => {
   const { isOpen: isModalOpen, onOpen: openModal, onClose: handleModalClose } = useModal();
@@ -30,12 +31,12 @@ const Day04: React.FC = () => {
       description="Building the atomic foundation for professional, accessible web applications."
     >
       
-      <div className="playground-grid">
-        <section className="exercise-section card-glass">
-          <div className="card-header">
-            <span className="badge">KATA 01</span>
+      <S.PlaygroundGrid>
+        <S.ExerciseSection>
+          <S.CardHeader>
+            <Badge variant="primary">KATA 01</Badge>
             <h2>The Decoupled Accessible Modal</h2>
-          </div>
+          </S.CardHeader>
           <p>A headless modal implementation with focus trapping, Escape handling, and smooth Framer Motion animations.</p>
           
           <Button 
@@ -52,9 +53,9 @@ const Day04: React.FC = () => {
             onClose={handleModalClose} 
             title="Premium Modal Experience"
           >
-            <form onSubmit={handleFormSubmit} className="modal-form">
+            <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
               <p style={{ marginBottom: '1.5rem' }}>
-                This modal component is now globally available in <code>@/components/Modal</code>.
+                This modal component is now globally available in <code>@/design-system/molecules/Modal</code>.
               </p>
               
               <Input 
@@ -71,7 +72,7 @@ const Day04: React.FC = () => {
                 fullWidth 
               />
               
-              <div className="modal-actions">
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2.5rem' }}>
                 <Button variant="ghost" type="button" onClick={handleModalClose}>
                   Cancel
                 </Button>
@@ -81,17 +82,17 @@ const Day04: React.FC = () => {
               </div>
             </form>
           </Modal>
-        </section>
+        </S.ExerciseSection>
 
-        <section className="exercise-section card-glass">
-          <div className="card-header">
-            <span className="badge">KATA 02</span>
+        <S.ExerciseSection>
+          <S.CardHeader>
+            <Badge variant="primary">KATA 02</Badge>
             <h2>Global Announcement Hub</h2>
-          </div>
+          </S.CardHeader>
           <p>Compare how different ARIA live intensities affect screen reader announcements.</p>
           
-          <div className="live-region-playground">
-            <div className="button-group-vertical">
+          <S.LiveRegionPlayground>
+            <S.ButtonGroupVertical>
               <Button 
                 variant="secondary" 
                 onClick={() => {
@@ -115,45 +116,44 @@ const Day04: React.FC = () => {
               >
                 Trigger Assertive Announcement
               </Button>
-            </div>
+            </S.ButtonGroupVertical>
             
-            <div className="live-output">
+            <S.LiveOutput>
               <label>ARIA Live Output:</label>
-              <div 
+              <S.AnnouncementBox 
                 aria-live="polite" 
-                className="announcement-box"
               >
                 {announcement || <span style={{ opacity: 0.3 }}>Waiting for interaction...</span>}
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+              </S.AnnouncementBox>
+            </S.LiveOutput>
+          </S.LiveRegionPlayground>
+        </S.ExerciseSection>
+      </S.PlaygroundGrid>
 
-      <section className="exercise-section card-glass">
-        <div className="card-header">
-          <span className="badge">Preview</span>
+      <S.ExerciseSection>
+        <S.CardHeader>
+          <Badge>Preview</Badge>
           <h2>Atomic Library Gallery</h2>
-        </div>
-        <div className="gallery-grid">
-          <div className="gallery-item">
+        </S.CardHeader>
+        <S.GalleryGrid>
+          <S.GalleryItem>
             <h3>Button Variants</h3>
-            <div className="gallery-flex">
+            <S.GalleryFlex>
               <Button variant="primary">Primary</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="ghost">Ghost</Button>
               <Button variant="danger">Danger</Button>
-            </div>
-          </div>
-          <div className="gallery-item">
+            </S.GalleryFlex>
+          </S.GalleryItem>
+          <S.GalleryItem>
             <h3>Loading States</h3>
-            <div className="gallery-flex">
+            <S.GalleryFlex>
               <Button isLoading>Loading</Button>
               <Button variant="secondary" isLoading>Loading</Button>
-            </div>
-          </div>
-        </div>
-      </section>
+            </S.GalleryFlex>
+          </S.GalleryItem>
+        </S.GalleryGrid>
+      </S.ExerciseSection>
     </PageLayout>
   );
 };

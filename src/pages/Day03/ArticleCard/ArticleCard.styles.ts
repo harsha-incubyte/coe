@@ -1,0 +1,96 @@
+import styled from 'styled-components';
+import { theme } from '@/design-system/theme';
+
+export const StyledArticleCard = styled.article`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: ${({ theme }) => theme.shadows.lg};
+    border-color: ${({ theme }) => theme.colors.primary[500]};
+  }
+`;
+StyledArticleCard.defaultProps = { theme };
+
+export const DateText = styled.time`
+  font-size: ${({ theme }) => theme.typography.fontSize.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
+`;
+DateText.defaultProps = { theme };
+
+export const CardContent = styled.div`
+  padding: ${({ theme }) => theme.spacing.lg};
+  flex-grow: 1;
+
+  p {
+    color: ${({ theme }) => theme.colors.textSecondary};
+    line-height: ${({ theme }) => theme.typography.lineHeight.relaxed};
+    margin: 0;
+  }
+`;
+CardContent.defaultProps = { theme };
+
+export const CardFooter = styled.footer`
+  padding: ${({ theme }) => theme.spacing.lg};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+`;
+CardFooter.defaultProps = { theme };
+
+export const ReadMoreButton = styled.a`
+  display: inline-block;
+  color: ${({ theme }) => theme.colors.primary[300]};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  text-decoration: none;
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
+  transition: color 0.2s;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary[600]};
+    text-decoration: underline;
+  }
+`;
+ReadMoreButton.defaultProps = { theme };
+
+// Non-semantic version styles (reusing properties but on generic tags)
+export const NonSemanticCard = styled.div`
+  background: #1e293b;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+export const NonSemanticHeader = styled.div`
+  padding: 1.5rem;
+  border-bottom: 1px solid #334155;
+`;
+
+export const NonSemanticTitle = styled.div`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.25rem;
+`;
+
+export const NonSemanticDate = styled.div`
+  font-size: 0.75rem;
+  color: #64748b;
+`;
+
+export const NonSemanticBtn = styled.div`
+  display: inline-block;
+  color: #6366f1;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.875rem;
+`;
