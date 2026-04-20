@@ -4,22 +4,19 @@ import { useWizardState, useWizardDispatch, WIZARD_STEPS } from './WizardContext
 import { WizardProvider } from './WizardProvider';
 import { Wizard as GenericWizard, WizardStep } from '@/components/Wizard';
 import { Input } from '@/design-system/atoms/Input';
+import { StepIndicator as MoleculeStepIndicator } from '@/design-system/molecules/StepIndicator';
 import './Wizard.css';
 
 const StepIndicator: React.FC = () => {
-  const { steps, getStepStatus } = useWizard();
+  const { steps, currentStepIndex } = useWizard();
+  const formattedSteps = steps.map(s => ({ label: s }));
 
   return (
-    <div className="wizard-stepper">
-      {steps.map((s, i) => (
-        <div 
-          key={s} 
-          className={`step-item ${getStepStatus(s)}`}
-        >
-          <span className="step-number">{i + 1}</span>
-          <span className="step-label">{s}</span>
-        </div>
-      ))}
+    <div style={{ marginBottom: '2rem' }}>
+      <MoleculeStepIndicator 
+        steps={formattedSteps} 
+        activeIndex={currentStepIndex} 
+      />
     </div>
   );
 };

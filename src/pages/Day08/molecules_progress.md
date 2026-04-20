@@ -8,7 +8,7 @@ This document tracks the migration and creation of Molecule components within ou
 
 ## 🔵 Navigation Molecules
 - [x] **Tabs (Refactor)**: Migrating the existing `src/components/Tabs` into the design system.
-- [ ] **StepIndicator**: A visual tracker for multi-step processes (e.g., for the `Wizard`).
+- [x] **StepIndicator**: A visual tracker for multi-step processes (e.g., for the `Wizard`).
 - [ ] **Pagination**: Controls for navigating through data sets.
 - [ ] **Breadcrumbs**: Hierarchical navigation path.
 
@@ -31,6 +31,6 @@ This document tracks the migration and creation of Molecule components within ou
 
 ### Progress Summary
 - **Total Molecules Identified**: 15
-- **Completed**: 6
+- **Completed**: 7
 - **In Progress**: 0
-- **Pending**: 9
+- **Pending**: 8
