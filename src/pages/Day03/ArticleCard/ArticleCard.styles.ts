@@ -62,18 +62,24 @@ CardFooter.defaultProps = { theme };
 
 export const ReadMoreButton = styled.a`
   display: inline-block;
-  color: ${({ theme }) => theme.colors.primary[300]};
+  color: ${({ theme }) => theme.colors.accent[300]};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   text-decoration: none;
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+  cursor: pointer;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary[600]};
-    text-decoration: underline;
+    color: ${({ theme }) => theme.colors.accent[100]};
+    transform: translateX(4px);
+  }
+
+  &::after {
+    content: ' →';
   }
 `;
 ReadMoreButton.defaultProps = { theme };
+
 
 // Non-semantic version styles (reusing properties but on generic tags)
 export const NonSemanticCard = styled.div`
@@ -107,11 +113,24 @@ export const NonSemanticDate = styled.div`
 
 export const NonSemanticBtn = styled.div`
   display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: #1e293b;
   color: #6366f1;
-  font-weight: 700;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid #334155;
+  transition: all 0.2s ease;
   cursor: pointer;
-  font-size: 0.875rem;
+  text-align: center;
+
+  &:hover {
+    background: #6366f1;
+    color: white;
+    transform: scale(1.05);
+  }
 `;
+
 
 export const NonSemanticContent = styled.div`
   padding: 1.5rem;
