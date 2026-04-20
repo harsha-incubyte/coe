@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { Tabs } from '@/components/Tabs';
+import { Tabs } from '@/design-system/molecules/Tabs';
 import { DeviceConfigurationWizard as Wizard } from '@/pages/Day06/components/Wizard/Wizard';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Spinner } from '@/components/Spinner/Spinner';

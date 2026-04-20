@@ -7,7 +7,7 @@ This document tracks the migration and creation of Molecule components within ou
 - [x] **FormGroup**: Standardized Label + Input + Error message wrapper.
 
 ## 🔵 Navigation Molecules
-- [ ] **Tabs (Refactor)**: Migrating the existing `src/components/Tabs` into the design system.
+- [x] **Tabs (Refactor)**: Migrating the existing `src/components/Tabs` into the design system.
 - [ ] **StepIndicator**: A visual tracker for multi-step processes (e.g., for the `Wizard`).
 - [ ] **Pagination**: Controls for navigating through data sets.
 - [ ] **Breadcrumbs**: Hierarchical navigation path.

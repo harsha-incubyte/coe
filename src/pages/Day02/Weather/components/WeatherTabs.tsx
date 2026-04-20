@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs } from '@/components/Tabs';
+import { Tabs } from '@/design-system/molecules/Tabs';
 import * as S from './WeatherTabs.styles';
 
 interface WeatherTabsProps {
