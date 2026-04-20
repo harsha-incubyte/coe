@@ -1,4 +1,5 @@
 import React from 'react';
+import { CardHeader } from '@/design-system/molecules/CardHeader';
 import './ArticleCard.css';
 
 interface ArticleCardProps {
@@ -10,14 +11,11 @@ interface ArticleCardProps {
 const ArticleCardGood: React.FC<ArticleCardProps> = ({ title, date, content }) => {
   return (
     <article className="article-card">
-      <header className="card-header">
-        <h2 className="title-text">{title}</h2>
-        <div className="card-meta">
-          <time className="date" dateTime={date}>
-            {date}
-          </time>
-        </div>
-      </header>
+      <CardHeader 
+        title={title} 
+        subtitle={<time className="date" dateTime={date}>{date}</time>}
+        titleLevel={2}
+      />
       <div className="card-content">
         <p>{content}</p>
       </div>
