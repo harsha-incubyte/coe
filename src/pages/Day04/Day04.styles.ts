@@ -1,6 +1,25 @@
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
 
+export const Container = styled.div`
+  padding-bottom: 4rem;
+`;
+
+export const Header = styled.header`
+  text-align: center;
+  margin-bottom: 5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h1 {
+    background: linear-gradient(135deg, ${({ theme }) => theme.colors.text} 0%, ${({ theme }) => theme.colors.primary[400]} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+`;
+
 export const PlaygroundGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
