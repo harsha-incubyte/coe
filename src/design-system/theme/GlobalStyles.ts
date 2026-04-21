@@ -27,6 +27,25 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
     line-height: ${({ theme }) => theme.typography.lineHeight.tight};
     color: ${({ theme }) => theme.colors.text};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.xl};
+
+    @media (max-width: 1024px) {
+      font-size: ${({ theme }) => theme.typography.fontSize['4xl']};
+    }
+  }
+
+  h2 {
+    font-size: ${({ theme }) => theme.typography.fontSize['2xl']};
+  }
+
+  p {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
   }
 
   a {
@@ -42,6 +61,14 @@ export const GlobalStyles = createGlobalStyle`
   button, input, textarea, select {
     font-family: inherit;
     font-size: inherit;
+  }
+
+  code {
+    font-family: ${({ theme }) => theme.typography.fontFamily.mono};
+    font-size: 0.9em;
+    padding: 0.2rem 0.4rem;
+    background-color: ${({ theme }) => theme.colors.codeBackground};
+    border-radius: ${({ theme }) => theme.borderRadius.sm};
   }
 
   /* Custom Scrollbar for modern look */

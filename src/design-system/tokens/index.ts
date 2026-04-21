@@ -56,6 +56,10 @@ export const colors = {
   surface: '#0f172a',       // Deep navy surface
   surfaceLight: '#1e293b',  // Lightened surface
   border: '#1e293b',        // Border color for surfaces
+  
+  // Additional tokens from legacy CSS
+  codeBackground: '#1f2028',
+  socialBackground: 'rgba(47, 48, 58, 0.5)',
 };
 
 export const spacing = {

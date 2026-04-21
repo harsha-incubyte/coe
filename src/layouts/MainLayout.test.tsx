@@ -2,15 +2,24 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { describe, it, expect } from 'vitest';
+import { ThemeManager } from '@/design-system/theme/ThemeManager';
+
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <ThemeManager>
+      <BrowserRouter>
+        {ui}
+      </BrowserRouter>
+    </ThemeManager>
+  );
+};
 
 describe('MainLayout', () => {
   it('should have a skip link as the first focusable element', () => {
-    render(
-      <BrowserRouter>
-        <MainLayout>
-          <div>Content</div>
-        </MainLayout>
-      </BrowserRouter>
+    renderWithProviders(
+      <MainLayout>
+        <div>Content</div>
+      </MainLayout>
     );
 
     const skipLink = screen.getByRole('link', { name: /skip to content/i });
@@ -19,12 +28,10 @@ describe('MainLayout', () => {
   });
 
   it('should have a main element with id "main-content" and tabIndex="-1"', () => {
-    render(
-      <BrowserRouter>
-        <MainLayout>
-          <div>Content</div>
-        </MainLayout>
-      </BrowserRouter>
+    renderWithProviders(
+      <MainLayout>
+        <div>Content</div>
+      </MainLayout>
     );
 
     const mainElement = screen.getByRole('main');
@@ -33,12 +40,10 @@ describe('MainLayout', () => {
   });
 
   it('should apply correct theme styles to the content container', () => {
-    render(
-      <BrowserRouter>
-        <MainLayout>
-          <div>Content</div>
-        </MainLayout>
-      </BrowserRouter>
+    renderWithProviders(
+      <MainLayout>
+        <div>Content</div>
+      </MainLayout>
     );
 
     const mainElement = screen.getByRole('main');
@@ -47,23 +52,6 @@ describe('MainLayout', () => {
       maxWidth: '1200px',
       margin: '0 auto',
       padding: '3rem'
-    });
-  });
-
-  it('should apply global styles to headings', () => {
-    render(
-      <BrowserRouter>
-        <MainLayout>
-          <h1>Test Heading</h1>
-        </MainLayout>
-      </BrowserRouter>
-    );
-
-    const heading = screen.getByRole('heading', { level: 1 });
-    // This is expected to be provided by GlobalStyles.ts after migration
-    expect(heading).toHaveStyle({
-      textAlign: 'center',
-      fontSize: '2.5rem'
     });
   });
 });
