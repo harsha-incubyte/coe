@@ -63,7 +63,7 @@ const Day07: React.FC = () => {
           </Button>
         </S.AddTaskForm>
 
-        <div className="tasks-list-container">
+        <div className="tasks-list-container" data-testid="tasks-list-container">
           {isLoading ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0' }}>
               <Spinner />
