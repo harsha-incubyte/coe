@@ -1,4 +1,4 @@
-describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
+describe('Day 05 Kata 2: Automation & UI Sanity', () => {
   beforeEach(() => {
     // Set authentication state in localStorage
     cy.window().then((win) => {
@@ -12,29 +12,35 @@ describe('Day 05 Kata 2: Navigation Flow Accessibility', () => {
       }));
     });
 
-    // Visit a page where the Navbar is present
-    cy.visit('/day-03');
-    // Ensure the main content is loaded AND wait for animations to finish
+    // Visit Day 05 page
+    cy.visit('/day-05');
+    // Ensure the main content is loaded
     cy.get('main').should('be.visible');
-    cy.wait(1000); // 1s is enough for the 0.4s animation
     // Inject axe-core
     cy.injectAxe();
   });
 
-  it('should have no accessibility violations on baseline and after opening profile dropdown', () => {
-    // Check baseline accessibility
+  it('should have no accessibility violations on baseline', () => {
     cy.checkA11y();
+  });
 
-    // Open User Profile dropdown
-    cy.get('#user-profile-btn').click();
+  it('should display the automation and UI sanity sections', () => {
+    cy.contains('h1', 'Automation & UI Sanity').should('be.visible');
+    cy.contains('h2', 'Automated A11y Pipeline').should('be.visible');
+    cy.contains('h2', 'Pa11y Headless CI').should('be.visible');
+    cy.contains('h2', 'Mobile Ergonomics').should('be.visible');
+    cy.contains('h2', 'Contrast Polish (4.5:1)').should('be.visible');
+  });
 
-    // Verify dropdown is visible and wait for animation to finish
-    cy.get('#user-menu').should('be.visible');
-    cy.wait(300);
+  it('should have accessible touch targets in the ergonomics section', () => {
+    // This will fail if the buttons don't have proper roles or labels
+    cy.get('button[aria-label="Accessible close"]').should('have.css', 'min-width', '44px');
+    cy.get('button[aria-label="Accessible close"]').should('have.css', 'min-height', '44px');
+  });
 
-    // Check accessibility again with the dropdown open
-    cy.checkA11y(undefined, undefined, (violations) => {
-      cy.task('log', JSON.stringify(violations, null, 2));
-    });
+  it('should follow atomic structure for sections', () => {
+    // Expecting sections to have a specific test ID or role for atomic consistency
+    cy.get('section').should('have.length.at.least', 4);
+    cy.get('section').first().should('have.attr', 'data-testid', 'demo-section-pipeline');
   });
 });
