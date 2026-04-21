@@ -23,13 +23,18 @@ describe('Day 05 Kata 2: Automation & UI Sanity', () => {
   it('should have no accessibility violations on baseline', () => {
     cy.get('.day-05-grid').should('be.visible');
     cy.wait(1000); // Wait for animations to settle
-    cy.checkA11y({ include: ['.day-05-grid'], exclude: ['.axe-ignore'] }, {
+    
+    // Strict audit: No exclusions allowed. We want to catch everything!
+    cy.checkA11y({ include: ['.day-05-grid'] }, {
       rules: {
         'page-has-heading-one': { enabled: false }
       }
-    }, (violations) => {
-      cy.task('log', JSON.stringify(violations, null, 2));
     });
+  });
+
+  it('should use semantic roles for all sections', () => {
+    // Asserting that each demo section is a semantic 'region' or correctly tagged
+    cy.get('[data-testid^="demo-section-"]').should('have.prop', 'tagName', 'SECTION');
   });
 
   it('should display the automation and UI sanity sections', () => {
