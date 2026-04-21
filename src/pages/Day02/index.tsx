@@ -5,7 +5,7 @@ import { withAuth } from '@/components/withAuth/withAuth'
 import { PageLayout } from '@/design-system/layout/PageLayout'
 
 
-const LoginForm = lazy(() => import('./LoginForm/LoginForm').then(m => ({ default: m.LoginForm })))
+const LoginForm = lazy(() => import('@/design-system/organisms').then(m => ({ default: m.LoginForm })))
 const Weather = lazy(() => import('./Weather/Weather').then(m => ({ default: m.Weather })))
 
 const ProtectedWeather = withAuth(Weather)
