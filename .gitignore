@@ -27,10 +27,6 @@ dist-ssr
 cypress/screenshots
 cypress/videos
 
-# Planning & Artifacts
-docs/
-
-
 
 *storybook.log
 storybook-static
