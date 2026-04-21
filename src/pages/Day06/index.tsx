@@ -1,6 +1,6 @@
 import { withAuth } from '@/components/withAuth/withAuth';
 import { Dashboard } from './Dashboard/Dashboard';
-import { LoginForm } from '@/pages/Day02/LoginForm/LoginForm';
+import { LoginForm } from '@/design-system/organisms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Dashboard/Dashboard.styles';
 
