@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Day05 from './Day05';
 import { describe, it, expect, vi } from 'vitest';
