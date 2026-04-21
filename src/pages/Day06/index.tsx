@@ -2,16 +2,16 @@ import { withAuth } from '@/components/withAuth/withAuth';
 import { Dashboard } from './Dashboard/Dashboard';
 import { LoginForm } from '@/pages/Day02/LoginForm/LoginForm';
 import { PageLayout } from '@/design-system/layout/PageLayout';
-import './Dashboard/Dashboard.css';
+import * as S from './Dashboard/Dashboard.styles';
 
 const Day06Fallback = () => (
   <PageLayout 
     title="Advanced React Patterns Dashboard"
     description="Please login to access the configuration wizard and telemetry data."
   >
-    <main className="dashboard-main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+    <S.DashboardMainContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <LoginForm redirectPath="/day-06" />
-    </main>
+    </S.DashboardMainContent>
   </PageLayout>
 );
 

@@ -1,6 +1,24 @@
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
 
+export const DashboardContainer = styled.div`
+  padding-bottom: 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+export const Header = styled.header`
+  text-align: center;
+  margin-bottom: 5rem;
+
+  h1 {
+    background: linear-gradient(135deg, ${({ theme }) => theme.colors.text} 0%, ${({ theme }) => theme.colors.primary[500]} 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+`;
+
 export const DashboardMainContent = styled.div`
   margin-top: 2rem;
   background: ${({ theme }) => theme.colors.surface};

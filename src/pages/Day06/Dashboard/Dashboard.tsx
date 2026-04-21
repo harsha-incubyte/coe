@@ -23,7 +23,7 @@ export const Dashboard: React.FC = () => {
           <Tabs.Tab id="docs">Documentation</Tabs.Tab>
         </Tabs.List>
 
-        <S.DashboardMainContent>
+        <S.DashboardMainContent data-testid="dashboard-main-content">
           <Tabs.Panel id="device-setup">
             <S.PanelInner>
               <h3>Configuration Wizard</h3>
