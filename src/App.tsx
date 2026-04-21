@@ -1,4 +1,5 @@
-import { Spinner, ToastContainer } from '@/design-system/molecules';
+import { Spinner } from '@/design-system/atoms';
+import { ToastContainer } from '@/design-system/molecules';
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
