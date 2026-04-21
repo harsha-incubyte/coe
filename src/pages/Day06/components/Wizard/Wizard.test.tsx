@@ -56,3 +56,15 @@ describe('Wizard Component (Split Context Pattern)', () => {
     expect(finalLogCount).toBe(1);
   });
 });
+
+describe('Wizard Styling and Structure', () => {
+  it('should have the correct data-testid on container', () => {
+    render(<DeviceConfigurationWizard />);
+    expect(screen.getByTestId('wizard-container')).toBeInTheDocument();
+  });
+
+  it('should have a progress bar with correct role', () => {
+    render(<DeviceConfigurationWizard />);
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  });
+});
