@@ -43,7 +43,7 @@ const StyledInput = styled.input`
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.textSecondary};
-    opacity: 0.6;
+    opacity: 0.9;
   }
 
   &:disabled {
