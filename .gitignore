@@ -32,3 +32,4 @@ cypress/videos
 storybook-static
 auth_flow_output.txt
 scratch/cypress_output.txt
+cypress_output*.txt
