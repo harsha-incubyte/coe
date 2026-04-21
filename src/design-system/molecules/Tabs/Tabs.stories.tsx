@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs } from './Tabs';
-import React from 'react';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Design System/Molecules/Tabs',

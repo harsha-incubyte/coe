@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InputGroup } from './InputGroup';
 import { Input } from '@/design-system/atoms/Input';
-import React from 'react';
 
 const meta: Meta<typeof InputGroup> = {
   title: 'Design System/Molecules/InputGroup',
@@ -10,7 +9,7 @@ const meta: Meta<typeof InputGroup> = {
     layout: 'padded',
   },
   args: {
-    children: <Input placeholder="Enter amount" />,
+    children: <Input label="Amount" hideLabel placeholder="Enter amount" />,
   },
 };
 
@@ -34,7 +33,7 @@ export const WithSuffix: Story = {
 export const WithPrefixAndSuffix: Story = {
   args: {
     prefix: 'https://',
-    children: <Input placeholder="example" />,
+    children: <Input label="Domain" hideLabel placeholder="example" />,
     suffix: '.com',
   },
 };
@@ -42,6 +41,6 @@ export const WithPrefixAndSuffix: Story = {
 export const WithIcon: Story = {
   args: {
     prefix: <span>🔍</span>,
-    children: <Input placeholder="Search..." />,
+    children: <Input label="Search" hideLabel placeholder="Search..." />,
   },
 };

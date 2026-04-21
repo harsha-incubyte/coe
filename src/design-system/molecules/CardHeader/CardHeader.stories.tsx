@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CardHeader } from './CardHeader';
 import { Button } from '@/design-system/atoms/Button';
-import React from 'react';
 
 const meta: Meta<typeof CardHeader> = {
   title: 'Design System/Molecules/CardHeader',
@@ -30,8 +29,8 @@ export const WithActions: Story = {
     subtitle: 'Active since Jan 2024',
     actions: (
       <>
-        <Button variant="secondary" size="small">Edit</Button>
-        <Button variant="primary" size="small">Save</Button>
+        <Button variant="secondary" size="sm">Edit</Button>
+        <Button variant="primary" size="sm">Save</Button>
       </>
     ),
   },

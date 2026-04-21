@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Modal, type ModalProps } from './Modal';
 import { Button } from '@/design-system/atoms';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const ModalWrapper = (args: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,8 +25,8 @@ const meta: Meta<typeof Modal> = {
       <div>
         <p>This is the modal content. You can put anything here.</p>
         <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <Button variant="secondary" size="small">Cancel</Button>
-          <Button variant="primary" size="small">Confirm</Button>
+          <Button variant="secondary" size="sm">Cancel</Button>
+          <Button variant="primary" size="sm">Confirm</Button>
         </div>
       </div>
     ),

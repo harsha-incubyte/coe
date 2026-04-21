@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dropdown } from './Dropdown';
 import { Button } from '@/design-system/atoms';
 import { fn } from '@storybook/test';
-import React from 'react';
 
 const meta: Meta<typeof Dropdown> = {
   title: 'Design System/Molecules/Dropdown',

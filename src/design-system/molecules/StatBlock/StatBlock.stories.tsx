@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StatBlock } from './StatBlock';
-import React from 'react';
 
 const meta: Meta<typeof StatBlock> = {
   title: 'Design System/Molecules/StatBlock',

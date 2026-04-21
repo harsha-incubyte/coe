@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { Input } from '@/design-system/atoms/Input';
-import React from 'react';
 
 const meta: Meta<typeof FormGroup> = {
   title: 'Design System/Molecules/FormGroup',
@@ -11,7 +10,7 @@ const meta: Meta<typeof FormGroup> = {
   },
   args: {
     label: 'Username',
-    children: <Input placeholder="Enter your username" />,
+    children: <Input label="Username" hideLabel placeholder="Enter your username" />,
   },
 };
 
@@ -47,7 +46,7 @@ export const HiddenLabel: Story = {
 export const FullWidth: Story = {
   args: {
     fullWidth: true,
-    children: <Input fullWidth placeholder="Full width input" />,
+    children: <Input label="Full width input" hideLabel fullWidth placeholder="Full width input" />,
   },
 };
 
@@ -56,8 +55,10 @@ export const RenderPropChildren: Story = {
     children: ({ id, describedBy, isInvalid }) => (
       <Input 
         id={id} 
+        label="Custom input"
+        hideLabel
         aria-describedby={describedBy} 
-        status={isInvalid ? 'error' : 'default'} 
+        error={isInvalid ? 'Invalid' : undefined} 
         placeholder="Custom input with render props"
       />
     ),

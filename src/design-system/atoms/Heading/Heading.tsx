@@ -1,6 +1,5 @@
 import React, { type ComponentPropsWithoutRef } from 'react';
 import styled, { css } from 'styled-components';
-import { theme } from '@/design-system/theme';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -54,4 +53,3 @@ export const Heading: React.FC<HeadingProps> = ({
   );
 };
 
-Heading.defaultProps = { theme };

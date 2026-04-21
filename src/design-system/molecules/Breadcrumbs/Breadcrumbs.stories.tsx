@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from './Breadcrumbs';
 import { BrowserRouter } from 'react-router-dom';
-import React from 'react';
 
 const meta: Meta<typeof Breadcrumbs> = {
   title: 'Design System/Molecules/Breadcrumbs',
