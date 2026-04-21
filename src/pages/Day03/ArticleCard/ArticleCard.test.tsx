@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '@/design-system/test-utils';
 import { describe, it, expect } from 'vitest';
 import ArticleCardBad from './ArticleCardBad';
 import ArticleCardGood from './ArticleCardGood';

@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { render } from '@/design-system/test-utils';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
 import CounterUI from '@/components/Counter';

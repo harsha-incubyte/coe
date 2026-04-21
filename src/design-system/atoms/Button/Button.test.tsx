@@ -32,9 +32,9 @@ describe('Button Component', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-busy', 'true');
     expect(button).toBeDisabled();
-    // Content should be hidden or replaced by spinner
-    expect(screen.getByText('Submit')).toHaveStyle('visibility: hidden');
-    expect(button.querySelector('.btn-spinner')).toBeInTheDocument();
+    // Children content should be replaced by loading dots when isLoading is true and no loadingText is provided
+    expect(screen.queryByText('Submit')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Loading')).toBeInTheDocument();
   });
 
   it('calls onClick when clicked', () => {
