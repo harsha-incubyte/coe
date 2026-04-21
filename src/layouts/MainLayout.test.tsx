@@ -31,4 +31,39 @@ describe('MainLayout', () => {
     expect(mainElement).toHaveAttribute('id', 'main-content');
     expect(mainElement).toHaveAttribute('tabIndex', '-1');
   });
+
+  it('should apply correct theme styles to the content container', () => {
+    render(
+      <BrowserRouter>
+        <MainLayout>
+          <div>Content</div>
+        </MainLayout>
+      </BrowserRouter>
+    );
+
+    const mainElement = screen.getByRole('main');
+    // spacing['2xl'] is 3rem (48px)
+    expect(mainElement).toHaveStyle({
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '3rem'
+    });
+  });
+
+  it('should apply global styles to headings', () => {
+    render(
+      <BrowserRouter>
+        <MainLayout>
+          <h1>Test Heading</h1>
+        </MainLayout>
+      </BrowserRouter>
+    );
+
+    const heading = screen.getByRole('heading', { level: 1 });
+    // This is expected to be provided by GlobalStyles.ts after migration
+    expect(heading).toHaveStyle({
+      textAlign: 'center',
+      fontSize: '2.5rem'
+    });
+  });
 });
