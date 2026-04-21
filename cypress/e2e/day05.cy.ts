@@ -29,6 +29,8 @@ describe('Day 05 Kata 2: Automation & UI Sanity', () => {
       rules: {
         'page-has-heading-one': { enabled: false }
       }
+    }, (violations) => {
+      cy.task('log', JSON.stringify(violations, null, 2));
     });
   });
 
@@ -46,10 +48,10 @@ describe('Day 05 Kata 2: Automation & UI Sanity', () => {
   });
 
   it('should have accessible touch targets in the ergonomics section', () => {
-    cy.get('button[aria-label="Accessible close"]').invoke('css', 'min-width').then(val => {
+    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-width').then(val => {
       expect(parseFloat(val)).to.be.at.least(44);
     });
-    cy.get('button[aria-label="Accessible close"]').invoke('css', 'min-height').then(val => {
+    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-height').then(val => {
       expect(parseFloat(val)).to.be.at.least(44);
     });
   });

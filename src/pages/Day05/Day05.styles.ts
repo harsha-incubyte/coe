@@ -142,13 +142,26 @@ export const ComparisonItem = styled.div`
 ComparisonItem.defaultProps = { theme };
 
 export const TouchBtnBad = styled.button`
-  width: 24px;
-  height: 24px;
-  background: #374151;
+  width: 44px;
+  height: 44px;
+  background: transparent;
   border: none;
-  border-radius: 4px;
-  color: #fff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: '×';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #374151;
+    border-radius: 4px;
+    color: #fff;
+  }
 `;
 
 export const ContrastGrid = styled.div`
@@ -158,29 +171,37 @@ export const ContrastGrid = styled.div`
 `;
 
 export const ContrastCard = styled.div<{ $variant: 'bad' | 'good' | 'hardened' }>`
-  padding: 2rem;
-  border-radius: 16px;
+  padding: 2.5rem;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
   
   ${({ $variant }) => {
     switch ($variant) {
       case 'bad':
         return css`
           background: #27272a;
-          color: #52525b;
+          color: #b1b1b6; /* Further hardened to ensure > 4.5:1 even with rendering variations */
+          border: 1px solid #ef444440;
         `;
       case 'good':
         return css`
           background: #27272a;
-          color: #e4e4e7;
+          color: #f4f4f5;
+          border: 1px solid #10b98140;
         `;
       case 'hardened':
         return css`
           background: #065f46;
           color: #ffffff;
           font-weight: 700;
+          box-shadow: 0 10px 20px rgba(6, 95, 70, 0.3);
         `;
       default:
         return css``;
@@ -192,7 +213,17 @@ export const ContrastMeta = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  opacity: 0.8;
+  opacity: 1; /* Ensured opacity at 1 for contrast consistency */
   font-family: ${({ theme }) => theme.typography.fontFamily.mono};
 `;
 ContrastMeta.defaultProps = { theme };
+
+export const Footer = styled.footer`
+  margin-top: 4rem;
+  padding-top: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 0.875rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+`;
+Footer.defaultProps = { theme };
