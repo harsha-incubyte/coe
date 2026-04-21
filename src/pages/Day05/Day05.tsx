@@ -9,7 +9,7 @@ const Day05: React.FC = () => {
       title="Automation & UI Sanity"
       description="Hardening the application with automated accessibility audits and mobile ergonomics."
     >
-      <S.Day05Grid>
+      <S.Day05Grid className="day-05-grid">
         {/* Section 1: Automated Audits */}
         <S.DemoSection $glass data-testid="demo-section-pipeline">
           <S.SectionIcon aria-hidden="true">🧪</S.SectionIcon>
@@ -64,7 +64,7 @@ const Day05: React.FC = () => {
         <S.TouchComparison>
             <S.ComparisonItem>
               <label>Default (Small)</label>
-              <S.TouchBtnBad aria-label="Non-accessible close">
+              <S.TouchBtnBad aria-label="Non-accessible close" className="axe-ignore">
                 ×
               </S.TouchBtnBad>
               <span style={{ color: '#ef4444', fontSize: '0.8125rem' }}>Too Small</span>
@@ -88,7 +88,7 @@ const Day05: React.FC = () => {
             high-contrast readability.
           </p>
           <S.ContrastGrid>
-            <S.ContrastCard $variant="bad">
+            <S.ContrastCard $variant="bad" className="axe-ignore">
               <span>Low Contrast Text</span>
               <S.ContrastMeta>
                 <span>Ratio: 2.1:1</span>

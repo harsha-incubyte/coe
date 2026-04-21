@@ -19,7 +19,7 @@
     "http://localhost:4173/day-04",
     {
       "url": "http://localhost:4173/day-05",
-      "hideElements": ".contrast-card.bad"
+      "hideElements": ".axe-ignore"
     }
   ]
 }

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { theme } from '@/design-system/theme';
 
 export const StyledArticleCard = styled.article`
   background: ${({ theme }) => theme.colors.surface};
@@ -21,14 +20,11 @@ export const StyledArticleCard = styled.article`
 `;
 
 
-StyledArticleCard.defaultProps = { theme };
-
 export const DateText = styled.time`
   font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  color: ${({ theme }) => theme.colors.textMuted};
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
 `;
-DateText.defaultProps = { theme };
 
 export const HeaderWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
@@ -39,7 +35,6 @@ export const HeaderWrapper = styled.div`
     padding-bottom: ${({ theme }) => theme.spacing.lg};
   }
 `;
-HeaderWrapper.defaultProps = { theme };
 
 
 export const CardContent = styled.div`
@@ -52,13 +47,10 @@ export const CardContent = styled.div`
     margin: 0;
   }
 `;
-CardContent.defaultProps = { theme };
-
 export const CardFooter = styled.footer`
   padding: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
-CardFooter.defaultProps = { theme };
 
 export const ReadMoreButton = styled.a`
   display: inline-block;
@@ -78,7 +70,6 @@ export const ReadMoreButton = styled.a`
     content: ' →';
   }
 `;
-ReadMoreButton.defaultProps = { theme };
 
 
 // Non-semantic version styles (reusing properties but on generic tags)
@@ -108,7 +99,7 @@ export const NonSemanticTitle = styled.div`
 
 export const NonSemanticDate = styled.div`
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
 `;
 
 export const NonSemanticBtn = styled.div`

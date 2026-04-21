@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { theme } from '@/design-system/theme';
 
 export const Day05Grid = styled.div`
@@ -135,7 +135,7 @@ export const ComparisonItem = styled.div`
   label {
     font-size: 0.75rem;
     text-transform: uppercase;
-    color: ${({ theme }) => theme.colors.textMuted};
+    color: ${({ theme }) => theme.colors.textSecondary};
     letter-spacing: 0.05em;
   }
 `;
@@ -167,21 +167,23 @@ export const ContrastCard = styled.div<{ $variant: 'bad' | 'good' | 'hardened' }
   ${({ $variant }) => {
     switch ($variant) {
       case 'bad':
-        return `
+        return css`
           background: #27272a;
           color: #52525b;
         `;
       case 'good':
-        return `
+        return css`
           background: #27272a;
           color: #e4e4e7;
         `;
       case 'hardened':
-        return `
+        return css`
           background: #065f46;
-          color: #fff;
+          color: #ffffff;
           font-weight: 700;
         `;
+      default:
+        return css``;
     }
   }}
 `;

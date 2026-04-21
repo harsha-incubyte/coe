@@ -21,7 +21,9 @@ describe('Day 05 Kata 2: Automation & UI Sanity', () => {
   });
 
   it('should have no accessibility violations on baseline', () => {
-    cy.checkA11y('.day-05-grid', {
+    cy.get('.day-05-grid').should('be.visible');
+    cy.wait(1000); // Wait for animations to settle
+    cy.checkA11y({ include: ['.day-05-grid'], exclude: ['.axe-ignore'] }, {
       rules: {
         'page-has-heading-one': { enabled: false }
       }
