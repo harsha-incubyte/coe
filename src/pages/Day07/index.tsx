@@ -97,6 +97,11 @@ const Day07: React.FC = () => {
             </S.TasksList>
           )}
         </div>
+        
+        <S.SectionFooter>
+          <span>{tasks?.length || 0} tasks total</span>
+          <span>{tasks?.filter(t => t.completed).length || 0} completed</span>
+        </S.SectionFooter>
       </S.TasksSection>
 
       <S.Day07Footer>

@@ -10,8 +10,8 @@ export const Day07Container = styled.div`
 Day07Container.defaultProps = { theme };
 
 export const TasksSection = styled.article`
-  background: ${({ theme }) => `${theme.colors.surface}80`};
-  backdrop-filter: blur(12px);
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 20px;
   padding: 2.5rem;
@@ -33,6 +33,18 @@ export const SectionHeader = styled.header`
   }
 `;
 SectionHeader.defaultProps = { theme };
+
+export const SectionFooter = styled.footer`
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+SectionFooter.defaultProps = { theme };
 
 export const LoadingPill = styled.div`
   font-size: 0.75rem;
