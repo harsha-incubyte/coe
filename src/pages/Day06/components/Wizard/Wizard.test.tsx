@@ -65,6 +65,9 @@ describe('Wizard Styling and Structure', () => {
 
   it('should have a progress bar with correct role', () => {
     render(<DeviceConfigurationWizard />);
+    const nextBtn = screen.getByRole('button', { name: /next step/i });
+    fireEvent.click(nextBtn); // Step 1
+    fireEvent.click(nextBtn); // Step 2 (ConfigureStep)
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 });

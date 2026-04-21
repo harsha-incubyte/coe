@@ -94,7 +94,12 @@ const ConfigureStep: React.FC = () => (
   <S.StepContent>
     <h2>Configuration</h2>
     <p>Applying settings to selected device...</p>
-    <S.MockProgressBar>
+    <S.MockProgressBar 
+      role="progressbar" 
+      aria-valuenow={65} 
+      aria-valuemin={0} 
+      aria-valuemax={100}
+    >
       <S.ProgressFill $width="65%" />
     </S.MockProgressBar>
   </S.StepContent>
@@ -109,7 +114,7 @@ const TestStep: React.FC = () => (
 
 const WizardContent: React.FC = () => {
   return (
-    <S.WizardContainer>
+    <S.WizardContainer data-testid="wizard-container">
       <StepIndicator />
       <div className="wizard-body">
         <WizardStep index={0}><ScanStep /></WizardStep>
