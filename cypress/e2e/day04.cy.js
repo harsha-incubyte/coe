@@ -75,7 +75,7 @@ describe('Day 04: ARIA Patterns & Accessible Components', () => {
         .and('contain', 'Success: Data synced at');
       
       // Should have aria-live container
-      cy.get('.toast-container').should('have.attr', 'aria-live', 'polite');
+      cy.get('[data-testid="toast-container"]').should('have.attr', 'aria-live', 'polite');
     });
 
     it('triggers assertive announcements for critical errors', () => {

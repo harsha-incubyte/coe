@@ -30,10 +30,15 @@ const renderWithTheme = (ui: React.ReactElement) => {
 };
 
 describe('Day04 Page', () => {
-  it('should render atomic Input components instead of legacy ones', () => {
+  it('should render atomic Input components instead of legacy ones', async () => {
     renderWithTheme(<Day04 />);
+    
+    // Open the modal
+    const launchButton = screen.getByRole('button', { name: /launch modal/i });
+    launchButton.click();
+
     // New Input is wrapped in a FormGroup
-    const fullNameInput = screen.getByLabelText(/full name/i);
+    const fullNameInput = await screen.findByLabelText(/full name/i);
     expect(fullNameInput).toBeInTheDocument();
     expect(fullNameInput).toHaveAttribute('id');
     
