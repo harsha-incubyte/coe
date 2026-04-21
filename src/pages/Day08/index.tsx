@@ -224,7 +224,7 @@ const Day08: React.FC = () => {
 
   return (
     <PageLayout
-      title="Day 08: Design Systems & Component Architecture"
+      title="Design Systems & Component Architecture"
       description="Establishing a premium foundation with Design Tokens and Atomic Design."
     >
       <Section>
