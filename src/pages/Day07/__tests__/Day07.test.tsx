@@ -51,4 +51,16 @@ describe('Day07 Component', () => {
 
     expect(checkboxes[0]).toBeInTheDocument();
   });
+
+  it('should have the correct data-testid on tasks-list-container', async () => {
+    render(<Day07 />, { wrapper: createWrapper() });
+    await waitFor(() => {
+      expect(screen.getByTestId('tasks-list-container')).toBeInTheDocument();
+    });
+  });
+
+  it('should have a task board heading', () => {
+    render(<Day07 />, { wrapper: createWrapper() });
+    expect(screen.getByRole('heading', { name: /Task Board/i })).toBeInTheDocument();
+  });
 });
