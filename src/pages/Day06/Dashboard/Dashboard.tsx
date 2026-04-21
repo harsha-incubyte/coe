@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs } from '@/design-system/molecules';
-import { DeviceConfigurationWizard as Wizard } from '@/design-system/organisms/Wizard/Wizard';
+import { DeviceConfigurationWizard as Wizard } from '@/design-system/organisms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Spinner } from '@/design-system/atoms';
 import * as S from './Dashboard.styles';
