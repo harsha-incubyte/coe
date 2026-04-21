@@ -11,8 +11,8 @@ const Day05: React.FC = () => {
     >
       <S.Day05Grid>
         {/* Section 1: Automated Audits */}
-        <S.DemoSection $glass>
-          <S.SectionIcon>🧪</S.SectionIcon>
+        <S.DemoSection $glass data-testid="demo-section-pipeline">
+          <S.SectionIcon aria-hidden="true">🧪</S.SectionIcon>
           <h2>Automated A11y Pipeline</h2>
           <p>
             We've integrated <code>jest-axe</code> for unit tests and <code>cypress-axe</code> for dynamic 
@@ -31,8 +31,8 @@ const Day05: React.FC = () => {
         </S.DemoSection>
 
         {/* Section 2: Pa11y CI */}
-        <S.DemoSection $glass>
-          <S.SectionIcon>🤖</S.SectionIcon>
+        <S.DemoSection $glass data-testid="demo-section-pa11y">
+          <S.SectionIcon aria-hidden="true">🤖</S.SectionIcon>
           <h2>Pa11y Headless CI</h2>
           <p>
             Automated command-line audits that run against production-like builds to catch issues 
@@ -54,17 +54,17 @@ const Day05: React.FC = () => {
         </S.DemoSection>
 
         {/* Section 3: Touch Targets */}
-        <S.DemoSection $glass>
-          <S.SectionIcon>📱</S.SectionIcon>
+        <S.DemoSection $glass data-testid="demo-section-mobile">
+          <S.SectionIcon aria-hidden="true">📱</S.SectionIcon>
           <h2>Mobile Ergonomics</h2>
           <p>
             All interactive elements now follow the WCAG 2.1 AAA success criterion for a minimum 
             <strong> 44x44px</strong> hit area.
           </p>
-          <S.TouchComparison>
+        <S.TouchComparison>
             <S.ComparisonItem>
               <label>Default (Small)</label>
-              <S.TouchBtnBad aria-hidden="true">
+              <S.TouchBtnBad aria-label="Non-accessible close">
                 ×
               </S.TouchBtnBad>
               <span style={{ color: '#ef4444', fontSize: '0.8125rem' }}>Too Small</span>
@@ -79,9 +79,9 @@ const Day05: React.FC = () => {
           </S.TouchComparison>
         </S.DemoSection>
 
-        {/* Section 3: Contrast Polish */}
-        <S.DemoSection $glass $fullWidth>
-          <S.SectionIcon>🎨</S.SectionIcon>
+        {/* Section 4: Contrast Polish */}
+        <S.DemoSection $glass $fullWidth data-testid="demo-section-contrast">
+          <S.SectionIcon aria-hidden="true">🎨</S.SectionIcon>
           <h2>Contrast Polish (4.5:1)</h2>
           <p>
             Refined our color palette to ensure all critical text and icons meet the AA standard for 

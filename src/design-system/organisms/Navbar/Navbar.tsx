@@ -79,7 +79,7 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    color: ${({ theme }) => theme.colors.primary[500]};
+    color: ${({ theme }) => theme.colors.primary[300]};
     background: ${({ theme }) => theme.colors.primary[50] + '1A'}; // 10% opacity
     font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   }

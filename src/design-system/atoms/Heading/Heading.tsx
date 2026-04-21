@@ -1,3 +1,4 @@
+import React, { type ComponentPropsWithoutRef } from 'react';
 import styled, { css } from 'styled-components';
 import { theme } from '@/design-system/theme';
 
@@ -28,9 +29,7 @@ const levelStyles = {
   `,
 };
 
-export const Heading = styled.h1.attrs<StyledHeadingProps>(({ $level = 1 }) => ({
-  as: `h${$level}`,
-}))<StyledHeadingProps>`
+const StyledHeading = styled.h1<StyledHeadingProps>`
   margin-bottom: ${({ theme }) => theme.spacing.md};
   font-family: ${({ theme }) => theme.typography.fontFamily.heading};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
@@ -40,5 +39,19 @@ export const Heading = styled.h1.attrs<StyledHeadingProps>(({ $level = 1 }) => (
   
   ${({ $level = 1 }) => levelStyles[$level]}
 `;
+
+export type HeadingProps = StyledHeadingProps & ComponentPropsWithoutRef<'h1'>;
+
+export const Heading: React.FC<HeadingProps> = ({ 
+  $level = 1, 
+  children, 
+  ...props 
+}) => {
+  return (
+    <StyledHeading as={`h${$level}`} $level={$level} {...props}>
+      {children}
+    </StyledHeading>
+  );
+};
 
 Heading.defaultProps = { theme };

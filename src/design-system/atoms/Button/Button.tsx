@@ -108,16 +108,19 @@ const sizeStyles = {
     font-size: ${({ theme }) => theme.typography.fontSize.sm};
     padding: 0.5rem 1rem;
     min-height: 2.25rem;
+    min-width: 2.25rem;
   `,
   md: css`
     font-size: ${({ theme }) => theme.typography.fontSize.base};
     padding: 0.75rem 1.5rem;
     min-height: 3rem;
+    min-width: 3rem;
   `,
   lg: css`
     font-size: ${({ theme }) => theme.typography.fontSize.lg};
     padding: 1rem 2rem;
     min-height: 3.5rem;
+    min-width: 3.5rem;
   `,
 };
 
