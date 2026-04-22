@@ -1,12 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
-
-export interface ModalFooterProps {
-  children: React.ReactNode;
-  align?: 'flex-start' | 'center' | 'flex-end';
-  className?: string;
-}
+import type { ModalFooterProps } from './Modal.types';
+export type { ModalFooterProps };
 
 const FooterContainer = styled.footer<{ $align: string }>`
   display: flex;

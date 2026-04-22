@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import ArticleCardBad from './ArticleCard/ArticleCardBad';
-import ArticleCardGood from './ArticleCard/ArticleCardGood';
+import React, { useState, lazy, Suspense } from 'react';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Day03.styles';
+import { Spinner } from '@/design-system/atoms';
+
+const ArticleCardBad = lazy(() => import('./ArticleCard/ArticleCardBad'));
+const ArticleCardGood = lazy(() => import('./ArticleCard/ArticleCardGood'));
 
 const Day03: React.FC = () => {
   const [useSemantic, setUseSemantic] = useState(true);
@@ -53,15 +55,17 @@ const Day03: React.FC = () => {
       </S.ToggleContainer>
 
       <S.ComparisonGrid>
-        {articles.map((article, index) => (
-          <S.CardWrapper key={index}>
-            {useSemantic ? (
-              <ArticleCardGood {...article} />
-            ) : (
-              <ArticleCardBad {...article} />
-            )}
-          </S.CardWrapper>
-        ))}
+        <Suspense fallback={<Spinner />}>
+          {articles.map((article, index) => (
+            <S.CardWrapper key={index}>
+              {useSemantic ? (
+                <ArticleCardGood {...article} />
+              ) : (
+                <ArticleCardBad {...article} />
+              )}
+            </S.CardWrapper>
+          ))}
+        </Suspense>
       </S.ComparisonGrid>
 
       <S.AuditNotes>

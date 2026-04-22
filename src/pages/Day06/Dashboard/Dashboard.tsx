@@ -1,9 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs } from '@/design-system/molecules';
-import { DeviceConfigurationWizard as Wizard } from '@/design-system/organisms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { Spinner } from '@/design-system/atoms';
 import * as S from './Dashboard.styles';
+
+const Wizard = lazy(() => import('@/design-system/organisms').then(m => ({ default: m.DeviceConfigurationWizard })));
 
 // KATA 4: Code Splitting
 const RealTimeDataChart = lazy(() => import('@/pages/Day06/components/RealTimeDataChart/RealTimeDataChart'));
@@ -29,7 +30,9 @@ export const Dashboard: React.FC = () => {
               <h3>Configuration Wizard</h3>
               <p>Follow the steps below to pair and configure your edge device.</p>
               {/* KATA 2: Multi-Step Wizard */}
-              <Wizard />
+              <Suspense fallback={<Spinner />}>
+                <Wizard />
+              </Suspense>
             </S.PanelInner>
           </Tabs.Panel>
 

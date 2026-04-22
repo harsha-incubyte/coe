@@ -1,38 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
-import { Input } from '@/design-system/atoms';
+import { Input, Spinner } from '@/design-system/atoms';
 import { Alert, Badge } from '@/design-system/molecules';
 import { useBoolean } from '@/hooks/useBoolean';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import WeatherIllustration from './components/WeatherIllustration';
-import { WeatherTabs } from './components/WeatherTabs';
 import { mapWeatherCode } from './WeatherUtils';
 import * as S from './Weather.styles';
+import type { WeatherData, Suggestion } from './Weather.types';
 
-interface WeatherData {
-  city: string;
-  country: string;
-  admin1?: string;
-  timezone: string;
-  elevation: number;
-  temperature: number;
-  condition: string;
-  weatherCode: number;
-  isDay: boolean;
-}
-
-interface Suggestion {
-  id: number;
-  name: string;
-  country: string;
-  admin1?: string;
-  latitude: number;
-  longitude: number;
-  timezone: string;
-  elevation: number;
-}
+const WeatherIllustration = lazy(() => import('./components/WeatherIllustration'));
+const WeatherTabs = lazy(() => import('./components/WeatherTabs').then(m => ({ default: m.WeatherTabs })));
 
 export const Weather: React.FC = () => {
 
@@ -245,29 +224,31 @@ export const Weather: React.FC = () => {
       {error && <Alert variant="error" message={error} className="weather-error" />}
 
       {weather && !loading && (
-        <WeatherTabs>
-          <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
-            <S.WeatherOverlayData>
-              <S.DataHeader>
-                <S.CityInfo>
-                  <S.CityName>{weather.city}</S.CityName>
-                  <S.CityMeta>{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</S.CityMeta>
-                </S.CityInfo>
-                <S.TimePill>{localTime}</S.TimePill>
-              </S.DataHeader>
+        <Suspense fallback={<Spinner />}>
+          <WeatherTabs>
+            <WeatherIllustration weatherCode={weather.weatherCode} isDay={weather.isDay}>
+              <S.WeatherOverlayData>
+                <S.DataHeader>
+                  <S.CityInfo>
+                    <S.CityName>{weather.city}</S.CityName>
+                    <S.CityMeta>{weather.admin1 ? `${weather.admin1}, ` : ''}{weather.country}</S.CityMeta>
+                  </S.CityInfo>
+                  <S.TimePill>{localTime}</S.TimePill>
+                </S.DataHeader>
 
-              <S.DataFooter>
-                <S.TempDisplay>
-                  <S.TempValue>{Math.round(weather.temperature)}</S.TempValue>
-                  <S.TempUnit>°C</S.TempUnit>
-                </S.TempDisplay>
-                <Badge variant="primary" pill size="md">
-                  {weather.condition}
-                </Badge>
-              </S.DataFooter>
-            </S.WeatherOverlayData>
-          </WeatherIllustration>
-        </WeatherTabs>
+                <S.DataFooter>
+                  <S.TempDisplay>
+                    <S.TempValue>{Math.round(weather.temperature)}</S.TempValue>
+                    <S.TempUnit>°C</S.TempUnit>
+                  </S.TempDisplay>
+                  <Badge variant="primary" pill size="md">
+                    {weather.condition}
+                  </Badge>
+                </S.DataFooter>
+              </S.WeatherOverlayData>
+            </WeatherIllustration>
+          </WeatherTabs>
+        </Suspense>
       )}
     </S.DashboardContainer>
   );

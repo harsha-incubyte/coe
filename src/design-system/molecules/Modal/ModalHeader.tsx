@@ -1,12 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
-
-export interface ModalHeaderProps {
-  title: string;
-  onClose?: () => void;
-  className?: string;
-}
+import type { ModalHeaderProps } from './Modal.types';
+export type { ModalHeaderProps };
 
 const HeaderContainer = styled.header`
   display: flex;

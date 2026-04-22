@@ -4,14 +4,8 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { theme } from '@/design-system/theme';
 import { ModalHeader } from './ModalHeader';
-
-export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-}
+import type { ModalProps } from './Modal.types';
+export type { ModalProps };
 
 const OverlayWrapper = styled.div`
   position: fixed;

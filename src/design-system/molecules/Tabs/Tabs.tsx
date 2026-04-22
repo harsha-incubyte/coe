@@ -1,12 +1,23 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
+import type { 
+  TabsContextValue, 
+  TabsProps, 
+  TabsListProps, 
+  TabTriggerProps, 
+  TabPanelProps 
+} from './Tabs.types';
+
+export type { 
+  TabsContextValue, 
+  TabsProps, 
+  TabsListProps, 
+  TabTriggerProps, 
+  TabPanelProps 
+};
 
 // Context
-interface TabsContextValue {
-  activeTab: string;
-  setActiveTab: (id: string) => void;
-}
 
 const TabsContext = createContext<TabsContextValue | undefined>(undefined);
 
@@ -82,11 +93,6 @@ StyledTabPanel.defaultProps = { theme };
 
 // --- Components ---
 
-export interface TabsProps {
-  defaultValue: string;
-  children: ReactNode;
-}
-
 export const TabsRoot: React.FC<TabsProps> = ({ defaultValue, children }) => {
   const [activeTab, setActiveTab] = useState(defaultValue);
 
@@ -96,11 +102,6 @@ export const TabsRoot: React.FC<TabsProps> = ({ defaultValue, children }) => {
     </TabsContext.Provider>
   );
 };
-
-export interface TabsListProps {
-  children: ReactNode;
-  'aria-label'?: string;
-}
 
 export const TabsList: React.FC<TabsListProps> = ({ children, 'aria-label': ariaLabel }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -138,12 +139,6 @@ export const TabsList: React.FC<TabsListProps> = ({ children, 'aria-label': aria
   );
 };
 
-export interface TabTriggerProps {
-  id: string;
-  children: ReactNode;
-  disabled?: boolean;
-}
-
 export const TabTrigger: React.FC<TabTriggerProps> = ({ id, children, disabled }) => {
   const { activeTab, setActiveTab } = useTabsContext();
   const isActive = activeTab === id;
@@ -163,11 +158,6 @@ export const TabTrigger: React.FC<TabTriggerProps> = ({ id, children, disabled }
     </StyledTabTrigger>
   );
 };
-
-export interface TabPanelProps {
-  id: string;
-  children: ReactNode;
-}
 
 export const TabPanel: React.FC<TabPanelProps> = ({ id, children }) => {
   const { activeTab } = useTabsContext();
