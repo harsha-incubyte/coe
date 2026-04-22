@@ -1,4 +1,8 @@
 export const colors = {
+  // Base Colors
+  white: '#ffffff',
+  black: '#000000',
+
   // Brand Colors
   primary: {
     50: '#eef2ff',

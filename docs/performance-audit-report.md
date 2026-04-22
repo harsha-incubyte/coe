@@ -55,6 +55,6 @@ Currently, thick components hold multiple inline `interface` declarations for th
 
 ## 3. Verification Plan
 
-1. Run `npm run build` locally before and after the refactor to directly compare the generated chunk sizes and verify that dead-code elimination was successful.
-2. Run standard testing suite (`npm run test:run` and `npm run cy:run`) to ensure no broken standard imports or unhandled `Suspense` boundaries have slipped into the codebase.
-3. Execute a follow-up CLI headless Lighthouse audit on `http://localhost:5173/day-03` to verify the module graph drops the LCP time significantly.
+1. [x] Run `npm run build` locally before and after the refactor to directly compare the generated chunk sizes and verify that dead-code elimination was successful.
+2. [x] Run standard testing suite (`npm run test:run` and `npm run cy:run`) to ensure no broken standard imports or unhandled `Suspense` boundaries have slipped into the codebase.
+3. [x] Execute a follow-up CLI headless Lighthouse audit on `http://localhost:5173/day-03` to verify the module graph drops the LCP time significantly.

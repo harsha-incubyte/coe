@@ -123,7 +123,7 @@ export const ConceptCard = styled.div`
   h3 {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
-    color: ${({ theme }) => theme.colors.primary[400]};
+    color: ${({ theme }) => theme.colors.white};
     font-weight: 700;
   }
 
