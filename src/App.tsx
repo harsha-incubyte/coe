@@ -16,6 +16,7 @@ const Day05 = lazy(() => import('@/pages/Day05'))
 const Day06 = lazy(() => import('@/pages/Day06'))
 const Day07 = lazy(() => import('@/pages/Day07'))
 const Day08 = lazy(() => import('@/pages/Day08'))
+const Day09 = lazy(() => import('@/pages/Day09'))
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/day-06" element={<Day06 />} />
                 <Route path="/day-07" element={<Day07 />} />
                 <Route path="/day-08" element={<Day08 />} />
+                <Route path="/day-09" element={<Day09 />} />
               </Routes>
             </Suspense>
           </MainLayout>
