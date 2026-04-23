@@ -110,7 +110,7 @@ export const Day07Footer = styled.footer`
 `;
 
 export const ConceptCard = styled.div`
-  background: ${({ theme }) => `${theme.colors.surface}30`};
+  background: ${({ theme }) => theme.colors.surface};
   padding: 2rem;
   border-radius: 20px;
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -123,7 +123,7 @@ export const ConceptCard = styled.div`
   h3 {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 700;
   }
 
