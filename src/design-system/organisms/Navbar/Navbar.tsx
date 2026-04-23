@@ -197,6 +197,7 @@ export const Navbar: React.FC = () => {
     { to: '/day-06', label: 'Day 06' },
     { to: '/day-07', label: 'Day 07', onMouseEnter: prefetchTasks },
     { to: '/day-08', label: 'Day 08' },
+    { to: '/day-09', label: 'Day 09' },
   ];
 
   return (
