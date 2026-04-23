@@ -31,6 +31,8 @@ This project is a collection of React + TypeScript Katas, developed following st
 
 The application is designed to showcase daily progress. Each "Day" is isolated within its own directory under `src/pages/`, containing its components, styles, and tests.
 
+Recently, the codebase completed a **Phase 2 Refactoring (Atomic Design Migration)**, successfully transitioning all legacy vanilla CSS and duplicate UI components across all Katas into a strict `styled-components` design system.
+
 ### Directory Structure
 ```text
 src/
@@ -126,7 +128,9 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 ## 📝 TODOs
 
 - [ ] **Internationalization (i18n)**: Implement support for multiple languages using a framework like `react-i18next`. Ensure all static text, date formats, and accessibility labels are localized.
-- [x] **Shared Theme System**: Standardize all color tokens and spacing into a centralized CSS variable system to remove ad-hoc styling.
+- [x] **Shared Theme System (Phase 2 Refactor)**: Standardized all color tokens, spacing, and typography into a centralized `styled-components` ThemeProvider. This was retroactively applied to all Katas (Day 01 - Day 07) to eliminate legacy CSS, remove duplicate components, and guarantee WCAG AA contrast compliance across the board.
+- [ ] **State Machine Integration**: Explore XState for complex, multi-step flows to further decouple logic from React components.
+- [ ] **AI-Driven Workflows**: Formalize custom local LLM agent workflows (e.g., via Antigravity and Gemma 2) to automate routine TDD tasks and PR summaries.
 
 ---
 *Created with ❤️ by Harsha at Incubyte*

@@ -1,76 +1,53 @@
-# 10-Day Planner React Application Architecture
+# Application Architecture
 
-Based on your requirements, here is a project structure designed to build a **Single Unified Web Application** as you progress through the 10 days. 
+This project is built as a **Single Unified Web Application** (using Vite + React + TypeScript) that serves as a robust platform for modern frontend development practices. Instead of completely isolated codebases, the application centralizes scalable patterns while isolating feature sets into "Katas".
 
-This approach uses a single overarching project (e.g., using Vite + React + TypeScript) rather than completely isolated folders for each day. It solves all three of your core requirements:
-1. **Showcases Progress:** A master layout (like a sidebar dashboard) links to unique routes for each day's Katas.
-2. **Maximum Reusability:** Core components (accessible buttons, hooks) are stored centrally, making them easy to import into later days.
-3. **Single Application:** A complete, deployable portfolio piece that a mentor can navigate with one click.
+## Core Principles
 
-## Proposed Directory Structure
+1. **Atomic Design System:** UI components are strictly segregated into Atoms, Molecules, and Organisms. They consume a central `styled-components` theme.
+2. **Feature Isolation (Katas):** Complex domain logic is isolated within individual page directories (`src/pages/DayXX/`).
+3. **Decoupled State:** Client state is managed via Zustand, while Server state/data fetching is managed via React Query.
+4. **Strict Testing (TDD):** Every layer is covered by Vitest (Unit), Cypress (E2E), and Pa11y/Axe (Accessibility).
+
+## Directory Structure
 
 ```text
 /
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── cypress/               # Day 2/5: E2E Tests
+├── .github/               # CI/CD Workflows
+├── cypress/               # End-to-End Tests & cypress-axe audits
+├── docs/                  # Architecture & Playbook Documentation
 ├── src/
-│   ├── App.tsx            # Main application router connecting all days
-│   ├── main.tsx           # Entry point
+│   ├── design-system/     # ATOMIC DESIGN SYSTEM
+│   │   ├── atoms/         # Building blocks (Button, Input, Heading)
+│   │   ├── molecules/     # Compound UI (SearchBar, Modal, Tabs)
+│   │   ├── organisms/     # Complex UI sections (Wizard)
+│   │   ├── layout/        # Global page layouts & wrappers
+│   │   ├── theme/         # styled-components ThemeProvider & GlobalStyles
+│   │   └── tokens/        # Colors, Spacing, Typography constants
 │   │
-│   ├── components/        # REUSABLE COMPONENTS (Built throughout the days)
-│   │   ├── Button/        # Day 4: Accessible Button
-│   │   ├── Modal/         # Day 4 & 8: Accessible Headless Modal
-│   │   └── form/          # Day 4: Accessible Form elements
+│   ├── hooks/             # Domain-agnostic reusable hooks
+│   ├── lib/               # External library config (MSW, etc.)
+│   ├── store/             # Global client state (Zustand)
 │   │
-│   ├── hooks/             # REUSABLE HOOKS
-│   │   └── useLocalStorage.ts # Day 2
+│   ├── pages/             # FEATURE ISOLATION (KATAS)
+│   │   ├── Day01/         # Simple state & logic Katas
+│   │   ├── Day02/         # Forms & MSW Mocking
+│   │   ├── Day06/         # Performance & Dashboard
+│   │   ├── Day07/         # Server State (React Query)
+│   │   └── ...
 │   │
-│   ├── layouts/           # SHELL UI
-│   │   └── MainLayout.tsx # Has a Sidebar navigation linking to Day 1, Day 2, etc.
-│   │
-│   ├── lib/               # UTILITIES & CONFIG
-│   │   ├── msw/           # Day 2: Mock Service Worker setup
-│   │   └── test-utils.tsx # Shared RTL testing utilities
-│   │
-│   ├── pages/             # DAY-BY-DAY PROGRESS (KATAS)
-│   │   ├── Dashboard/     # Landing page (Welcome & Summary)
-│   │   ├── Day01/
-│   │   │   ├── FizzBuzz.tsx
-│   │   │   ├── FizzBuzz.test.tsx
-│   │   │   ├── Counter.tsx
-│   │   │   └── index.tsx  # Exports everything for the Day 1 route
-│   │   ├── Day02/
-│   │   │   ├── Weather.tsx
-│   │   │   ├── LoginFlow.tsx
-│   │   │   └── index.tsx
-│   │   ├── Day03/         # Nav & Layout semantic katas
-│   │   ├── ...
-│   │   └── Day09_10/      # Medical Chat App Assembly (consumes all `components/`)
-│   │
-│   ├── store/             # Day 7: Zustand stores
-│   │   └── useAuthStore.ts
-│   │
-│   └── styles/            # Day 8: Design Tokens and Global CSS
-│       └── index.css
+│   ├── App.tsx            # Main Application Router
+│   ├── setupTests.ts      # Vitest & jest-dom configuration
+│   └── main.tsx           # Entry point
 ```
 
----
+## How It Solves Scalability
 
-## How It Solves Your Goals
+### 1. Maximum Reusability
+Instead of rewriting standard components (like a modal or a button), everything is built once in `src/design-system/`. When building complex features in later Katas, developers construct the UI rapidly using robust, heavily tested atomic components.
 
-### 1. Reflect Individual Katas/Tasks Progress
-The `src/pages/DayXX` pattern isolates the *scaffolding* of specific katas. When the mentor clicks on "Day 1" in your sidebar, they will see the FizzBuzz and Counter rendering. The file structure groups related tasks per day so reviewers can examine `src/pages/Day01/FizzBuzz.test.tsx` directly.
+### 2. Feature Scaffolding
+The `src/pages/DayXX` pattern isolates the scaffolding of specific tasks. This ensures that domain-specific logic (e.g., the Weather fetching logic of Day 02 or the Task Board optimistic updates of Day 07) does not pollute the global application scope.
 
-### 2. Reuse Initial Days' Work
-Instead of rewriting a dropdown or an accessible button, you build it *once* in `src/components`. 
-*   On **Day 4**, you create an accessible Button component in `src/components/Button`.
-*   On **Day 9**, when building the Medical Chat Application, you simply `import { Button } from '@/components/Button'` to use it.
-*   The mentor sees that your fundamental accessible building blocks from earlier days dynamically construct the complex application at the end.
-
-### 3. Single React Application
-The entire structure runs under a unified router (e.g., React Router).
-*   **Navigation:** You can add a `Sidebar` in `src/layouts/MainLayout.tsx` that lists `Day 1`, `Day 2`, up to `Medical Chat Project`. 
-*   **Testing:** Jest/Vitest will scan `*.test.tsx` across the whole `src/` folder, meaning running `npm run test --coverage` will validate your whole 10-day journey at once. 
-*   **Accessibility (A11y):** Running `Pa11y` or `cypress-axe` can traverse your single site map efficiently.
+### 3. Unified Testing Map
+Because it is a single React application, test runners (Vitest, Cypress, Pa11y) can scan the entire codebase efficiently. A single CI run validates the entire history of the project's progression without needing to traverse disparate project folders.
