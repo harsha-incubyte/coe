@@ -1,14 +1,8 @@
 import { streamText } from 'ai';
-import { openai, createOpenAI } from '@ai-sdk/openai';
-import { anthropic } from '@ai-sdk/anthropic';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-
-// Define the local Gemma model provider
-const localGemma = createOpenAI({
-  baseURL: process.env.LOCAL_LLM_URL || 'http://localhost:4000/v1',
-  apiKey: 'not-needed',
-});
+import { getLLMProvider } from '@/lib/llm/registry';
+import prisma from '@/lib/prisma';
 
 export const maxDuration = 30;
 
@@ -21,31 +15,50 @@ export async function POST(req: Request) {
     // return new Response('Unauthorized', { status: 401 });
   }
 
-  const { messages, model = 'local-gemma' } = await req.json();
+  const { messages, model = 'local-gemma', conversationId } = await req.json();
+  const lastMessage = messages[messages.length - 1];
 
-  let providerModel;
+  // Optional: Save user message to DB immediately
+  let currentConversationId = conversationId;
+  
+  if (session?.user?.id) {
+    if (!currentConversationId) {
+      const conversation = await prisma.conversation.create({
+        data: {
+          title: lastMessage.content.substring(0, 50) || 'New Conversation',
+          userId: session.user.id,
+        }
+      });
+      currentConversationId = conversation.id;
+    }
 
-  switch (model) {
-    case 'openai':
-      providerModel = openai('gpt-4o');
-      break;
-    case 'anthropic':
-      providerModel = anthropic('claude-3-5-sonnet-20240620');
-      break;
-    case 'local-gemma':
-    default:
-      providerModel = localGemma('gemma-2-9b'); // Or whatever the local model ID is
-      break;
+    await prisma.message.create({
+      data: {
+        role: 'user',
+        content: lastMessage.content,
+        conversationId: currentConversationId,
+      }
+    });
   }
 
-  const result = await streamText({
+  // The registry handles validation, health checks, and failovers automatically
+  const providerModel = await getLLMProvider(model);
+
+  const result = streamText({
     model: providerModel,
     messages,
     onFinish: async (completion) => {
-      // Optional: Save to database here if we have conversationId
-      // This is where Chunk 5's DB persistence logic will go.
+      if (session?.user?.id && currentConversationId) {
+        await prisma.message.create({
+          data: {
+            role: 'assistant',
+            content: completion.text,
+            conversationId: currentConversationId,
+          }
+        });
+      }
     },
   });
 
-  return result.toAIStreamResponse();
+  return result.toDataStreamResponse();
 }
