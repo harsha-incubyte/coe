@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, type Task } from '@/hooks/queries/useTasks';
-import { useAppStore } from '@/store';
+import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Checkbox, Input, Spinner } from '@/design-system/atoms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Day07.styles';
 
 const Day07: React.FC = () => {
+  const { data: session } = useSession();
   const { data: tasks, isLoading, isError, error } = useTasksQuery();
   const createTask = useCreateTaskMutation();
   const updateTask = useUpdateTaskMutation();
-  const { user } = useAppStore();
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const handleAddTask = (e: React.FormEvent) => {
@@ -26,7 +26,7 @@ const Day07: React.FC = () => {
       title="State Management & Data Fetching"
       description={
         <span>
-          Welcome back, <strong>{user?.name || 'Guest'}</strong>. 
+          Welcome back, <strong>{session?.user?.name || 'Guest'}</strong>. 
           Managing your server state with React Query and client state with Zustand.
         </span>
       }
@@ -106,9 +106,9 @@ const Day07: React.FC = () => {
 
       <S.Day07Footer>
         <S.ConceptCard>
-          <h3>Zustand Auth State</h3>
-          <p>Auth state is persisted in localStorage. Refresh the page to see it persist!</p>
-          <pre>{JSON.stringify({ user, authenticated: !!user }, null, 2)}</pre>
+          <h3>NextAuth Session State</h3>
+          <p>Auth state is managed by NextAuth and synchronized across tabs.</p>
+          <pre>{JSON.stringify({ user: session?.user, authenticated: !!session }, null, 2)}</pre>
         </S.ConceptCard>
         <S.ConceptCard>
           <h3>React Query Cache</h3>

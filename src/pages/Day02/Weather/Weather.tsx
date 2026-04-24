@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { useAppStore } from '@/store';
 import { useToast } from '@/hooks/useToast';
 import { Input, Spinner } from '@/design-system/atoms';
 import { Alert, Badge } from '@/design-system/molecules';
@@ -25,15 +24,8 @@ export const Weather: React.FC = () => {
   const [localTime, setLocalTime] = useState<string>('');
   const skipNextSuggestionsRef = useRef(false);
 
-  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      showToast('Session expired. Please login again.', 'warning');
-    }
-  }, [isAuthenticated, showToast]);
 
   useOnClickOutside(searchContainerRef, () => {
     closeSuggestions();

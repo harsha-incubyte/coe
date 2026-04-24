@@ -1,17 +1,18 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { createAuthSlice, type AuthState } from './slices/authSlice';
 
 // Define the shape of our global store
-type StoreState = AuthState; // Add more slices here as they are created
+interface StoreState {
+  // Add slices here
+}
 
 export const useAppStore = create<StoreState>()(
   persist(
-    (...a) => ({
-      ...createAuthSlice(...a),
+    () => ({
+      // Add slice spread here
     }),
     {
-      name: 'coe-app-storage', // unique name for the storage key in localStorage
+      name: 'coe-app-storage',
       storage: createJSONStorage(() => localStorage),
     }
   )

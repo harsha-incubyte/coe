@@ -2,9 +2,14 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import Day07 from '@/pages/Day07';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAppStore } from '@/store';
-import React from 'react';
+import { useSession } from 'next-auth/react';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';
+import { LayoutProvider } from '@/design-system/layout/LayoutContext';
+
+// Mock useSession
+vi.mock('next-auth/react', () => ({
+  useSession: vi.fn(),
+}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -12,14 +17,19 @@ const createWrapper = () => {
   });
   return ({ children }: { children: React.ReactNode }) => (
     <ThemeManager>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <LayoutProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </LayoutProvider>
     </ThemeManager>
   );
 };
 
 describe('Day07 Component', () => {
   beforeEach(() => {
-    useAppStore.setState({ user: { id: '1', name: 'Harsha', email: 'harsha@incubyte.co' } });
+    vi.mocked(useSession).mockReturnValue({
+      data: { user: { name: 'Harsha', email: 'harsha@incubyte.co' } },
+      status: 'authenticated',
+    } as any);
   });
 
   it('should render personalized welcome message from Zustand store', () => {

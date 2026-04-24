@@ -3,8 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/design-system/theme';
-import { ConversationSidebar } from './ConversationSidebar';
-import type { Conversation } from '../hooks/useChatState';
+import { ConversationSidebar, type Conversation } from './ConversationSidebar';
 
 const mockConversations: Conversation[] = [
   {
@@ -48,8 +47,6 @@ describe('ConversationSidebar', () => {
     currentConversationId: '1',
     onSelectConversation: vi.fn(),
     onNewConversation: vi.fn(),
-    errorRate: 0,
-    onErrorRateChange: vi.fn(),
   };
 
   it('renders all conversations initially', () => {

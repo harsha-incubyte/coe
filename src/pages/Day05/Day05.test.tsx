@@ -1,8 +1,9 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+
 import Day05 from './Day05';
 import { describe, it, expect, vi } from 'vitest';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';
+import { LayoutProvider } from '@/design-system/layout/LayoutContext';
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -22,9 +23,9 @@ Object.defineProperty(window, 'matchMedia', {
 const renderWithTheme = (ui: React.ReactElement) => {
   return render(
     <ThemeManager>
-      <BrowserRouter>
+      <LayoutProvider>
         {ui}
-      </BrowserRouter>
+      </LayoutProvider>
     </ThemeManager>
   );
 };

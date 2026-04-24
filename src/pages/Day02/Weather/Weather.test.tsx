@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, vitest } from 'vitest';
 import { Weather } from './Weather'; 
-import { withAuth } from '@/components/withAuth/withAuth';
-import { useAppStore } from '@/store';
+import { ThemeManager } from '@/design-system/theme/ThemeManager';
+import { LayoutProvider } from '@/design-system/layout/LayoutContext';
 
 const mockShowToast = vitest.fn();
 vitest.mock('@/hooks/useToast', () => ({
@@ -14,45 +14,19 @@ vitest.mock('@/hooks/useToast', () => ({
 }));
 
 describe('Weather Component', () => {
-  const ProtectedWeather = withAuth(Weather);
-
   beforeEach(() => {
-    useAppStore.getState().logout();
-    localStorage.clear();
     mockShowToast.mockClear();
   });
 
   const setup = () => {
-    useAppStore.getState().login(
-      { id: '1', email: 'test@example.com', name: 'Test User' },
-      'fake-token'
-    );
-    
     return render(
-      <Router initialEntries={['/day-02/weather']}>
-        <Routes>
-          <Route path="/day-02/weather" element={<ProtectedWeather />} />
-          <Route path="/day-02/login" element={<div>Authentication Required</div>} />
-        </Routes>
-      </Router>
+      <ThemeManager>
+        <LayoutProvider>
+          <Weather />
+        </LayoutProvider>
+      </ThemeManager>
     );
   };
-
-  it('should show authentication required if no token is present', () => {
-    // Ensure logged out
-    useAppStore.getState().logout();
-    
-    render(
-      <Router initialEntries={['/day-02/weather']}>
-        <Routes>
-          <Route path="/day-02/weather" element={<ProtectedWeather />} />
-          <Route path="/day-02/login" element={<div>Authentication Required</div>} />
-        </Routes>
-      </Router>
-    );
-
-    expect(screen.getByText(/Authentication Required/i)).toBeInTheDocument();
-  });
 
   it('should render search input when authenticated', () => {
     setup();
@@ -182,23 +156,4 @@ describe('Weather Component', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('should show toast notification on session expiration', async () => {
-    useAppStore.getState().login(
-      { id: '1', email: 'test@example.com', name: 'Test User' },
-      'fake-token'
-    );
-
-    render(
-      <Router>
-        <Weather />
-      </Router>
-    );
-
-    // Trigger logout via store to simulate session expiration
-    await waitFor(() => {
-      useAppStore.getState().logout();
-    });
-
-    expect(mockShowToast).toHaveBeenCalledWith('Session expired. Please login again.', 'warning');
-  });
 });

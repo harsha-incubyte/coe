@@ -1,27 +1,31 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useAppStore } from '@/store';
+import { describe, it, expect, vi } from 'vitest';
 import { Navbar } from './Navbar';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@/design-system/theme';
+import { useSession } from 'next-auth/react';
+
+// Mock useSession
+vi.mock('next-auth/react', () => ({
+  useSession: vi.fn(),
+  signOut: vi.fn(),
+}));
 
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <ThemeProvider theme={theme}>
-      <MemoryRouter>
-        {ui}
-      </MemoryRouter>
+      {ui}
     </ThemeProvider>
   );
 };
 
 describe('Navbar', () => {
-  beforeEach(() => {
-    useAppStore.setState({ isAuthenticated: false, user: null });
-  });
-
   it('should render Day 01, Day 02, Day 07, Day 08 and Day 09 links', () => {
+    vi.mocked(useSession).mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+    } as any);
+    
     renderWithProviders(<Navbar />);
 
     expect(screen.getByText(/Day 01/i)).toBeInTheDocument();
@@ -32,15 +36,21 @@ describe('Navbar', () => {
   });
 
   it('should be wrapped in a header tag', () => {
+    vi.mocked(useSession).mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+    } as any);
+    
     const { container } = renderWithProviders(<Navbar />);
     expect(container.querySelector('header')).toBeInTheDocument();
   });
 
   it('should have a button for the User Profile dropdown with Correct ARIA attributes', () => {
-    useAppStore.setState({ 
-      isAuthenticated: true, 
-      user: { id: '1', name: 'John Doe', email: 'john@example.com' } 
-    });
+    vi.mocked(useSession).mockReturnValue({
+      data: { user: { name: 'John Doe', email: 'john@example.com' } },
+      status: 'authenticated',
+    } as any);
+    
     renderWithProviders(<Navbar />);
     const button = screen.getByRole('button', { name: /user profile/i });
     expect(button).toBeInTheDocument();
@@ -49,7 +59,11 @@ describe('Navbar', () => {
   });
 
   it('should show Login link when not authenticated', () => {
-    useAppStore.setState({ isAuthenticated: false });
+    vi.mocked(useSession).mockReturnValue({
+      data: null,
+      status: 'unauthenticated',
+    } as any);
+    
     renderWithProviders(<Navbar />);
     expect(screen.getByText(/Login/i)).toBeInTheDocument();
   });

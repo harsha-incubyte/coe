@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+
 import MainLayout from './MainLayout';
 import { describe, it, expect } from 'vitest';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';
@@ -7,9 +7,9 @@ import { ThemeManager } from '@/design-system/theme/ThemeManager';
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <ThemeManager>
-      <BrowserRouter>
+      
         {ui}
-      </BrowserRouter>
+      
     </ThemeManager>
   );
 };
