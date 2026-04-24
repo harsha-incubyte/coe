@@ -129,4 +129,42 @@ export const taskHandlers = [
   }),
 ];
 
-export const handlers = [...authHandlers, ...weatherHandlers, ...taskHandlers];
+export const chatHandlers = [
+  http.post('/api/chat', async () => {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const text = "This is a **mocked** medical response from the simulated Gemma 2 backend.\\n\\n### Disclaimer\\n> I am an AI, not a doctor. Please consult a qualified healthcare provider for any medical concerns.\\n\\nHere is a simple breakdown:\\n\\n| Symptom | Potential Cause | Action |\\n| --- | --- | --- |\\n| Persistent Cough | Allergies, Infection | Rest, hydration |\\n| High Fever | Flu, Infection | Seek medical care if > 103°F |\\n\\n```javascript\\n// Mock token calculation\\nconst tokens = text.length / 4;\\n```\\n";
+        
+        const words = text.split(' ');
+        
+        // Wait to simulate processing time (shows typing indicator)
+        await delay(1500);
+        
+        for (const word of words) {
+          const chunk = JSON.stringify({ choices: [{ delta: { content: word + ' ' } }] });
+          controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
+          await delay(50); // Fast stream
+        }
+        
+        // Simulate usage token payload (custom extension for tracking)
+        const finalChunk = JSON.stringify({ 
+          usage: { prompt_tokens: 24, completion_tokens: words.length, total_tokens: 24 + words.length }
+        });
+        controller.enqueue(encoder.encode(`data: ${finalChunk}\n\n`));
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+        controller.close();
+      }
+    });
+
+    return new HttpResponse(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      }
+    });
+  })
+];
+
+export const handlers = [...authHandlers, ...weatherHandlers, ...taskHandlers, ...chatHandlers];
