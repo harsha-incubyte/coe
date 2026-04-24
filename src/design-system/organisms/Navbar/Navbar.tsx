@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAppStore } from '@/store';
+import { useSession, signOut } from 'next-auth/react';
 import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
 import { queryClient } from '@/lib/queryClient';
@@ -168,12 +168,14 @@ LoginBtn.defaultProps = { theme };
 export const Navbar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAppStore();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const user = session?.user;
   const { showToast } = useToast();
 
-  const handleLogout = (e?: React.MouseEvent) => {
+  const handleLogout = async (e?: React.MouseEvent) => {
     e?.preventDefault();
-    logout();
+    await signOut({ redirect: false });
     showToast('You have been logged out successfully.', 'info');
     router.push('/login');
   };
@@ -202,7 +204,7 @@ export const Navbar: React.FC = () => {
     <Header>
       <Nav aria-label="Main Navigation">
         <LogoSection>
-          <LogoImage src={logo} alt="Incubyte Logo" />
+          <LogoImage src={logo.src} alt="Incubyte Logo" />
           <LogoText>COE</LogoText>
         </LogoSection>
         <NavLinks>
@@ -232,7 +234,7 @@ export const Navbar: React.FC = () => {
                   aria-label="User Profile"
                 >
                   <AvatarPlaceholder>
-                    {user?.name.charAt(0).toUpperCase() || 'U'}
+                    {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                   </AvatarPlaceholder>
                 </UserProfileBtn>
               )}

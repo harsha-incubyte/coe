@@ -1,17 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumbs } from './Breadcrumbs';
-import { BrowserRouter } from 'react-router-dom';
-
 const meta: Meta<typeof Breadcrumbs> = {
   title: 'Design System/Molecules/Breadcrumbs',
   component: Breadcrumbs,
-  decorators: [
-    (Story) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
-    ),
-  ],
   parameters: {
     layout: 'padded',
   },
