@@ -1,4 +1,4 @@
-import { LanguageModelV1 } from '@ai-sdk/provider';
+import { LanguageModelV3 } from '@ai-sdk/provider';
 import { SUPPORTED_MODELS, SupportedModel, LLMProviderAdapter } from './types';
 import { gemmaAdapter, openaiAdapter, anthropicAdapter } from './providers';
 
@@ -11,7 +11,7 @@ const providers: Record<SupportedModel, LLMProviderAdapter> = {
 // Prioritized list for failover
 const FALLBACK_ORDER: SupportedModel[] = ['local-gemma', 'openai', 'anthropic'];
 
-export async function getLLMProvider(requestedModelStr: string): Promise<LanguageModelV1> {
+export async function getLLMProvider(requestedModelStr: string): Promise<LanguageModelV3> {
   let targetModel = requestedModelStr as SupportedModel;
   
   // 1. Strict Validation

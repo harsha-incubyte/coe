@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useToast } from '@/hooks/useToast';
 import { Input, Spinner } from '@/design-system/atoms';

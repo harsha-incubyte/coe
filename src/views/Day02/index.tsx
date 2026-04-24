@@ -1,3 +1,5 @@
+'use client';
+
 import { Spinner } from '@/design-system/atoms';
 import { lazy, Suspense } from 'react'
 import { PageLayout } from '@/design-system/layout/PageLayout'

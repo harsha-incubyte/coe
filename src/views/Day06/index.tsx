@@ -1,3 +1,5 @@
+'use client';
+
 import { Dashboard } from './Dashboard/Dashboard';
 import { LoginForm } from '@/design-system/organisms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
@@ -19,4 +21,3 @@ const Day06 = () => {
 };
 
 export default Day06;
-

@@ -24,6 +24,15 @@ const CURRENT_CONVO_KEY = 'medical_chat_current_convo';
 
 export const useChatState = () => {
   const [conversations, setConversations] = useState<Conversation[]>(() => {
+    if (typeof window === 'undefined') return [
+      {
+        id: uuidv4(),
+        title: 'New Consultation',
+        messages: [],
+        updatedAt: Date.now(),
+      },
+    ];
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -47,20 +56,25 @@ export const useChatState = () => {
   });
 
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
     return localStorage.getItem(CURRENT_CONVO_KEY) || null;
   });
 
   // Persist conversations
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
   }, [conversations]);
 
   // Persist current conversation ID
   useEffect(() => {
-    if (currentConversationId) {
-      localStorage.setItem(CURRENT_CONVO_KEY, currentConversationId);
-    } else {
-      localStorage.removeItem(CURRENT_CONVO_KEY);
+    if (typeof window !== 'undefined') {
+      if (currentConversationId) {
+        localStorage.setItem(CURRENT_CONVO_KEY, currentConversationId);
+      } else {
+        localStorage.removeItem(CURRENT_CONVO_KEY);
+      }
     }
   }, [currentConversationId]);
 

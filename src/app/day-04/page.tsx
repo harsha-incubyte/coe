@@ -1,2 +1,2 @@
-import Day04 from '@/pages/Day04';
+import Day04 from '@/views/Day04';
 export default function Day04Page() { return <Day04 />; }

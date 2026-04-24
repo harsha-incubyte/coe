@@ -21,12 +21,12 @@ export async function POST(req: Request) {
   // Optional: Save user message to DB immediately
   let currentConversationId = conversationId;
   
-  if (session?.user?.id) {
+  if (session && (session.user as any)?.id) {
     if (!currentConversationId) {
       const conversation = await prisma.conversation.create({
         data: {
           title: lastMessage.content.substring(0, 50) || 'New Conversation',
-          userId: session.user.id,
+          userId: (session.user as any).id,
         }
       });
       currentConversationId = conversation.id;
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     model: providerModel,
     messages,
     onFinish: async (completion) => {
-      if (session?.user?.id && currentConversationId) {
+      if (session && (session.user as any)?.id && currentConversationId) {
         await prisma.message.create({
           data: {
             role: 'assistant',
@@ -60,5 +60,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return result.toDataStreamResponse();
+  return result.toTextStreamResponse();
 }

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import Day07 from '@/pages/Day07';
+import Day07 from '@/views/Day07';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, lazy, Suspense } from 'react';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import * as S from './Day03.styles';

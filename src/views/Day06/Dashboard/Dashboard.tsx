@@ -7,7 +7,7 @@ import * as S from './Dashboard.styles';
 const Wizard = lazy(() => import('@/design-system/organisms').then(m => ({ default: m.DeviceConfigurationWizard })));
 
 // KATA 4: Code Splitting
-const RealTimeDataChart = lazy(() => import('@/pages/Day06/components/RealTimeDataChart/RealTimeDataChart'));
+const RealTimeDataChart = lazy(() => import('@/views/Day06/components/RealTimeDataChart/RealTimeDataChart'));
 
 export const Dashboard: React.FC = () => {
   return (

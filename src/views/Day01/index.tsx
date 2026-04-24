@@ -1,3 +1,5 @@
+'use client';
+
 import FizzBuzzUI from '@/components/FizzBuzz'
 import CounterUI from '@/components/Counter'
 import { PageLayout } from '@/design-system/layout/PageLayout'
@@ -21,4 +23,3 @@ const Day01 = () => {
 }
 
 export default Day01
-

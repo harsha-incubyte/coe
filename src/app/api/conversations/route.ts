@@ -6,13 +6,13 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user?.id) {
+  if (!session || !(session.user as any)?.id) {
     return new Response('Unauthorized', { status: 401 });
   }
 
   try {
     const conversations = await prisma.conversation.findMany({
-      where: { userId: session.user.id },
+      where: { userId: (session.user as any).id },
       include: {
         messages: {
           orderBy: { timestamp: 'asc' },

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useTasksQuery, useCreateTaskMutation, useUpdateTaskMutation, type Task } from '@/hooks/queries/useTasks';
 import { useSession } from 'next-auth/react';

@@ -39,7 +39,7 @@ const Day10: React.FC = () => {
     onFinish: () => {
       refetchConversations();
     },
-  });
+  } as any) as any;
 
   React.useEffect(() => {
     if (currentConversation) {

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import styled from 'styled-components';
 import { Button, Checkbox, Heading, Input } from '@/design-system/atoms';

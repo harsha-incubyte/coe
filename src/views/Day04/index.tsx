@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Badge, Modal } from '@/design-system/molecules';
 import { Button, Input } from '@/design-system/atoms';

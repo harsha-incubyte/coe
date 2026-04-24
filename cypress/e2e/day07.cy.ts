@@ -23,7 +23,7 @@ describe('Day 07: Task Board & Atomic Refactor', () => {
     cy.get('[data-testid="tasks-list-container"]').should('be.visible');
     
     // Audit the full page
-    cy.checkA11y(null, {
+    cy.checkA11y(undefined, {
       rules: {
         // Heading rules can be a bit strict on layouts, 
         // but we should aim for perfect results
