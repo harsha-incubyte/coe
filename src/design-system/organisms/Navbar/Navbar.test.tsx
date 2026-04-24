@@ -24,7 +24,7 @@ describe('Navbar', () => {
     vi.mocked(useSession).mockReturnValue({
       data: null,
       status: 'unauthenticated',
-    } as any);
+    } as import('next-auth/react').SessionContextValue);
     
     renderWithProviders(<Navbar />);
 
@@ -39,7 +39,7 @@ describe('Navbar', () => {
     vi.mocked(useSession).mockReturnValue({
       data: null,
       status: 'unauthenticated',
-    } as any);
+    } as import('next-auth/react').SessionContextValue);
     
     const { container } = renderWithProviders(<Navbar />);
     expect(container.querySelector('header')).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('Navbar', () => {
     vi.mocked(useSession).mockReturnValue({
       data: { user: { name: 'John Doe', email: 'john@example.com' } },
       status: 'authenticated',
-    } as any);
+    } as import('next-auth/react').SessionContextValue);
     
     renderWithProviders(<Navbar />);
     const button = screen.getByRole('button', { name: /user profile/i });
@@ -62,7 +62,7 @@ describe('Navbar', () => {
     vi.mocked(useSession).mockReturnValue({
       data: null,
       status: 'unauthenticated',
-    } as any);
+    } as import('next-auth/react').SessionContextValue);
     
     renderWithProviders(<Navbar />);
     expect(screen.getByText(/Login/i)).toBeInTheDocument();

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { useToast } from '@/hooks/useToast';
 import { Input, Spinner } from '@/design-system/atoms';
 import { Alert, Badge } from '@/design-system/molecules';
 import { useBoolean } from '@/hooks/useBoolean';
@@ -27,7 +26,6 @@ export const Weather: React.FC = () => {
   const skipNextSuggestionsRef = useRef(false);
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const { showToast } = useToast();
 
   useOnClickOutside(searchContainerRef, () => {
     closeSuggestions();

@@ -20,11 +20,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
   const isUser = message.role === 'user';
   const isError = message.status === 'error';
 
-  const timeValue = message.createdAt || message.timestamp || Date.now();
-  const timeString = new Intl.DateTimeFormat('default', {
+  const [fallbackTimestamp, setFallbackTimestamp] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (!message.createdAt && !message.timestamp) {
+      setFallbackTimestamp(Date.now());
+    }
+  }, [message.createdAt, message.timestamp]);
+
+  const timeValue = message.createdAt || message.timestamp || fallbackTimestamp;
+  const timeString = timeValue ? new Intl.DateTimeFormat('default', {
     hour: 'numeric',
     minute: 'numeric',
-  }).format(new Date(timeValue));
+  }).format(new Date(timeValue)) : '--:--';
 
   return (
     <MessageWrapper $isUser={isUser} role="listitem">

@@ -48,11 +48,11 @@ describe('Day 05 Kata 2: Automation & UI Sanity', () => {
   });
 
   it('should have accessible touch targets in the ergonomics section', () => {
-    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-width').then((val: any) => {
-      expect(parseFloat(val)).to.be.at.least(44);
+    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-width').then((val: unknown) => {
+      expect(parseFloat(val as string)).to.be.at.least(44);
     });
-    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-height').then((val: any) => {
-      expect(parseFloat(val)).to.be.at.least(44);
+    cy.get('button[aria-label="Accessible close button"]').invoke('css', 'min-height').then((val: unknown) => {
+      expect(parseFloat(val as string)).to.be.at.least(44);
     });
   });
 

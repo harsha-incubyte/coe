@@ -3,16 +3,18 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
+import { Session } from 'next-auth';
 
-  if (!session || !(session.user as any)?.id) {
+export async function GET() {
+  const session = await getServerSession(authOptions) as Session | null;
+
+  if (!session?.user?.id) {
     return new Response('Unauthorized', { status: 401 });
   }
 
   try {
     const conversations = await prisma.conversation.findMany({
-      where: { userId: (session.user as any).id },
+      where: { userId: session.user.id },
       include: {
         messages: {
           orderBy: { timestamp: 'asc' },

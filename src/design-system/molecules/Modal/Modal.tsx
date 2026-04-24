@@ -89,11 +89,12 @@ export const Modal: React.FC<ModalProps> = ({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => {
+      clearTimeout(timer);
+      setMounted(false);
+    };
   }, []);
-
-  if (!mounted || typeof document === 'undefined') return null;
 
   useEffect(() => {
     if (isOpen) {
@@ -165,7 +166,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen]);
 
-  return createPortal(
+  return (mounted && typeof document !== 'undefined') ? createPortal(
     <AnimatePresence>
       {isOpen && (
         <OverlayWrapper>
@@ -190,7 +191,7 @@ export const Modal: React.FC<ModalProps> = ({
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <ModalHeader title={title} onClose={onClose} />
+              <ModalHeader title={title} onClose={onClose} titleId={titleId} />
               <ModalContent>
                 {children}
               </ModalContent>
@@ -200,7 +201,7 @@ export const Modal: React.FC<ModalProps> = ({
       )}
     </AnimatePresence>,
     document.body
-  );
+  ) : null;
 };
 
 Modal.displayName = 'Modal';

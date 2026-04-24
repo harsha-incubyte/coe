@@ -26,6 +26,11 @@ export const ToastContainer: React.FC = () => {
   };
 
   useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     const handleShowToast = (event: CustomEvent<ToastData>) => {
       const newToast: ToastData = event.detail;
       setToasts((prev) => [...prev, newToast]);
@@ -38,7 +43,6 @@ export const ToastContainer: React.FC = () => {
     };
 
     window.addEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
-    setIsMounted(true);
     return () => window.removeEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
   }, []);
 

@@ -8,17 +8,23 @@ import {
 import { ConversationSidebar } from './components/ConversationSidebar';
 import { MessageList } from './components/MessageList';
 import { ChatInput } from './components/ChatInput';
-import { type Message } from './components/ChatMessage';
 import { useChat } from '@ai-sdk/react';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 
+interface Conversation {
+  id: string;
+  title: string;
+  messages: import('./components/ChatMessage').Message[];
+  updatedAt: Date | number;
+}
+
 const Day10: React.FC = () => {
   const { data: session } = useSession();
   const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
 
-  const { data: conversations = [], refetch: refetchConversations } = useQuery({
+  const { data: conversations = [], refetch: refetchConversations } = useQuery<Conversation[]>({
     queryKey: ['conversations'],
     queryFn: async () => {
       const res = await fetch('/api/conversations');
@@ -28,7 +34,7 @@ const Day10: React.FC = () => {
     enabled: !!session?.user,
   });
 
-  const currentConversation = conversations.find((c: any) => c.id === currentConversationId);
+  const currentConversation = conversations.find((c) => c.id === currentConversationId);
 
   const { messages, input, handleInputChange, isLoading, setMessages, append, reload, error } = useChat({
     api: '/api/chat',
@@ -39,7 +45,7 @@ const Day10: React.FC = () => {
     onFinish: () => {
       refetchConversations();
     },
-  } as any) as any;
+  });
 
   React.useEffect(() => {
     if (currentConversation) {
@@ -69,7 +75,7 @@ const Day10: React.FC = () => {
       content: 'There was an error communicating with the AI. Please try again.',
       status: 'error',
       createdAt: new Date(),
-    } as any);
+    } as import('./components/ChatMessage').Message);
   }
 
   return (
@@ -107,7 +113,7 @@ const Day10: React.FC = () => {
           </ChatHeader>
 
           <MessageList 
-            messages={displayMessages as any} 
+            messages={displayMessages} 
             isTyping={isLoading} 
             onResend={() => reload()} 
           />

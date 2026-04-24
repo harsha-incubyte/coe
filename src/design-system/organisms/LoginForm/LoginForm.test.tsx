@@ -42,10 +42,12 @@ describe('LoginForm', () => {
     vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
       refresh: mockRefresh,
-    } as any);
-    vi.mocked(useSearchParams).mockReturnValue({
-      get: vi.fn().mockReturnValue(null),
-    } as any);
+      back: vi.fn(),
+      forward: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    } as unknown as ReturnType<typeof useRouter>);
+    vi.mocked(useSearchParams).mockReturnValue(new URLSearchParams() as unknown as ReturnType<typeof useSearchParams>);
   });
 
   it('should render email and password inputs and a login button', () => {

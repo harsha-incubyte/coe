@@ -29,7 +29,7 @@ describe('Day07 Component', () => {
     vi.mocked(useSession).mockReturnValue({
       data: { user: { name: 'Harsha', email: 'harsha@incubyte.co' } },
       status: 'authenticated',
-    } as any);
+    } as unknown as ReturnType<typeof useSession>);
   });
 
   it('should render personalized welcome message from Zustand store', () => {

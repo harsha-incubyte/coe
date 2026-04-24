@@ -4,11 +4,13 @@ import { authOptions } from '@/lib/auth';
 import { getLLMProvider } from '@/lib/llm/registry';
 import prisma from '@/lib/prisma';
 
+import { Session } from 'next-auth';
+
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   // Check authentication
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as Session | null;
   if (!session) {
     // For now, let's allow anonymous requests during migration testing, 
     // but in production, we should return 401.
@@ -21,12 +23,12 @@ export async function POST(req: Request) {
   // Optional: Save user message to DB immediately
   let currentConversationId = conversationId;
   
-  if (session && (session.user as any)?.id) {
+  if (session?.user?.id) {
     if (!currentConversationId) {
       const conversation = await prisma.conversation.create({
         data: {
           title: lastMessage.content.substring(0, 50) || 'New Conversation',
-          userId: (session.user as any).id,
+          userId: session.user.id,
         }
       });
       currentConversationId = conversation.id;
@@ -48,7 +50,7 @@ export async function POST(req: Request) {
     model: providerModel,
     messages,
     onFinish: async (completion) => {
-      if (session && (session.user as any)?.id && currentConversationId) {
+      if (session?.user?.id && currentConversationId) {
         await prisma.message.create({
           data: {
             role: 'assistant',

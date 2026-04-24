@@ -79,8 +79,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           router.refresh();
         }, 500);
       }
-    } catch (err: any) {
-      const errorMessage = err.message === 'CredentialsSignin' 
+    } catch (err: unknown) {
+      const errorMessage = (err instanceof Error && err.message === 'CredentialsSignin')
         ? "Access Denied! Invalid credentials." 
         : "Something went wrong. Please try again.";
       setError(errorMessage);

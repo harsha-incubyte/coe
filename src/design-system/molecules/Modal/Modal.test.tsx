@@ -21,9 +21,9 @@ describe('Modal Component', () => {
     children: <button data-testid="modal-content">Modal Content</button>,
   };
 
-  it('renders correctly when open', () => {
+  it('renders correctly when open', async () => {
     renderWithTheme(<Modal {...defaultProps} />);
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Test Modal')).toBeInTheDocument();
   });
 
@@ -32,34 +32,38 @@ describe('Modal Component', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('calls onClose when close button is clicked', () => {
+  it('calls onClose when close button is clicked', async () => {
     renderWithTheme(<Modal {...defaultProps} />);
-    fireEvent.click(screen.getByLabelText('Close modal'));
+    const closeButton = await screen.findByLabelText('Close modal');
+    fireEvent.click(closeButton);
     expect(defaultProps.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onClose when overlay is clicked', () => {
+  it('calls onClose when overlay is clicked', async () => {
     renderWithTheme(<Modal {...defaultProps} />);
-    fireEvent.click(screen.getByTestId('modal-overlay'));
+    const overlay = await screen.findByTestId('modal-overlay');
+    fireEvent.click(overlay);
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
-  it('calls onClose when Escape key is pressed', () => {
+  it('calls onClose when Escape key is pressed', async () => {
     renderWithTheme(<Modal {...defaultProps} />);
+    await screen.findByRole('dialog');
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
-  it('has correct ARIA attributes', () => {
+  it('has correct ARIA attributes', async () => {
     renderWithTheme(<Modal {...defaultProps} />);
-    const modal = screen.getByRole('dialog');
+    const modal = await screen.findByRole('dialog');
     expect(modal).toHaveAttribute('aria-modal', 'true');
     expect(modal).toHaveAttribute('aria-labelledby');
   });
 
   it('should have no accessibility violations when open', async () => {
-    const { container } = renderWithTheme(<Modal {...defaultProps} />);
-    const results = await axe(container);
+    renderWithTheme(<Modal {...defaultProps} />);
+    const dialog = await screen.findByRole('dialog');
+    const results = await axe(dialog);
     expect(results).toHaveNoViolations();
   });
 

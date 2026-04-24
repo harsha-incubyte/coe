@@ -1,7 +1,8 @@
 import React from 'react';
 import { Navbar } from '@/design-system/organisms/Navbar';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { LayoutProvider, useLayout } from '@/design-system/layout/LayoutContext';
+import { LayoutProvider } from '@/design-system/layout/LayoutContext';
+import { useLayout } from '@/design-system/layout/useLayout';
 import { 
   LayoutContainer, 
   ContentContainer, 

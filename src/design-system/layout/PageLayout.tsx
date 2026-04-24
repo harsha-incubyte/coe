@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Heading } from '@/design-system/atoms';
 import { theme } from '@/design-system/theme';
-import { useLayout } from './LayoutContext';
+import { useLayout } from './useLayout';
 
 export interface PageLayoutProps {
   title: string | React.ReactNode;

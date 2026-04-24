@@ -81,13 +81,22 @@ export const useChatState = () => {
   // Sync currentConversationId if it's invalid or missing
   useEffect(() => {
     if (conversations.length > 0) {
-      if (!currentConversationId || !conversations.find(c => c.id === currentConversationId)) {
-        setCurrentConversationId(conversations[0].id);
+      const isValid = currentConversationId && conversations.some(c => c.id === currentConversationId);
+      if (!isValid) {
+        const timer = setTimeout(() => {
+          setCurrentConversationId(conversations[0].id);
+        }, 0);
+        return () => clearTimeout(timer);
       }
     }
   }, [conversations, currentConversationId]);
 
-  const currentConversation = conversations.find((c) => c.id === currentConversationId) || conversations[0] || null;
+  // Deriving the active conversation ID to ensure it's always valid
+  const activeConversationId = (currentConversationId && conversations.find(c => c.id === currentConversationId))
+    ? currentConversationId
+    : (conversations[0]?.id || null);
+
+  const currentConversation = conversations.find((c) => c.id === activeConversationId) || null;
 
   const addMessage = useCallback((conversationId: string, message: Message) => {
     setConversations((prev) =>
