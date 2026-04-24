@@ -1,7 +1,15 @@
 import React from 'react';
 import { MessageWrapper, MessageBubble, MessageMeta, ResendButton } from '../Day10.styles';
 import { AIResponseRenderer } from './AIResponseRenderer';
-import type { Message } from '../hooks/useChatState';
+
+export interface Message {
+  id: string;
+  role: 'user' | 'assistant' | 'system' | 'data';
+  content: string;
+  createdAt?: Date | number;
+  timestamp?: Date | number;
+  status?: string;
+}
 
 interface ChatMessageProps {
   message: Message;
@@ -12,10 +20,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
   const isUser = message.role === 'user';
   const isError = message.status === 'error';
 
+  const timeValue = message.createdAt || message.timestamp || Date.now();
   const timeString = new Intl.DateTimeFormat('default', {
     hour: 'numeric',
     minute: 'numeric',
-  }).format(new Date(message.timestamp));
+  }).format(new Date(timeValue));
 
   return (
     <MessageWrapper $isUser={isUser} role="listitem">

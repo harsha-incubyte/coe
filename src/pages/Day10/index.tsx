@@ -1,5 +1,4 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import {
   PageContainer,
   MainLayoutContent,
@@ -16,89 +15,69 @@ import {
 import { ConversationSidebar } from './components/ConversationSidebar';
 import { MessageList } from './components/MessageList';
 import { ChatInput } from './components/ChatInput';
-import { useChatState } from './hooks/useChatState';
-import type { Message } from './hooks/useChatState';
-import { useChatCompletions } from './hooks/useChatCompletions';
-import { buildPromptMessages } from './utils/prompts';
+import { type Message } from './components/ChatMessage';
+import { useChat } from '@ai-sdk/react';
 import { PageLayout } from '@/design-system/layout/PageLayout';
+import { useSession } from 'next-auth/react';
+import { useQuery } from '@tanstack/react-query';
 
 const Day10: React.FC = () => {
-  const {
-    conversations,
-    currentConversation,
-    currentConversationId,
-    setCurrentConversationId,
-    createNewConversation,
-    addMessage,
-    updateMessageStatus,
-    updateMessageContent
-  } = useChatState();
+  const { data: session } = useSession();
+  const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
 
-  const { generateCompletion, isGenerating } = useChatCompletions();
-  const [errorRate, setErrorRate] = React.useState(0.1);
+  const { data: conversations = [], refetch: refetchConversations } = useQuery({
+    queryKey: ['conversations'],
+    queryFn: async () => {
+      const res = await fetch('/api/conversations');
+      if (!res.ok) throw new Error('Failed to fetch');
+      return res.json();
+    },
+    enabled: !!session?.user,
+  });
+
+  const currentConversation = conversations.find((c: any) => c.id === currentConversationId);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append, reload, error } = useChat({
+    api: '/api/chat',
+    body: {
+      conversationId: currentConversationId,
+    },
+    initialMessages: currentConversation?.messages || [],
+    onFinish: () => {
+      refetchConversations();
+    },
+  });
+
+  React.useEffect(() => {
+    if (currentConversation) {
+      setMessages(currentConversation.messages || []);
+    } else {
+      setMessages([]);
+    }
+  }, [currentConversationId, currentConversation, setMessages]);
+
+  const handleNewConversation = () => {
+    setCurrentConversationId(null);
+    setMessages([]);
+  };
 
   const handleSendMessage = async (content: string) => {
-    if (!currentConversationId || !currentConversation) return;
-
-    const userMessageId = uuidv4();
-    const assistantMessageId = uuidv4();
-
-    const userMessage: Message = {
-      id: userMessageId,
+    append({
       role: 'user',
       content,
-      timestamp: Date.now(),
-      status: 'sent',
-    };
-    addMessage(currentConversationId, userMessage);
+    });
+  };
 
-    const assistantMessage: Message = {
-      id: assistantMessageId,
+  const displayMessages = [...messages];
+  if (error) {
+    displayMessages.push({
+      id: 'error-placeholder',
       role: 'assistant',
-      content: '',
-      timestamp: Date.now() + 1,
-      status: 'delivering',
-    };
-    addMessage(currentConversationId, assistantMessage);
-
-    const history = currentConversation.messages.map(m => ({ role: m.role, content: m.content }));
-    const apiMessages = buildPromptMessages(history, content);
-
-    try {
-      await generateCompletion(apiMessages, (chunk) => {
-        updateMessageContent(currentConversationId, assistantMessageId, (prev) => prev + chunk);
-      });
-      updateMessageStatus(currentConversationId, assistantMessageId, 'sent');
-    } catch (err) {
-      updateMessageStatus(currentConversationId, assistantMessageId, 'error');
-    }
-  };
-
-  const handleResend = async (messageId: string) => {
-    if (!currentConversationId || !currentConversation) return;
-    
-    const msg = currentConversation.messages.find(m => m.id === messageId);
-    if (!msg) return;
-
-    updateMessageStatus(currentConversationId, messageId, 'delivering');
-    
-    // For assistant messages that failed
-    if (msg.role === 'assistant') {
-       const userMsgIndex = currentConversation.messages.findIndex(m => m.id === messageId) - 1;
-       const userMsg = currentConversation.messages[userMsgIndex];
-       const history = currentConversation.messages.slice(0, userMsgIndex).map(m => ({ role: m.role, content: m.content }));
-       const apiMessages = buildPromptMessages(history, userMsg?.content || '');
-       
-       try {
-         await generateCompletion(apiMessages, (chunk) => {
-           updateMessageContent(currentConversationId, messageId, (prev) => prev + chunk);
-         });
-         updateMessageStatus(currentConversationId, messageId, 'sent');
-       } catch (err) {
-         updateMessageStatus(currentConversationId, messageId, 'error');
-       }
-    }
-  };
+      content: 'There was an error communicating with the AI. Please try again.',
+      status: 'error',
+      createdAt: new Date(),
+    } as any);
+  }
 
   return (
     <PageLayout title="Medical Chat" mode="full">
@@ -107,9 +86,7 @@ const Day10: React.FC = () => {
           conversations={conversations}
           currentConversationId={currentConversationId}
           onSelectConversation={setCurrentConversationId}
-          onNewConversation={createNewConversation}
-          errorRate={errorRate}
-          onErrorRateChange={setErrorRate}
+          onNewConversation={handleNewConversation}
         />
         
         <ChatMain>
@@ -137,14 +114,16 @@ const Day10: React.FC = () => {
           </ChatHeader>
 
           <MessageList 
-            messages={currentConversation?.messages || []} 
-            isTyping={isGenerating} 
-            onResend={handleResend}
+            messages={displayMessages as any} 
+            isTyping={isLoading} 
+            onResend={() => reload()} 
           />
 
           <ChatInput 
+            value={input}
+            onChange={handleInputChange}
             onSendMessage={handleSendMessage} 
-            disabled={isGenerating} 
+            disabled={isLoading} 
           />
         </ChatMain>
       </div>

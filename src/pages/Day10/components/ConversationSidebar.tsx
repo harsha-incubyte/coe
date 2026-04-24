@@ -8,27 +8,29 @@ import {
   ConversationTitle,
   ConversationSubtitle
 } from '../Day10.styles';
-import type { Conversation } from '../hooks/useChatState';
 import { Button } from '@/design-system/atoms';
 import { SearchBar } from '@/design-system/molecules';
-import { ChatSettings } from './ChatSettings';
+import type { Message } from './ChatMessage';
+
+export interface Conversation {
+  id: string;
+  title: string;
+  messages: Message[];
+  updatedAt: number | Date;
+}
 
 interface ConversationSidebarProps {
   conversations: Conversation[];
   currentConversationId: string | null;
   onSelectConversation: (id: string) => void;
   onNewConversation: () => void;
-  errorRate: number;
-  onErrorRateChange: (rate: number) => void;
 }
 
 export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
   conversations,
   currentConversationId,
   onSelectConversation,
-  onNewConversation,
-  errorRate,
-  onErrorRateChange
+  onNewConversation
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -80,8 +82,6 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
           </div>
         )}
       </ConversationListContainer>
-
-      <ChatSettings errorRate={errorRate} onErrorRateChange={onErrorRateChange} />
     </SidebarContainer>
   );
 };

@@ -4,10 +4,27 @@ import { InputAreaContainer, InputWrapper, StyledTextarea, SendButton } from '..
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
-  const [message, setMessage] = useState('');
+export const ChatInput: React.FC<ChatInputProps> = ({ 
+  onSendMessage, 
+  disabled,
+  value,
+  onChange
+}) => {
+  const [internalMessage, setInternalMessage] = useState('');
+  const message = value !== undefined ? value : internalMessage;
+  const setMessage = (val: string) => {
+    if (onChange) {
+      const event = { target: { value: val } } as React.ChangeEvent<HTMLTextAreaElement>;
+      onChange(event);
+    } else {
+      setInternalMessage(val);
+    }
+  };
+
   const [error, setError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

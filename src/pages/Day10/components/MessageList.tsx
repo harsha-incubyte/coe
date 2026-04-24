@@ -2,9 +2,8 @@ import React, { useRef } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import type { VirtuosoHandle } from 'react-virtuoso';
 import { MessageListContainer } from '../Day10.styles';
-import { ChatMessage } from './ChatMessage';
+import { ChatMessage, type Message } from './ChatMessage';
 import { TypingIndicator } from './TypingIndicator';
-import type { Message } from '../hooks/useChatState';
 
 interface MessageListProps {
   messages: Message[];

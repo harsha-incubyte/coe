@@ -1,4 +1,3 @@
-import { withAuth } from '@/components/withAuth/withAuth';
 import { Dashboard } from './Dashboard/Dashboard';
 import { LoginForm } from '@/design-system/organisms';
 import { PageLayout } from '@/design-system/layout/PageLayout';
@@ -15,10 +14,9 @@ const Day06Fallback = () => (
   </PageLayout>
 );
 
-// Use withAuth with custom fallback to handle auth "in day-06 itself"
-const Day06 = withAuth(Dashboard, {
-  fallback: Day06Fallback
-});
+const Day06 = () => {
+  return <Dashboard />;
+};
 
 export default Day06;
 
