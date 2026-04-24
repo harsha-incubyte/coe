@@ -23,46 +23,65 @@ const STORAGE_KEY = 'medical_chat_conversations';
 const CURRENT_CONVO_KEY = 'medical_chat_current_convo';
 
 export const useChatState = () => {
-  const [conversations, setConversations] = useState<Conversation[]>(() => {
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize from localStorage
+  useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          setConversations(parsed);
+        } else {
+          setConversations([
+            {
+              id: uuidv4(),
+              title: 'New Consultation',
+              messages: [],
+              updatedAt: Date.now(),
+            },
+          ]);
         }
+      } else {
+        setConversations([
+          {
+            id: uuidv4(),
+            title: 'New Consultation',
+            messages: [],
+            updatedAt: Date.now(),
+          },
+        ]);
+      }
+      
+      const storedCurrentId = localStorage.getItem(CURRENT_CONVO_KEY);
+      if (storedCurrentId) {
+        setCurrentConversationId(storedCurrentId);
       }
     } catch (e) {
       console.error('Failed to parse stored conversations', e);
     }
-    // Return initial conversation if none exist
-    return [
-      {
-        id: uuidv4(),
-        title: 'New Consultation',
-        messages: [],
-        updatedAt: Date.now(),
-      },
-    ];
-  });
-
-  const [currentConversationId, setCurrentConversationId] = useState<string | null>(() => {
-    return localStorage.getItem(CURRENT_CONVO_KEY) || null;
-  });
+    setIsInitialized(true);
+  }, []);
 
   // Persist conversations
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
-  }, [conversations]);
+    if (isInitialized) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
+  }, [conversations, isInitialized]);
 
   // Persist current conversation ID
   useEffect(() => {
+    if (!isInitialized) return;
     if (currentConversationId) {
       localStorage.setItem(CURRENT_CONVO_KEY, currentConversationId);
     } else {
       localStorage.removeItem(CURRENT_CONVO_KEY);
     }
-  }, [currentConversationId]);
+  }, [currentConversationId, isInitialized]);
 
   // Sync currentConversationId if it's invalid or missing
   useEffect(() => {

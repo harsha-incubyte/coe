@@ -13,12 +13,12 @@
     }
   },
   "urls": [
-    "http://localhost:4173/day-01",
-    "http://localhost:4173/day-02",
-    "http://localhost:4173/day-03",
-    "http://localhost:4173/day-04",
+    "http://localhost:3000/day-01",
+    "http://localhost:3000/day-02",
+    "http://localhost:3000/day-03",
+    "http://localhost:3000/day-04",
     {
-      "url": "http://localhost:4173/day-05",
+      "url": "http://localhost:3000/day-05",
       "hideElements": ".axe-ignore"
     }
   ]
