@@ -1,14 +1,7 @@
+'use client';
+
 import React from 'react';
 import {
-  PageContainer,
-  MainLayoutContent,
-  ChatContainer,
-  SidebarArea,
-  ChatArea,
-  EmptyStateContainer,
-  EmptyStateIcon,
-  EmptyStateTitle,
-  EmptyStateText,
   ChatMain,
   ChatHeader
 } from './Day10.styles';
@@ -37,7 +30,7 @@ const Day10: React.FC = () => {
 
   const currentConversation = conversations.find((c: any) => c.id === currentConversationId);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append, reload, error } = useChat({
+  const { messages, input, handleInputChange, isLoading, setMessages, append, reload, error } = useChat({
     api: '/api/chat',
     body: {
       conversationId: currentConversationId,

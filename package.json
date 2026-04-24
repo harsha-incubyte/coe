@@ -10,7 +10,7 @@
     "test:run": "NODE_OPTIONS='--max-old-space-size=4096' vitest run",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "msw-init": "msw init public/ --save",
     "next:dev": "next dev",
     "next:build": "next build",

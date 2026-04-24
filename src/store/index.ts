@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 // Define the shape of our global store
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface StoreState {
   // Add slices here
 }
