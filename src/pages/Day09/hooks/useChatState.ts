@@ -27,12 +27,23 @@ export const useChatState = () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.error('Failed to parse stored conversations', e);
     }
-    return [];
+    // Return initial conversation if none exist
+    return [
+      {
+        id: uuidv4(),
+        title: 'New Consultation',
+        messages: [],
+        updatedAt: Date.now(),
+      },
+    ];
   });
 
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(() => {
@@ -53,27 +64,16 @@ export const useChatState = () => {
     }
   }, [currentConversationId]);
 
-  const currentConversation = conversations.find((c) => c.id === currentConversationId) || null;
-
-  const createNewConversation = useCallback(() => {
-    const newConvo: Conversation = {
-      id: uuidv4(),
-      title: 'New Consultation',
-      messages: [],
-      updatedAt: Date.now(),
-    };
-    setConversations((prev) => [newConvo, ...prev]);
-    setCurrentConversationId(newConvo.id);
-  }, []);
-
-  // Ensure there is always a conversation
+  // Sync currentConversationId if it's invalid or missing
   useEffect(() => {
-    if (conversations.length === 0) {
-      createNewConversation();
-    } else if (!currentConversationId || !conversations.find((c) => c.id === currentConversationId)) {
-      setCurrentConversationId(conversations[0].id);
+    if (conversations.length > 0) {
+      if (!currentConversationId || !conversations.find(c => c.id === currentConversationId)) {
+        setCurrentConversationId(conversations[0].id);
+      }
     }
-  }, [conversations.length, currentConversationId, createNewConversation, conversations]);
+  }, [conversations, currentConversationId]);
+
+  const currentConversation = conversations.find((c) => c.id === currentConversationId) || conversations[0] || null;
 
   const addMessage = useCallback((conversationId: string, message: Message) => {
     setConversations((prev) =>
@@ -120,10 +120,21 @@ export const useChatState = () => {
     );
   }, []);
 
+  const createNewConversation = useCallback(() => {
+    const newConvo: Conversation = {
+      id: uuidv4(),
+      title: 'New Consultation',
+      messages: [],
+      updatedAt: Date.now(),
+    };
+    setConversations((prev) => [newConvo, ...prev]);
+    setCurrentConversationId(newConvo.id);
+  }, []);
+
   return {
     conversations,
     currentConversation,
-    currentConversationId,
+    currentConversationId: currentConversation?.id || null,
     setCurrentConversationId,
     createNewConversation,
     addMessage,

@@ -1,7 +1,16 @@
-import React from 'react';
-import { SidebarContainer, SidebarHeader, ConversationListContainer, ConversationItem } from '../Day09.styles';
+import React, { useState, useMemo } from 'react';
+import { 
+  SidebarContainer, 
+  SidebarHeader, 
+  ConversationListContainer, 
+  ConversationItem, 
+  SearchWrapper,
+  ConversationTitle,
+  ConversationSubtitle
+} from '../Day09.styles';
 import type { Conversation } from '../hooks/useChatState';
 import { Button } from '@/design-system/atoms';
+import { SearchBar } from '@/design-system/molecules';
 import { ChatSettings } from './ChatSettings';
 
 interface ConversationSidebarProps {
@@ -21,6 +30,18 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
   errorRate,
   onErrorRateChange
 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredConversations = useMemo(() => {
+    if (!searchQuery.trim()) return conversations;
+    
+    const query = searchQuery.toLowerCase();
+    return conversations.filter(convo => 
+      convo.title.toLowerCase().includes(query) || 
+      convo.messages.some(msg => msg.content.toLowerCase().includes(query))
+    );
+  }, [conversations, searchQuery]);
+
   return (
     <SidebarContainer aria-label="Chat History Sidebar">
       <SidebarHeader>
@@ -29,18 +50,35 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
           + New
         </Button>
       </SidebarHeader>
+
+      <SearchWrapper>
+        <SearchBar 
+          placeholder="Search conversations..." 
+          onSearch={() => {}} // We search as user types
+          onChange={setSearchQuery}
+        />
+      </SearchWrapper>
       
       <ConversationListContainer role="navigation" aria-label="Past Consultations">
-        {conversations.map((convo) => (
-          <ConversationItem
-            key={convo.id}
-            $isActive={convo.id === currentConversationId}
-            onClick={() => onSelectConversation(convo.id)}
-            aria-current={convo.id === currentConversationId ? "page" : undefined}
-          >
-            {convo.title}
-          </ConversationItem>
-        ))}
+        {filteredConversations.length > 0 ? (
+          filteredConversations.map((convo) => (
+            <ConversationItem
+              key={convo.id}
+              $isActive={convo.id === currentConversationId}
+              onClick={() => onSelectConversation(convo.id)}
+              aria-current={convo.id === currentConversationId ? "page" : undefined}
+            >
+              <ConversationTitle>{convo.title}</ConversationTitle>
+              <ConversationSubtitle>
+                {convo.messages.length} messages
+              </ConversationSubtitle>
+            </ConversationItem>
+          ))
+        ) : (
+          <div style={{ padding: '20px', textAlign: 'center', opacity: 0.5, fontSize: '14px' }}>
+            No conversations found
+          </div>
+        )}
       </ConversationListContainer>
 
       <ChatSettings errorRate={errorRate} onErrorRateChange={onErrorRateChange} />

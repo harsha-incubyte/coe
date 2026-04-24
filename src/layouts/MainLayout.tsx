@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from '@/design-system/organisms/Navbar';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { LayoutProvider, useLayout } from '@/design-system/layout/LayoutContext';
 import { 
   LayoutContainer, 
   ContentContainer, 
@@ -12,11 +13,12 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayoutContent: React.FC<MainLayoutProps> = ({ children }) => {
   const isDesktop = useMediaQuery('(min-width: 1025px)');
+  const { isFullWidth } = useLayout();
 
   return (
-    <LayoutContainer>
+    <LayoutContainer $fullWidth={isFullWidth}>
       {isDesktop && (
         <DesktopIndicator>
           Desktop Optimized
@@ -26,11 +28,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         Skip to content
       </SkipLink>
       <Navbar />
-      <ContentContainer id="main-content" tabIndex={-1}>
+      <ContentContainer id="main-content" tabIndex={-1} $fullWidth={isFullWidth}>
         {children}
       </ContentContainer>
     </LayoutContainer>
   );
 };
+
+const MainLayout: React.FC<MainLayoutProps> = (props) => (
+  <LayoutProvider>
+    <MainLayoutContent {...props} />
+  </LayoutProvider>
+);
 
 export default MainLayout;

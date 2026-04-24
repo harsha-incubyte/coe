@@ -1,20 +1,28 @@
 import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
 
-export const LayoutContainer = styled.div`
+export const LayoutContainer = styled.div<{ $fullWidth?: boolean }>`
   min-height: 100vh;
+  height: ${({ $fullWidth }) => ($fullWidth ? '100vh' : 'auto')};
+  display: flex;
+  flex-direction: column;
   background-color: ${({ theme }) => theme.colors.background};
+  overflow: ${({ $fullWidth }) => ($fullWidth ? 'hidden' : 'visible')};
 `;
 LayoutContainer.defaultProps = { theme };
 
-export const ContentContainer = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing['2xl']};
+export const ContentContainer = styled.main<{ $fullWidth?: boolean }>`
+  max-width: ${({ $fullWidth }) => ($fullWidth ? 'none' : '1200px')};
+  margin: ${({ $fullWidth }) => ($fullWidth ? '0' : '0 auto')};
+  padding: ${({ theme, $fullWidth }) => ($fullWidth ? '0' : theme.spacing['2xl'])};
   outline: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
   @media (max-width: ${({ theme }) => theme.spacing['3xl']}) {
-     padding: ${({ theme }) => theme.spacing.lg};
+     padding: ${({ theme, $fullWidth }) => ($fullWidth ? '0' : theme.spacing.lg)};
   }
 `;
 ContentContainer.defaultProps = { theme };

@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Heading } from '@/design-system/atoms';
 import { theme } from '@/design-system/theme';
+import { useLayout } from './LayoutContext';
 
 export interface PageLayoutProps {
   title: string | React.ReactNode;
   description?: string | React.ReactNode;
   children: React.ReactNode;
   maxWidth?: string;
+  mode?: 'default' | 'full';
 }
 
-const PageContainer = styled(motion.div)<{ $maxWidth?: string }>`
-  max-width: ${({ $maxWidth }) => $maxWidth || '1200px'};
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing?.['3xl']} ${({ theme }) => theme.spacing?.md};
+const PageContainer = styled(motion.div)<{ $maxWidth?: string; $isFull?: boolean }>`
+  max-width: ${({ $maxWidth, $isFull }) => ($isFull ? 'none' : $maxWidth || '1200px')};
+  margin: ${({ $isFull }) => ($isFull ? '0' : '0 auto')};
+  padding: ${({ theme, $isFull }) => ($isFull ? '0' : `${theme.spacing?.['3xl']} ${theme.spacing?.md}`)};
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 PageContainer.defaultProps = { theme };
 
@@ -50,7 +55,11 @@ const Description = styled.p`
 `;
 Description.defaultProps = { theme };
 
-const ContentContainer = styled(motion.div)``;
+const ContentContainer = styled(motion.div)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -62,25 +71,38 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   title, 
   description, 
   children,
-  maxWidth 
+  maxWidth,
+  mode = 'default'
 }) => {
+  const { setFullWidth } = useLayout();
+  const isFull = mode === 'full';
+
+  useEffect(() => {
+    setFullWidth(isFull);
+    // Cleanup to revert to default mode when unmounting
+    return () => setFullWidth(false);
+  }, [isFull, setFullWidth]);
+
   return (
     <PageContainer 
       $maxWidth={maxWidth}
+      $isFull={isFull}
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <HeaderContainer>
-        {typeof title === 'string' ? <Heading $level={1}>{title}</Heading> : title}
-        {description && (
-          <Description>{description}</Description>
-        )}
-      </HeaderContainer>
+      {!isFull && (
+        <HeaderContainer>
+          {typeof title === 'string' ? <Heading $level={1}>{title}</Heading> : title}
+          {description && (
+            <Description>{description}</Description>
+          )}
+        </HeaderContainer>
+      )}
       <ContentContainer
-        initial={{ opacity: 0, y: 10 }}
+        initial={isFull ? { opacity: 0 } : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >

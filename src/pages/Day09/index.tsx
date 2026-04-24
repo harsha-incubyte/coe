@@ -1,6 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { PageContainer, ChatMain, ChatHeader } from './Day09.styles';
+import { PageLayout } from '@/design-system/layout/PageLayout';
+import { ChatMain, ChatHeader } from './Day09.styles';
 import { ConversationSidebar } from './components/ConversationSidebar';
 import { MessageList } from './components/MessageList';
 import { ChatInput } from './components/ChatInput';
@@ -70,38 +71,54 @@ const Day09: React.FC = () => {
   };
 
   return (
-    <PageContainer>
-      <ConversationSidebar
-        conversations={conversations}
-        currentConversationId={currentConversationId}
-        onSelectConversation={setCurrentConversationId}
-        onNewConversation={createNewConversation}
-        errorRate={errorRate}
-        onErrorRateChange={setErrorRate}
-      />
-      
-      <ChatMain>
-        <ChatHeader>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '24px' }}>🩺</span>
-            <h2 style={{ fontSize: '18px', margin: 0 }}>
-              {currentConversation?.title || 'Medical Consultation'}
-            </h2>
-          </div>
-        </ChatHeader>
-
-        <MessageList 
-          messages={currentConversation?.messages || []} 
-          isTyping={isTyping} 
-          onResend={handleResend}
+    <PageLayout title="Medical Chat" mode="full">
+      <div style={{ display: 'flex', flex: 1, height: '100%', overflow: 'hidden' }}>
+        <ConversationSidebar
+          conversations={conversations}
+          currentConversationId={currentConversationId}
+          onSelectConversation={setCurrentConversationId}
+          onNewConversation={createNewConversation}
+          errorRate={errorRate}
+          onErrorRateChange={setErrorRate}
         />
+        
+        <ChatMain>
+          <ChatHeader>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px'
+              }}>
+                🩺
+              </div>
+              <div>
+                <h2 style={{ fontSize: '16px', margin: 0, fontWeight: 600 }}>
+                  {currentConversation?.title || 'Medical Consultation'}
+                </h2>
+                <span style={{ fontSize: '12px', color: '#9ca3af' }}>AI Health Assistant</span>
+              </div>
+            </div>
+          </ChatHeader>
 
-        <ChatInput 
-          onSendMessage={handleSendMessage} 
-          disabled={isTyping} 
-        />
-      </ChatMain>
-    </PageContainer>
+          <MessageList 
+            messages={currentConversation?.messages || []} 
+            isTyping={isTyping} 
+            onResend={handleResend}
+          />
+
+          <ChatInput 
+            onSendMessage={handleSendMessage} 
+            disabled={isTyping} 
+          />
+        </ChatMain>
+      </div>
+    </PageLayout>
   );
 };
 
