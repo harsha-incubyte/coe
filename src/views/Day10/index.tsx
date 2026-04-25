@@ -9,6 +9,8 @@ import { ConversationSidebar } from './components/ConversationSidebar';
 import { MessageList } from './components/MessageList';
 import { ChatInput } from './components/ChatInput';
 import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
+import { Message } from './components/ChatMessage';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
@@ -18,7 +20,7 @@ import { useToast } from '@/hooks/useToast';
 interface Conversation {
   id: string;
   title: string;
-  messages: import('./components/ChatMessage').Message[];
+  messages: Message[];
   updatedAt: Date | number;
 }
 
@@ -26,6 +28,7 @@ const Day10: React.FC = () => {
   const { data: session } = useSession();
   const { showToast } = useToast();
   const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
+  const [chatSessionId, setChatSessionId] = React.useState(() => crypto.randomUUID());
 
   const { 
     data: conversations = [], 
@@ -65,39 +68,60 @@ const Day10: React.FC = () => {
   };
 
   const { messages, status, setMessages, sendMessage, regenerate, error: chatError } = useChat({
-    id: currentConversationId || undefined,
-    initialMessages: currentConversation?.messages || [],
-    onFinish: () => {
-      refetchConversations();
+    id: chatSessionId,
+    messages: (currentConversation?.messages || []).map(m => ({
+      ...m,
+      role: m.role as 'user' | 'assistant' | 'system',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
+    })),
+    onFinish: async () => {
+      const { data: newConversations } = await refetchConversations();
+      if (!currentConversationId && newConversations && newConversations.length > 0) {
+        // The newest conversation will be at the top due to 'orderBy: { updatedAt: desc }'
+        setCurrentConversationId(newConversations[0].id);
+      }
     },
     onError: (err) => {
       console.error('[CHAT_ERROR]', err);
       showToast('Failed to send message. The AI model might be unavailable.', 'error');
     },
-    // Note: In version 6+, api and body might need to be configured via transport 
-    // if the default transport doesn't pick them up from the top-level options.
-    ...({
+    transport: new DefaultChatTransport({
       api: '/api/chat',
       body: {
         conversationId: currentConversationId,
       },
-    } as any),
+    }),
   });
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
   React.useEffect(() => {
+    // Only update messages from the database if we're not currently chatting
+    if (status !== 'ready') return;
+
     if (currentConversation) {
-      setMessages(currentConversation.messages || []);
-    } else {
+      setMessages((currentConversation.messages || []).map(m => ({
+        ...m,
+        role: m.role as 'user' | 'assistant' | 'system',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
+      })));
+    } else if (currentConversationId === null) {
       setMessages([]);
     }
-  }, [currentConversationId, currentConversation, setMessages]);
+  }, [currentConversationId, currentConversation, setMessages, status]);
 
   const handleNewConversation = () => {
     setCurrentConversationId(null);
+    setChatSessionId(crypto.randomUUID());
     setMessages([]);
     setInput('');
+  };
+
+  const handleSelectConversation = (id: string) => {
+    setCurrentConversationId(id);
+    setChatSessionId(crypto.randomUUID());
   };
 
   const handleDeleteConversation = async (id: string) => {
@@ -143,10 +167,10 @@ const Day10: React.FC = () => {
     displayMessages.push({
       id: 'error-placeholder',
       role: 'assistant',
-      content: `Error: ${errorMessage}. Please try again or check the server status.`,
+      parts: [{ type: 'text', text: `Error: ${errorMessage}. Please try again or check the server status.` }],
       status: 'error',
-      createdAt: new Date(),
-    } as import('./components/ChatMessage').Message);
+      timestamp: Date.now(),
+    } as unknown as Message);
   }
 
   return (
@@ -155,7 +179,7 @@ const Day10: React.FC = () => {
         <ConversationSidebar
           conversations={conversations}
           currentConversationId={currentConversationId}
-          onSelectConversation={setCurrentConversationId}
+          onSelectConversation={handleSelectConversation}
           onNewConversation={handleNewConversation}
           onDeleteConversation={handleDeleteConversation}
         />

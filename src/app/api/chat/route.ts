@@ -119,7 +119,11 @@ export async function POST(req: Request) {
       },
     });
 
-    return result.toTextStreamResponse();
+    return result.toTextStreamResponse({
+      headers: {
+        'x-conversation-id': currentConversationId || '',
+      },
+    });
   } catch (error) {
     console.error('[CHAT_API] Unexpected error', error);
     return new Response(JSON.stringify({ 

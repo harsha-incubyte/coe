@@ -2,14 +2,13 @@ import React from 'react';
 import { MessageWrapper, MessageBubble, MessageMeta, ResendButton } from '../Day10.styles';
 import { AIResponseRenderer } from './AIResponseRenderer';
 
-export interface Message {
-  id: string;
-  role: 'user' | 'assistant' | 'system' | 'data' | 'tool';
-  content?: string;
-  parts?: Array<{ type: 'text'; text: string } | any>;
-  createdAt?: Date | number;
-  timestamp?: Date | number;
+import { UIMessage } from 'ai';
+
+export interface Message extends UIMessage {
   status?: string;
+  timestamp?: Date | number;
+  createdAt?: Date | number;
+  content?: string;
 }
 
 interface ChatMessageProps {
