@@ -10,8 +10,8 @@ const mockConversations: Conversation[] = [
     id: '1',
     title: 'Flu Symptoms',
     messages: [
-      { id: 'm1', role: 'user', content: 'I have a fever', timestamp: Date.now(), status: 'sent' },
-      { id: 'm2', role: 'assistant', content: 'Rest and hydrate', timestamp: Date.now(), status: 'sent' },
+      { id: 'm1', role: 'user', content: 'I have a fever', parts: [{ type: 'text', text: 'I have a fever' }], timestamp: Date.now(), status: 'sent' },
+      { id: 'm2', role: 'assistant', content: 'Rest and hydrate', parts: [{ type: 'text', text: 'Rest and hydrate' }], timestamp: Date.now(), status: 'sent' },
     ],
     updatedAt: Date.now(),
   },
@@ -19,7 +19,7 @@ const mockConversations: Conversation[] = [
     id: '2',
     title: 'Knee Pain',
     messages: [
-      { id: 'm3', role: 'user', content: 'My knee hurts after running', timestamp: Date.now(), status: 'sent' },
+      { id: 'm3', role: 'user', content: 'My knee hurts after running', parts: [{ type: 'text', text: 'My knee hurts after running' }], timestamp: Date.now(), status: 'sent' },
     ],
     updatedAt: Date.now(),
   },
@@ -27,7 +27,7 @@ const mockConversations: Conversation[] = [
     id: '3',
     title: 'General Health',
     messages: [
-      { id: 'm4', role: 'user', content: 'What is a good diet?', timestamp: Date.now(), status: 'sent' },
+      { id: 'm4', role: 'user', content: 'What is a good diet?', parts: [{ type: 'text', text: 'What is a good diet?' }], timestamp: Date.now(), status: 'sent' },
     ],
     updatedAt: Date.now(),
   }

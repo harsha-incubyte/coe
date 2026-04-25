@@ -43,7 +43,7 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
     const query = searchQuery.toLowerCase();
     return conversations.filter(convo => 
       convo.title.toLowerCase().includes(query) || 
-      convo.messages.some(msg => msg.content.toLowerCase().includes(query))
+      convo.messages.some(msg => (msg.content || '').toLowerCase().includes(query))
     );
   }, [conversations, searchQuery]);
 
