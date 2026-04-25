@@ -18,7 +18,7 @@ export interface PageLayoutProps {
 const PageContainer = styled(motion.div)<{ $maxWidth?: string; $isFull?: boolean }>`
   max-width: ${({ $maxWidth, $isFull }) => ($isFull ? 'none' : $maxWidth || '1200px')};
   margin: ${({ $isFull }) => ($isFull ? '0' : '0 auto')};
-  padding: ${({ theme, $isFull }) => ($isFull ? '0' : `${theme.spacing?.['3xl']} ${theme.spacing?.md}`)};
+  padding: ${({ theme, $isFull }) => ($isFull ? '0' : `${theme.spacing?.lg} ${theme.spacing?.md}`)};
   width: 100%;
   flex: 1;
   display: flex;
