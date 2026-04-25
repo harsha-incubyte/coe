@@ -40,3 +40,5 @@ cypress_output*.txt
 .env
 .env.local*.db
 *.db-journal
+
+/scratch

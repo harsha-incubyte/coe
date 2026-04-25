@@ -4,8 +4,9 @@ import { AIResponseRenderer } from './AIResponseRenderer';
 
 export interface Message {
   id: string;
-  role: 'user' | 'assistant' | 'system' | 'data';
-  content: string;
+  role: 'user' | 'assistant' | 'system' | 'data' | 'tool';
+  content?: string;
+  parts?: Array<{ type: 'text'; text: string } | any>;
   createdAt?: Date | number;
   timestamp?: Date | number;
   status?: string;
@@ -34,6 +35,13 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
     minute: 'numeric',
   }).format(new Date(timeValue)) : '--:--';
 
+  // Extract content string from message (handles both old string content and new parts format)
+  const displayContent = message.content || 
+    message.parts
+      ?.filter((p) => p.type === 'text')
+      .map((p) => p.text)
+      .join('') || '';
+
   return (
     <MessageWrapper $isUser={isUser} role="listitem">
       <MessageBubble 
@@ -42,9 +50,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
         aria-label={`${isUser ? 'You' : 'Medical Assistant'} said`}
       >
         {isUser ? (
-          <div style={{ whiteSpace: 'pre-wrap' }}>{message.content}</div>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{displayContent}</div>
         ) : (
-          <AIResponseRenderer content={message.content} />
+          <AIResponseRenderer content={displayContent} />
         )}
       </MessageBubble>
       <MessageMeta>

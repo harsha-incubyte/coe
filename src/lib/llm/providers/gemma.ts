@@ -10,7 +10,7 @@ export const gemmaAdapter: LLMProviderAdapter = {
       apiKey: 'not-needed',
     });
     // The exact model string might differ based on the MLX server, typically "gemma-2-9b"
-    return localOpenAI('gemma-2-9b');
+    return localOpenAI.chat('mlx-community/gemma-2-9b-it-4bit');
   },
 
   isHealthy: async () => {
