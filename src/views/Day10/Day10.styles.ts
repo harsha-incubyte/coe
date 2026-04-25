@@ -116,6 +116,38 @@ export const ConversationItem = styled.button<{ $isActive?: boolean }>`
       border-radius: 0 4px 4px 0;
     }
   `}
+
+  &:hover {
+    padding-right: 40px;
+  }
+`;
+
+export const DeleteButton = styled.button`
+  position: absolute;
+  right: ${spacing.sm};
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: ${colors.textMuted};
+  border: none;
+  padding: ${spacing.xs};
+  border-radius: ${borderRadius.md};
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+
+  &:hover {
+    color: ${colors.error};
+    background-color: ${colors.error}1A;
+  }
+
+  ${ConversationItem}:hover & {
+    opacity: 1;
+  }
 `;
 
 export const ConversationTitle = styled.span`
