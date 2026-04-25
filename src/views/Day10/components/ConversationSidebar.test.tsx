@@ -47,6 +47,7 @@ describe('ConversationSidebar', () => {
     currentConversationId: '1',
     onSelectConversation: vi.fn(),
     onNewConversation: vi.fn(),
+    onDeleteConversation: vi.fn(),
   };
 
   it('renders all conversations initially', () => {
