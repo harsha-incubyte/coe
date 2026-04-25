@@ -27,7 +27,7 @@ const PageContainer = styled(motion.div)<{ $maxWidth?: string; $isFull?: boolean
 PageContainer.defaultProps = { theme };
 
 const HeaderContainer = styled.header`
-  margin-bottom: ${({ theme }) => theme.spacing?.['3xl']};
+  margin-bottom: ${({ theme }) => theme.spacing?.xl};
 `;
 HeaderContainer.defaultProps = { theme };
 

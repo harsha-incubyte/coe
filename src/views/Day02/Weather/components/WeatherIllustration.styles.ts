@@ -3,11 +3,12 @@ import { theme } from '@/design-system/theme';
 
 export const WeatherCanvas = styled.div<{ $skyColor: string }>`
   width: 100%;
-  height: 450px;
+  min-width: 650px;
+  height: 400px;
   border-radius: ${({ theme }) => theme.borderRadius['2xl']};
   position: relative;
   overflow: hidden;
-  margin-top: ${({ theme }) => theme.spacing.md};
+  margin-top: ${({ theme }) => theme.spacing.none};
   box-shadow: ${({ theme }) => theme.shadows.xl};
   transition: background 1s ease;
   border: 1px solid ${({ theme }) => theme.colors.border};

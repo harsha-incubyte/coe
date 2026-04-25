@@ -8,13 +8,14 @@ const fadeIn = keyframes`
 
 export const WeatherTabsContainer = styled.div`
   width: 100%;
-  margin-top: ${({ theme }) => theme.spacing.md};
+  min-width: 650px;
+  margin-top: ${({ theme }) => theme.spacing.sm};
 
   .tabs-list {
     display: flex;
     justify-content: center;
     gap: ${({ theme }) => theme.spacing.md};
-    margin-bottom: ${({ theme }) => theme.spacing.xl};
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
     border-bottom: 1px solid ${({ theme }) => theme.colors.border};
     padding-bottom: ${({ theme }) => theme.spacing.sm};
   }

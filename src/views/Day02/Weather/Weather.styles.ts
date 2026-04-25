@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import { theme } from '@/design-system/theme';
 
 export const DashboardContainer = styled.div`
-  max-width: 600px;
-  margin: ${({ theme }) => theme.spacing['3xl']} auto;
+  max-width: 800px;
+  margin: ${({ theme }) => theme.spacing.lg} auto;
   padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
 export const SearchSection = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
   display: flex;
   flex-direction: column;
 `;

@@ -227,7 +227,6 @@ export const Weather: React.FC = () => {
                   </S.CityInfo>
                   <S.TimePill>{localTime}</S.TimePill>
                 </S.DataHeader>
-
                 <S.DataFooter>
                   <S.TempDisplay>
                     <S.TempValue>{Math.round(weather.temperature)}</S.TempValue>
