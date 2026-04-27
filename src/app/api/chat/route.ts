@@ -8,6 +8,23 @@ import { Session } from 'next-auth';
 
 export const maxDuration = 30;
 
+interface MessagePart {
+  type: string;
+  text?: string;
+}
+
+interface Message {
+  role: string;
+  content?: string;
+  parts?: MessagePart[];
+}
+
+interface ChatPayload {
+  messages: Message[];
+  model?: string;
+  conversationId?: string;
+}
+
 export async function POST(req: Request) {
   try {
     console.log('[CHAT_API] Received request');
@@ -18,7 +35,7 @@ export async function POST(req: Request) {
       console.log('[CHAT_API] Anonymous session');
     }
 
-    const payload = await req.json();
+    const payload = await req.json() as ChatPayload;
     const { messages, model = 'local-gemma', conversationId } = payload;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
@@ -32,12 +49,12 @@ export async function POST(req: Request) {
     const lastMessage = messages[messages.length - 1];
 
     // Helper to safely extract text content from both old and new message formats
-    const getMessageText = (msg: any) => {
+    const getMessageText = (msg: Message) => {
       if (typeof msg.content === 'string') return msg.content;
       if (Array.isArray(msg.parts)) {
         return msg.parts
-          .filter((p: any) => p.type === 'text')
-          .map((p: any) => p.text)
+          .filter((p: MessagePart) => p.type === 'text')
+          .map((p: MessagePart) => p.text || '')
           .join('');
       }
       return '';
@@ -97,9 +114,9 @@ export async function POST(req: Request) {
     console.log('[CHAT_API] Starting stream');
     const result = streamText({
       model: providerModel,
-      messages: await convertToModelMessages(messages.map((m: any) => ({
+      messages: await convertToModelMessages(messages.map((m: Message) => ({
         ...m,
-        parts: m.parts ?? [{ type: 'text', text: m.content }]
+        parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
       }))),
       onFinish: async (completion) => {
         if (session?.user?.id && currentConversationId) {

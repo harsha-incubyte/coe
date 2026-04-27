@@ -47,11 +47,11 @@ describe('MainLayout', () => {
     );
 
     const mainElement = screen.getByRole('main');
-    // spacing['2xl'] is 3rem (48px)
+    // md is 1rem, xl is 2rem
     expect(mainElement).toHaveStyle({
       maxWidth: '1200px',
       margin: '0 auto',
-      padding: '3rem'
+      padding: '1rem 2rem'
     });
   });
 });
