@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { TypingIndicatorContainer } from '../Day10.styles';
 
 const bounce = keyframes`
   0%, 80%, 100% { transform: scale(0); }
@@ -11,10 +12,10 @@ const TypingContainer = styled.div`
   align-items: center;
   gap: 4px;
   padding: 8px 12px;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 16px;
-  border-bottom-left-radius: 4px;
+  background: ${({ theme }) => theme.colors.surfaceLight};
+  border-radius: 1.25rem;
+  border-bottom-left-radius: 0.25rem;
+  box-shadow: ${({ theme }) => theme.shadows.md};
 `;
 
 const Dot = styled.div<{ $delay: string }>`
@@ -28,12 +29,12 @@ const Dot = styled.div<{ $delay: string }>`
 
 export const TypingIndicator: React.FC = () => {
   return (
-    <div style={{ padding: '0 2rem', marginBottom: '1rem' }}>
+    <TypingIndicatorContainer>
       <TypingContainer>
         <Dot $delay="-0.32s" />
         <Dot $delay="-0.16s" />
         <Dot $delay="0s" />
       </TypingContainer>
-    </div>
+    </TypingIndicatorContainer>
   );
 };
