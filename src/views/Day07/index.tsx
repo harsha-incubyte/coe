@@ -37,9 +37,20 @@ const Day07: React.FC = () => {
         <S.SectionHeader>
           <h2>Task Board</h2>
           <div className="status-pills">
-            <S.LoadingPill style={{ opacity: isLoading || createTask.isPending ? 1 : 0 }}>
-              {createTask.isPending ? 'Adding task...' : 'Syncing...'}
-            </S.LoadingPill>
+            <AnimatePresence mode="wait">
+              {(isLoading || createTask.isPending) && (
+                <motion.div
+                  key="loading-pill"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                >
+                  <S.LoadingPill>
+                    {createTask.isPending ? 'Adding task...' : 'Syncing...'}
+                  </S.LoadingPill>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </S.SectionHeader>
 
@@ -69,15 +80,17 @@ const Day07: React.FC = () => {
           {isLoading ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 0' }}>
               <Spinner />
-              <p style={{ color: '#94a3b8', marginTop: '1rem' }}>Fetching your tasks...</p>
+              <S.SectionFooter style={{ border: 'none', background: 'transparent', marginTop: '1rem' }}>
+                Fetching your tasks...
+              </S.SectionFooter>
             </div>
           ) : isError ? (
             <div style={{ color: '#ef4444', padding: '1rem' }}>
               <p>Error: {(error as Error).message}</p>
             </div>
           ) : (
-            <S.TasksList>
-              <AnimatePresence>
+            <S.TasksList as="div">
+              <AnimatePresence mode="popLayout">
                 {tasks?.map((task: Task) => (
                   <motion.div
                     key={task.id}
@@ -87,11 +100,16 @@ const Day07: React.FC = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                   >
                     <S.TaskItem $completed={task.completed}>
-                      <Checkbox
-                        label={task.title}
-                        checked={task.completed}
-                        onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
-                      />
+                      <S.TaskHeader>
+                        <Checkbox
+                          label={task.title}
+                          checked={task.completed}
+                          onChange={() => updateTask.mutate({ id: task.id, completed: !task.completed })}
+                        />
+                      </S.TaskHeader>
+                      <S.TaskFooter>
+                        <span>Status: {task.completed ? 'Completed' : 'Pending'}</span>
+                      </S.TaskFooter>
                     </S.TaskItem>
                   </motion.div>
                 ))}

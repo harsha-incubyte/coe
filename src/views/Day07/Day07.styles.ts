@@ -9,7 +9,7 @@ export const Day07Container = styled.div`
 `;
 Day07Container.defaultProps = { theme };
 
-export const TasksSection = styled.article`
+export const TasksSection = styled.section`
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -51,12 +51,11 @@ export const LoadingPill = styled.div`
   padding: 0.4rem 1rem;
   border-radius: 100px;
   font-weight: 700;
-  background: ${({ theme }) => `${theme.colors.primary[500]}20`};
-  color: ${({ theme }) => theme.colors.primary[400]};
-  border: 1px solid ${({ theme }) => `${theme.colors.primary[500]}40`};
+  background: ${({ theme }) => `${theme.colors.primary[500]}30`};
+  color: ${({ theme }) => theme.colors.primary[300]};
+  border: 1px solid ${({ theme }) => `${theme.colors.primary[500]}60`};
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: opacity 0.3s ease;
 `;
 LoadingPill.defaultProps = { theme };
 
@@ -79,24 +78,39 @@ export const TasksList = styled.ul`
   gap: 1rem;
 `;
 
-export const TaskItem = styled.li<{ $completed?: boolean }>`
+export const TaskItem = styled.article<{ $completed?: boolean }>`
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  background: ${({ theme }) => `${theme.colors.surface}40`};
-  padding: 1.25rem;
+  flex-direction: column;
+  background: ${({ theme }) => theme.colors.surfaceLight};
   border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 
   &:hover {
-    background: ${({ theme }) => `${theme.colors.surface}60`};
-    border-color: ${({ theme }) => `${theme.colors.primary[500]}40`};
-    transform: translateX(8px);
+    border-color: ${({ theme }) => `${theme.colors.primary[500]}60`};
+    transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.shadows.lg};
   }
 `;
 TaskItem.defaultProps = { theme };
+
+export const TaskHeader = styled.header`
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+`;
+
+export const TaskFooter = styled.footer`
+  padding: 0.75rem 1.25rem;
+  background: ${({ theme }) => `${theme.colors.black}20`};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
 
 export const Day07Footer = styled.footer`
   margin-top: 4rem;
@@ -123,13 +137,13 @@ export const ConceptCard = styled.div`
   h3 {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.white};
     font-weight: 700;
   }
 
   p {
     font-size: 0.9375rem;
-    color: ${({ theme }) => theme.colors.textSecondary};
+    color: ${({ theme }) => theme.colors.neutral[200]};
     line-height: 1.6;
   }
 
