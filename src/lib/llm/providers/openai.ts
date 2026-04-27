@@ -16,5 +16,6 @@ export const openaiAdapter: LLMProviderAdapter = {
       return false;
     }
     return true;
-  }
+  },
+  supportsSystemRole: true
 };

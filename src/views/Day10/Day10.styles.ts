@@ -487,6 +487,26 @@ export const TemplateIcon = styled.span`
 export const TemplateDescription = styled.p`
   font-size: ${typography.fontSize.xs};
   color: ${colors.textMuted};
-  margin: 0;
   line-height: 1.4;
+`;
+
+export const TokenInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: ${spacing.xs};
+  width: 100%;
+`;
+
+export const CostBadge = styled.span`
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: ${borderRadius.sm};
+  color: ${colors.primary[400]};
+  font-weight: ${typography.fontWeight.semibold};
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  margin-left: ${spacing.xs};
 `;

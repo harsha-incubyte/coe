@@ -16,5 +16,6 @@ export const anthropicAdapter: LLMProviderAdapter = {
       return false;
     }
     return true;
-  }
+  },
+  supportsSystemRole: true
 };

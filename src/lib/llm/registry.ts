@@ -11,7 +11,10 @@ const providers: Record<SupportedModel, LLMProviderAdapter> = {
 // Prioritized list for failover
 const FALLBACK_ORDER: SupportedModel[] = ['local-gemma', 'openai', 'anthropic'];
 
-export async function getLLMProvider(requestedModelStr: string): Promise<LanguageModelV3> {
+export async function getLLMProvider(requestedModelStr: string): Promise<{
+  model: LanguageModelV3;
+  adapter: LLMProviderAdapter;
+}> {
   let targetModel = requestedModelStr as SupportedModel;
   
   // 1. Strict Validation
@@ -23,7 +26,10 @@ export async function getLLMProvider(requestedModelStr: string): Promise<Languag
   // 2. Health Check Primary
   const primaryProvider = providers[targetModel];
   if (await primaryProvider.isHealthy()) {
-    return primaryProvider.getModel();
+    return {
+      model: primaryProvider.getModel(),
+      adapter: primaryProvider
+    };
   }
 
   // 3. Failover Strategy
@@ -33,7 +39,10 @@ export async function getLLMProvider(requestedModelStr: string): Promise<Languag
       const fallbackProvider = providers[fallback];
       if (await fallbackProvider.isHealthy()) {
         console.log(`Successfully failed over to '${fallback}'`);
-        return fallbackProvider.getModel();
+        return {
+          model: fallbackProvider.getModel(),
+          adapter: fallbackProvider
+        };
       }
     }
   }

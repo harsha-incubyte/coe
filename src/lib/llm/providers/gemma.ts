@@ -27,5 +27,6 @@ export const gemmaAdapter: LLMProviderAdapter = {
       console.warn('Local Gemma health check failed:', err);
       return false;
     }
-  }
+  },
+  supportsSystemRole: false
 };

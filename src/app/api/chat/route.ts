@@ -123,9 +123,9 @@ export async function POST(req: Request) {
 
     // The registry handles validation, health checks, and failovers automatically
     console.log('[CHAT_API] Getting LLM provider', { model });
-    let providerModel;
+    let provider;
     try {
-      providerModel = await getLLMProvider(model);
+      provider = await getLLMProvider(model);
     } catch (modelError) {
       console.error('[CHAT_API] Failed to get LLM provider', modelError);
       return new Response(JSON.stringify({ 
@@ -138,12 +138,38 @@ export async function POST(req: Request) {
     }
 
     console.log('[CHAT_API] Starting stream');
+    
+    // Determine how to handle system prompt based on provider capabilities
+    let finalMessages = [...normalizedMessages];
+    const supportsSystem = provider.adapter.supportsSystemRole !== false;
+
+    if (systemPrompt) {
+      if (supportsSystem) {
+        finalMessages = [{ role: 'system', content: systemPrompt } as Message, ...finalMessages];
+      } else {
+        // Prepend system prompt to the first user message
+        const firstUserMsgIndex = finalMessages.findIndex(m => m.role === 'user');
+        if (firstUserMsgIndex !== -1) {
+          const firstUserMsg = { ...finalMessages[firstUserMsgIndex] };
+          const text = getMessageText(firstUserMsg);
+          const combinedContent = `${systemPrompt}\n\n${text}`;
+          
+          if (firstUserMsg.parts) {
+            firstUserMsg.parts = [{ type: 'text', text: combinedContent }];
+          } else {
+            firstUserMsg.content = combinedContent;
+          }
+          finalMessages[firstUserMsgIndex] = firstUserMsg;
+        } else {
+          // If no user message found (unlikely), add it as a user message
+          finalMessages = [{ role: 'user', content: systemPrompt } as Message, ...finalMessages];
+        }
+      }
+    }
+
     const result = streamText({
-      model: providerModel,
-      messages: await convertToModelMessages([
-        ...(systemPrompt ? [{ role: 'system', content: systemPrompt } as Message] : []),
-        ...normalizedMessages
-      ].map((m: Message) => ({
+      model: provider.model,
+      messages: await convertToModelMessages(finalMessages.map((m: Message) => ({
         ...m,
         role: m.role as 'user' | 'assistant' | 'system',
         parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
@@ -152,12 +178,18 @@ export async function POST(req: Request) {
       onFinish: async (completion) => {
         if (session?.user?.id && currentConversationId) {
           try {
-            console.log('[CHAT_API] Saving assistant response to DB');
+            console.log('[CHAT_API] Saving assistant response to DB', { 
+              tokens: completion.usage,
+              model: model 
+            });
             await prisma.message.create({
               data: {
                 role: 'assistant',
                 content: completion.text,
                 conversationId: currentConversationId,
+                promptTokens: completion.usage.promptTokens,
+                completionTokens: completion.usage.completionTokens,
+                model: model,
               }
             });
           } catch (finishDbError) {

@@ -10,4 +10,6 @@ export interface LLMProviderAdapter {
   getModel: () => LanguageModelV3;
   // Performs a health check (e.g., pinging a /health or /models endpoint or checking keys)
   isHealthy: () => Promise<boolean>;
+  // Whether the provider supports the 'system' role
+  supportsSystemRole?: boolean;
 }

@@ -7,11 +7,13 @@ import {
   SearchWrapper,
   ConversationTitle,
   ConversationSubtitle,
-  DeleteButton
+  DeleteButton,
+  CostBadge
 } from '../Day10.styles';
 import { Button } from '@/design-system/atoms';
 import { SearchBar } from '@/design-system/molecules';
 import type { Message } from './ChatMessage';
+import { calculateCost, formatCost } from '@/utils/token-cost';
 
 export interface Conversation {
   id: string;
@@ -84,6 +86,11 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
               <ConversationTitle>{convo.title}</ConversationTitle>
               <ConversationSubtitle>
                 {convo.messages.length} messages
+                <CostBadge style={{ fontSize: '0.6rem', padding: '1px 4px' }}>
+                  {formatCost(
+                    convo.messages.reduce((acc, msg) => acc + calculateCost(msg.promptTokens, msg.completionTokens, msg.model), 0)
+                  )}
+                </CostBadge>
               </ConversationSubtitle>
               <DeleteButton 
                 onClick={(e) => {

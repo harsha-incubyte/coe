@@ -1,6 +1,7 @@
 import React from 'react';
-import { MessageWrapper, MessageBubble, MessageMeta, ResendButton } from '../Day10.styles';
+import { MessageWrapper, MessageBubble, MessageMeta, ResendButton, CostBadge } from '../Day10.styles';
 import { AIResponseRenderer } from './AIResponseRenderer';
+import { calculateCost, formatCost } from '@/utils/token-cost';
 
 import { UIMessage } from 'ai';
 
@@ -9,6 +10,9 @@ export interface Message extends UIMessage {
   timestamp?: Date | number;
   createdAt?: Date | number;
   content?: string;
+  promptTokens?: number;
+  completionTokens?: number;
+  model?: string;
 }
 
 interface ChatMessageProps {
@@ -58,6 +62,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
         <span aria-hidden="true">{timeString}</span>
         {/* Visually hidden but accessible time */}
         <span className="sr-only">Sent at {timeString}</span>
+        
+        {!isUser && message.promptTokens !== undefined && (
+          <CostBadge>
+            {formatCost(calculateCost(message.promptTokens, message.completionTokens, message.model))}
+          </CostBadge>
+        )}
         
         {isUser && message.status === 'delivering' && <span>Sending...</span>}
         {isError && (
