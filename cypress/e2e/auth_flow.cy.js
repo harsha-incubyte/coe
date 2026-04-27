@@ -23,27 +23,21 @@ describe('Authentication Flow', () => {
   });
 
   it('should login, view weather, search and logout', () => {
-    // Intercept login request
-    cy.intercept('POST', '**/api/login', {
-      statusCode: 200,
-      body: { email: 'harsha@incubyte.co', token: 'mock-token' }
-    }).as('loginRequest');
-
     // Visit login page
-    cy.visit('/day-02/login');
+    cy.visit('/login?callbackUrl=/day-02');
 
     // Attempt login with valid credentials
-    cy.get('#email').type('harsha@incubyte.co');
+    cy.get('#email').type('doctor@example.com');
     cy.get('#password').type('password123');
-    cy.get('.login-form').submit();
+    cy.get('button[type="submit"]').click();
 
     // Verify redirection to weather dashboard
-    cy.url().should('include', '/day-02/weather');
-    cy.get('#user-profile-btn').should('be.visible');
-    cy.get('input[placeholder="Search for a city..."]').should('be.visible');
+    cy.url().should('include', '/day-02');
+    cy.get('#user-profile-btn', { timeout: 10000 }).should('be.visible');
+    cy.get('[data-testid="city-search-input"]', { timeout: 10000 }).should('be.visible');
 
     // Search for a city
-    cy.get('input[placeholder="Search for a city..."]').type('Lond');
+    cy.get('[data-testid="city-search-input"]').first().should('be.visible').type('Lond');
     cy.get('.suggestions-list li').first().click();
 
     // Verify weather data is displayed
@@ -56,7 +50,7 @@ describe('Authentication Flow', () => {
 
     
     // Verify redirection back to login page
-    cy.url().should('include', '/day-02/login');
+    cy.url().should('include', '/login');
     cy.get('#email').should('be.visible');
   });
 });

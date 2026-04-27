@@ -167,6 +167,8 @@ export const Weather: React.FC = () => {
         <S.SearchContainer ref={searchContainerRef}>
           <form onSubmit={(e) => e.preventDefault()}>
             <Input
+              id="city-search-input"
+              data-testid="city-search-input"
               label="Search for a city"
               hideLabel
               type="text"

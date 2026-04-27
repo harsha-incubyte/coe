@@ -1,11 +1,10 @@
 'use client';
 
-import { Spinner } from '@/design-system/atoms';
-import { lazy, Suspense } from 'react'
+import React from 'react';
 import { PageLayout } from '@/design-system/layout/PageLayout'
 
 
-const Weather = lazy(() => import('./Weather/Weather').then(m => ({ default: m.Weather })))
+import { Weather } from './Weather/Weather';
 
 const Day02 = () => {
   return (
@@ -13,9 +12,7 @@ const Day02 = () => {
       title="Weather | Authentication | API Integration"
       description="Testing routes, API mocking, and protected paths."
     >
-      <Suspense fallback={<Spinner />}>
-        <Weather />
-      </Suspense>
+      <Weather />
     </PageLayout>
   )
 }
