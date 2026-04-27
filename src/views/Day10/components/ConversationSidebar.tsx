@@ -71,6 +71,14 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
               key={convo.id}
               $isActive={convo.id === currentConversationId}
               onClick={() => onSelectConversation(convo.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelectConversation(convo.id);
+                }
+              }}
+              role="button"
+              tabIndex={0}
               aria-current={convo.id === currentConversationId ? "page" : undefined}
             >
               <ConversationTitle>{convo.title}</ConversationTitle>

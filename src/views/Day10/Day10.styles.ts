@@ -83,7 +83,7 @@ export const ConversationListContainer = styled.div`
   }
 `;
 
-export const ConversationItem = styled.button<{ $isActive?: boolean }>`
+export const ConversationItem = styled.div<{ $isActive?: boolean }>`
   width: 100%;
   text-align: left;
   padding: ${spacing.md};
