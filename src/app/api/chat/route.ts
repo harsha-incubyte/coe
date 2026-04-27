@@ -14,7 +14,7 @@ interface MessagePart {
 }
 
 interface Message {
-  role: string;
+  role: 'user' | 'assistant' | 'system';
   content?: string;
   parts?: MessagePart[];
 }
@@ -63,6 +63,31 @@ export async function POST(req: Request) {
     const lastMessageContent = getMessageText(lastMessage);
     if (!lastMessageContent) {
       console.warn('[CHAT_API] Empty message content detected');
+    }
+
+    // Normalize messages to ensure alternating roles (user/assistant)
+    // This is required by many LLM providers (including Gemini and some local servers)
+    const normalizedMessages: Message[] = [];
+    for (const msg of messages) {
+      const last = normalizedMessages[normalizedMessages.length - 1];
+      if (last && last.role === msg.role) {
+        const text = getMessageText(msg);
+        const separator = '\n\n';
+        
+        if (last.parts) {
+          last.parts.push({ type: 'text', text: separator + text });
+        } else if (typeof last.content === 'string') {
+          last.content += separator + text;
+        } else {
+          last.content = text;
+        }
+      } else {
+        // Create a shallow copy of the message and its parts
+        normalizedMessages.push({ 
+          ...msg,
+          parts: msg.parts ? [...msg.parts] : undefined
+        });
+      }
     }
 
     // Optional: Save user message to DB immediately
@@ -114,8 +139,9 @@ export async function POST(req: Request) {
     console.log('[CHAT_API] Starting stream');
     const result = streamText({
       model: providerModel,
-      messages: await convertToModelMessages(messages.map((m: Message) => ({
+      messages: await convertToModelMessages(normalizedMessages.map((m: Message) => ({
         ...m,
+        role: m.role as 'user' | 'assistant' | 'system',
         parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
       }))),
       stopSequences: ['<end_of_turn>'],
