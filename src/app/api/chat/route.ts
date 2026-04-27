@@ -118,6 +118,7 @@ export async function POST(req: Request) {
         ...m,
         parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
       }))),
+      stopSequences: ['<end_of_turn>'],
       onFinish: async (completion) => {
         if (session?.user?.id && currentConversationId) {
           try {

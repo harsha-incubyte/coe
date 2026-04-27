@@ -69,10 +69,13 @@ const MarkdownContainer = styled.div`
 `;
 
 export const AIResponseRenderer: React.FC<{ content: string }> = ({ content }) => {
+  // Sanitize content to remove leaking stop tokens like <end_of_turn>
+  const sanitizedContent = content.replace(/<end_of_turn>/g, '');
+
   return (
     <MarkdownContainer>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {content}
+        {sanitizedContent}
       </ReactMarkdown>
     </MarkdownContainer>
   );
