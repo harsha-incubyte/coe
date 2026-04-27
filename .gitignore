@@ -42,3 +42,4 @@ cypress_output*.txt
 *.db-journal
 
 /scratch
+prisma/dev.db

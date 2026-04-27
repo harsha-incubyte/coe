@@ -9,7 +9,7 @@ import { ConversationSidebar } from './components/ConversationSidebar';
 import { MessageList } from './components/MessageList';
 import { ChatInput } from './components/ChatInput';
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { TextStreamChatTransport } from 'ai';
 import { Message } from './components/ChatMessage';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
@@ -69,6 +69,7 @@ const Day10: React.FC = () => {
 
   const { messages, status, setMessages, sendMessage, regenerate, error: chatError } = useChat({
     id: chatSessionId,
+    experimental_throttle: 50,
     messages: (currentConversation?.messages || []).map(m => ({
       ...m,
       role: m.role as 'user' | 'assistant' | 'system',
@@ -86,7 +87,7 @@ const Day10: React.FC = () => {
       console.error('[CHAT_ERROR]', err);
       showToast('Failed to send message. The AI model might be unavailable.', 'error');
     },
-    transport: new DefaultChatTransport({
+    transport: new TextStreamChatTransport({
       api: '/api/chat',
       body: {
         conversationId: currentConversationId,
