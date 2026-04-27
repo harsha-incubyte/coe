@@ -390,3 +390,41 @@ export const TypingIndicatorContainer = styled.div`
   margin: 0 auto;
   width: 100%;
 `;
+
+export const ScrollNudge = styled.button<{ $visible: boolean }>`
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(${(props) => (props.$visible ? '0' : '20px')});
+  background-color: ${colors.white};
+  color: ${colors.primary[600]};
+  border: 2px solid ${colors.primary[500]};
+  border-radius: ${borderRadius.full};
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  opacity: ${(props) => (props.$visible ? '1' : '0')};
+  pointer-events: ${(props) => (props.$visible ? 'all' : 'none')};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 20;
+
+  &:hover {
+    background-color: ${colors.primary[50]};
+    transform: translateX(-50%) translateY(-2px);
+    border-color: ${colors.primary[400]};
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.5);
+  }
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;

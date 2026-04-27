@@ -212,6 +212,7 @@ const Day10: React.FC = () => {
           <MessageList 
             messages={displayMessages} 
             isTyping={status === 'submitted'} 
+            status={status}
             onResend={() => regenerate()} 
           />
 
