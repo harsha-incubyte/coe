@@ -423,8 +423,70 @@ export const ScrollNudge = styled.button<{ $visible: boolean }>`
     transform: translateX(-50%) scale(0.95);
   }
 
+
   svg {
     width: 24px;
     height: 24px;
   }
+`;
+
+export const TemplateSelectorContainer = styled.div`
+  display: flex;
+  gap: ${spacing.md};
+  padding: ${spacing.lg};
+  overflow-x: auto;
+  background: rgba(2, 6, 23, 0.4);
+  border-bottom: 1px solid ${colors.border};
+  
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${colors.border};
+    border-radius: 10px;
+  }
+`;
+
+export const TemplateCard = styled.button<{ $isActive: boolean }>`
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.xs};
+  padding: ${spacing.md};
+  background: ${(props) => (props.$isActive ? `${colors.primary[600]}33` : colors.surface)};
+  border: 1px solid ${(props) => (props.$isActive ? colors.primary[500] : colors.border)};
+  border-radius: ${borderRadius.xl};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  color: ${colors.text};
+
+  &:hover {
+    background: ${(props) => (props.$isActive ? `${colors.primary[600]}44` : colors.surfaceLight)};
+    transform: translateY(-2px);
+    border-color: ${(props) => (props.$isActive ? colors.primary[400] : `${colors.primary[500]}66`)};
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+export const TemplateHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${spacing.sm};
+  font-weight: ${typography.fontWeight.bold};
+  font-size: ${typography.fontSize.sm};
+`;
+
+export const TemplateIcon = styled.span`
+  font-size: 1.5rem;
+`;
+
+export const TemplateDescription = styled.p`
+  font-size: ${typography.fontSize.xs};
+  color: ${colors.textMuted};
+  margin: 0;
+  line-height: 1.4;
 `;

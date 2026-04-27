@@ -23,6 +23,7 @@ interface ChatPayload {
   messages: Message[];
   model?: string;
   conversationId?: string;
+  systemPrompt?: string;
 }
 
 export async function POST(req: Request) {
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
     }
 
     const payload = await req.json() as ChatPayload;
-    const { messages, model = 'local-gemma', conversationId } = payload;
+    const { messages, model = 'local-gemma', conversationId, systemPrompt } = payload;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       console.error('[CHAT_API] Invalid messages payload', payload);
@@ -139,7 +140,10 @@ export async function POST(req: Request) {
     console.log('[CHAT_API] Starting stream');
     const result = streamText({
       model: providerModel,
-      messages: await convertToModelMessages(normalizedMessages.map((m: Message) => ({
+      messages: await convertToModelMessages([
+        ...(systemPrompt ? [{ role: 'system', content: systemPrompt } as Message] : []),
+        ...normalizedMessages
+      ].map((m: Message) => ({
         ...m,
         role: m.role as 'user' | 'assistant' | 'system',
         parts: m.parts ?? [{ type: 'text', text: m.content || '' }]

@@ -11,6 +11,8 @@ import { ChatInput } from './components/ChatInput';
 import { useChat } from '@ai-sdk/react';
 import { TextStreamChatTransport } from 'ai';
 import { Message } from './components/ChatMessage';
+import { PromptTemplateSelector } from './components/PromptTemplateSelector';
+import { MEDICAL_PROMPTS, DEFAULT_PROMPT, PromptTemplate } from '@/lib/llm/prompts';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
@@ -29,6 +31,7 @@ const Day10: React.FC = () => {
   const { showToast } = useToast();
   const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
   const [chatSessionId, setChatSessionId] = React.useState(() => crypto.randomUUID());
+  const [selectedTemplate, setSelectedTemplate] = React.useState<PromptTemplate>(DEFAULT_PROMPT);
 
   const { 
     data: conversations = [], 
@@ -91,6 +94,7 @@ const Day10: React.FC = () => {
       api: '/api/chat',
       body: {
         conversationId: currentConversationId,
+        systemPrompt: selectedTemplate.systemPrompt,
       },
     }),
   });
@@ -118,6 +122,7 @@ const Day10: React.FC = () => {
     setChatSessionId(crypto.randomUUID());
     setMessages([]);
     setInput('');
+    setSelectedTemplate(DEFAULT_PROMPT);
   };
 
   const handleSelectConversation = (id: string) => {
@@ -208,6 +213,14 @@ const Day10: React.FC = () => {
               </div>
             </div>
           </ChatHeader>
+
+          {messages.length === 0 && (
+            <PromptTemplateSelector 
+              selectedTemplateId={selectedTemplate.id}
+              onSelectTemplate={setSelectedTemplate}
+              disabled={isLoading}
+            />
+          )}
 
           <MessageList 
             messages={displayMessages} 
