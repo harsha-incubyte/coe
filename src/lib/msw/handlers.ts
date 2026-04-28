@@ -139,29 +139,21 @@ export const chatHandlers = [
         const words = text.split(' ');
         
         // Wait to simulate processing time (shows typing indicator)
-        await delay(1500);
+        await delay(1000);
         
         for (const word of words) {
-          const chunk = JSON.stringify({ choices: [{ delta: { content: word + ' ' } }] });
-          controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
-          await delay(50); // Fast stream
+          // Simple text stream
+          controller.enqueue(encoder.encode(word + ' '));
+          await delay(30); // Fast stream
         }
         
-        // Simulate usage token payload (custom extension for tracking)
-        const finalChunk = JSON.stringify({ 
-          usage: { prompt_tokens: 24, completion_tokens: words.length, total_tokens: 24 + words.length }
-        });
-        controller.enqueue(encoder.encode(`data: ${finalChunk}\n\n`));
-        controller.enqueue(encoder.encode('data: [DONE]\n\n'));
         controller.close();
       }
     });
 
     return new HttpResponse(stream, {
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        'Content-Type': 'text/plain; charset=utf-8',
       }
     });
   })

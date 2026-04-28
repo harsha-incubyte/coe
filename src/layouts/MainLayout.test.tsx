@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+
 import MainLayout from './MainLayout';
 import { describe, it, expect } from 'vitest';
 import { ThemeManager } from '@/design-system/theme/ThemeManager';
@@ -7,9 +7,9 @@ import { ThemeManager } from '@/design-system/theme/ThemeManager';
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <ThemeManager>
-      <BrowserRouter>
+      
         {ui}
-      </BrowserRouter>
+      
     </ThemeManager>
   );
 };
@@ -47,11 +47,11 @@ describe('MainLayout', () => {
     );
 
     const mainElement = screen.getByRole('main');
-    // spacing['2xl'] is 3rem (48px)
+    // md is 1rem, xl is 2rem
     expect(mainElement).toHaveStyle({
       maxWidth: '1200px',
       margin: '0 auto',
-      padding: '3rem'
+      padding: '1rem 2rem'
     });
   });
 });

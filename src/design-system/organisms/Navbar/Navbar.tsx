@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAppStore } from '@/store';
+import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/react';
 import { useToast } from '@/hooks/useToast';
 import logo from '@/assets/logo-incubyte.png';
 import { queryClient } from '@/lib/queryClient';
@@ -64,10 +65,11 @@ const NavLinks = styled.ul`
 `;
 NavLinks.defaultProps = { theme };
 
-const StyledNavLink = styled(NavLink)`
+const StyledNavLink = styled(Link)<{ $active?: boolean }>`
   text-decoration: none;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  color: ${({ theme, $active }) => $active ? theme.colors.primary[300] : theme.colors.textSecondary};
+  background: ${({ theme, $active }) => $active ? theme.colors.primary[50] + '1A' : 'transparent'};
+  font-weight: ${({ theme, $active }) => $active ? theme.typography.fontWeight.bold : theme.typography.fontWeight.medium};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   transition: all 0.2s ease;
   padding: 0.5rem 1rem;
@@ -76,12 +78,6 @@ const StyledNavLink = styled(NavLink)`
   &:hover {
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.surfaceLight};
-  }
-
-  &.active {
-    color: ${({ theme }) => theme.colors.primary[300]};
-    background: ${({ theme }) => theme.colors.primary[50] + '1A'}; // 10% opacity
-    font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   }
 `;
 StyledNavLink.defaultProps = { theme };
@@ -150,7 +146,7 @@ const UserEmail = styled.span`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const LoginBtn = styled(NavLink)`
+const LoginBtn = styled(Link)`
   text-decoration: none;
   color: white;
   background: ${({ theme }) => theme.colors.primary[600]};
@@ -170,15 +166,18 @@ const LoginBtn = styled(NavLink)`
 LoginBtn.defaultProps = { theme };
 
 export const Navbar: React.FC = () => {
-  const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAppStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const user = session?.user;
   const { showToast } = useToast();
 
-  const handleLogout = (e?: React.MouseEvent) => {
+  const handleLogout = async (e?: React.MouseEvent) => {
     e?.preventDefault();
-    logout();
+    await signOut({ redirect: false });
     showToast('You have been logged out successfully.', 'info');
-    navigate('/day-02/login');
+    router.push('/login');
   };
 
   const prefetchTasks = () => {
@@ -205,15 +204,16 @@ export const Navbar: React.FC = () => {
     <Header>
       <Nav aria-label="Main Navigation">
         <LogoSection>
-          <LogoImage src={logo} alt="Incubyte Logo" />
+          <LogoImage src={logo.src} alt="Incubyte Logo" />
           <LogoText>COE</LogoText>
         </LogoSection>
         <NavLinks>
           {navItems.map((item) => (
             <li key={item.to}>
               <StyledNavLink 
-                to={item.to}
+                href={item.to}
                 onMouseEnter={item.onMouseEnter}
+                $active={pathname === item.to}
               >
                 {item.label}
               </StyledNavLink>
@@ -234,13 +234,13 @@ export const Navbar: React.FC = () => {
                   aria-label="User Profile"
                 >
                   <AvatarPlaceholder>
-                    {user?.name.charAt(0).toUpperCase() || 'U'}
+                    {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                   </AvatarPlaceholder>
                 </UserProfileBtn>
               )}
               items={[
-                { label: 'Profile', onClick: () => navigate('#profile') },
-                { label: 'Settings', onClick: () => navigate('#settings') },
+                { label: 'Profile', onClick: () => router.push('#profile') },
+                { label: 'Settings', onClick: () => router.push('#settings') },
                 { label: 'Logout', onClick: (e?: React.MouseEvent) => handleLogout(e), variant: 'danger' },
               ]}
             >
@@ -252,7 +252,7 @@ export const Navbar: React.FC = () => {
               </div>
             </Dropdown>
           ) : (
-            <LoginBtn to="/day-02/login">Login</LoginBtn>
+            <LoginBtn href="/login">Login</LoginBtn>
           )}
         </NavbarActions>
       </Nav>

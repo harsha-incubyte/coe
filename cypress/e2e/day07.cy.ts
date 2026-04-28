@@ -12,18 +12,31 @@ describe('Day 07: Task Board & Atomic Refactor', () => {
       }));
     });
 
+    // Mock tasks API
+    cy.intercept('GET', '/api/tasks', {
+      statusCode: 200,
+      body: [
+        { id: '1', title: 'Task 1', completed: false },
+        { id: '2', title: 'Task 2', completed: true }
+      ]
+    }).as('getTasks');
+
     // Visit Day 07 page
     cy.visit('/day-07');
+    cy.wait('@getTasks');
     cy.get('main').should('be.visible');
     cy.injectAxe();
   });
 
   it('should have no accessibility violations on the task board', () => {
-    // Wait for the simulated loading state to finish
+    // Wait for the simulated loading state to finish and animations to stabilize
     cy.get('[data-testid="tasks-list-container"]').should('be.visible');
+    // Ensure the footer/concept cards are also visible and stable
+    cy.contains('React Query Cache').should('be.visible');
+    cy.wait(500); // Give motion animations a moment to settle
     
     // Audit the full page
-    cy.checkA11y(null, {
+    cy.checkA11y(undefined, {
       rules: {
         // Heading rules can be a bit strict on layouts, 
         // but we should aim for perfect results

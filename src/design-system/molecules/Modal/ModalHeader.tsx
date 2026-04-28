@@ -43,10 +43,11 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   title,
   onClose,
   className,
+  titleId,
 }) => {
   return (
     <HeaderContainer className={className}>
-      <Title>{title}</Title>
+      <Title id={titleId}>{title}</Title>
       {onClose && (
         <CloseButton onClick={onClose} aria-label="Close modal">
           &times;

@@ -12,6 +12,7 @@ export interface ModalHeaderProps {
   title: string;
   onClose?: () => void;
   className?: string;
+  titleId?: string;
 }
 
 export interface ModalFooterProps {

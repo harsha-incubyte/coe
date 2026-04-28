@@ -22,6 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*test-output*.txt
 
 # Cypress
 cypress/screenshots
@@ -33,3 +34,12 @@ storybook-static
 auth_flow_output.txt
 scratch/cypress_output.txt
 cypress_output*.txt
+
+.next
+/src/generated/prisma
+.env
+.env.local*.db
+*.db-journal
+
+/scratch
+prisma/dev.db

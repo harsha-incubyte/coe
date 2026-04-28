@@ -19,10 +19,16 @@ const StyledToastContainer = styled.div`
 
 export const ToastContainer: React.FC = () => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleShowToast = (event: CustomEvent<ToastData>) => {
@@ -39,6 +45,8 @@ export const ToastContainer: React.FC = () => {
     window.addEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
     return () => window.removeEventListener(SHOW_TOAST_EVENT, handleShowToast as EventListener);
   }, []);
+
+  if (!isMounted) return null;
 
   return createPortal(
     <StyledToastContainer 

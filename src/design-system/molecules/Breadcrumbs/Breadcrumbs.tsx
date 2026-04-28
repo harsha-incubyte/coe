@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { theme } from '@/design-system/theme';
 
 export interface BreadcrumbItem {
@@ -74,7 +74,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
           return (
             <BreadcrumbListItem key={item.label}>
               {item.href && !isLast ? (
-                <BreadcrumbLink to={item.href}>{item.label}</BreadcrumbLink>
+                <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
               ) : (
                 <BreadcrumbCurrent aria-current="page">{item.label}</BreadcrumbCurrent>
               )}

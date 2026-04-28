@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useId } from 'react';
+import React, { useEffect, useRef, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -86,6 +86,15 @@ export const Modal: React.FC<ModalProps> = ({
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const generatedId = useId();
   const titleId = `modal-title-${generatedId}`;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => {
+      clearTimeout(timer);
+      setMounted(false);
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -157,7 +166,7 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen]);
 
-  return createPortal(
+  return (mounted && typeof document !== 'undefined') ? createPortal(
     <AnimatePresence>
       {isOpen && (
         <OverlayWrapper>
@@ -182,7 +191,7 @@ export const Modal: React.FC<ModalProps> = ({
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <ModalHeader title={title} onClose={onClose} />
+              <ModalHeader title={title} onClose={onClose} titleId={titleId} />
               <ModalContent>
                 {children}
               </ModalContent>
@@ -192,7 +201,7 @@ export const Modal: React.FC<ModalProps> = ({
       )}
     </AnimatePresence>,
     document.body
-  );
+  ) : null;
 };
 
 Modal.displayName = 'Modal';

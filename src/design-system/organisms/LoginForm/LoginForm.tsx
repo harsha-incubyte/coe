@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAppStore } from '@/store';
+import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { useToast } from '@/hooks/useToast';
 import { Button, Input } from '@/design-system/atoms';
 import { useBoolean } from '@/hooks/useBoolean';
@@ -21,11 +21,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onLogin, 
   redirectPath
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || redirectPath;
-  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
-  const login = useAppStore((state) => state.login);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || redirectPath;
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,12 +33,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const { showToast } = useToast();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(from);
-    }
-  }, [isAuthenticated, navigate, from]);
-
+  // We will handle redirect logic within handleSubmit or via searchParams middleware
+  
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
 
@@ -66,29 +60,31 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       if (onLogin) {
         await onLogin({ email, password });
       } else {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+        const result = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+          callbackUrl,
         });
 
-        if (!response.ok) {
-          throw new Error('Unauthorized');
+        if (result?.error) {
+          throw new Error(result.error);
         }
 
-        const data = await response.json();
-        // Assuming the API returns user info and a token
-        login({ id: '1', email: data.email || email, name: 'Harsha Vardhana' }, data.token);
+        setSuccess('Login successful');
+        showToast('Welcome back! You have successfully logged in.', 'success');
+        
+        setTimeout(() => {
+          router.push(callbackUrl);
+          router.refresh();
+        }, 500);
       }
-      setSuccess('Login successful');
-      showToast('Welcome back! You have successfully logged in.', 'success');
-      setTimeout(() => {
-        navigate(from);
-      }, 500);
-    } catch {
-      const errorMessage = "Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!";
+    } catch (err: unknown) {
+      const errorMessage = (err instanceof Error && err.message === 'CredentialsSignin')
+        ? "Access Denied! Invalid credentials." 
+        : "Something went wrong. Please try again.";
       setError(errorMessage);
-      showToast('Login failed. Please check your credentials.', 'error');
+      showToast(errorMessage, 'error');
     } finally {
       stopLoading();
     }

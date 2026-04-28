@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Heading } from '@/design-system/atoms';
 import { theme } from '@/design-system/theme';
-import { useLayout } from './LayoutContext';
+import { useLayout } from './useLayout';
 
 export interface PageLayoutProps {
   title: string | React.ReactNode;
@@ -16,7 +18,7 @@ export interface PageLayoutProps {
 const PageContainer = styled(motion.div)<{ $maxWidth?: string; $isFull?: boolean }>`
   max-width: ${({ $maxWidth, $isFull }) => ($isFull ? 'none' : $maxWidth || '1200px')};
   margin: ${({ $isFull }) => ($isFull ? '0' : '0 auto')};
-  padding: ${({ theme, $isFull }) => ($isFull ? '0' : `${theme.spacing?.['3xl']} ${theme.spacing?.md}`)};
+  padding: ${({ theme, $isFull }) => ($isFull ? '0' : `${theme.spacing?.lg} ${theme.spacing?.md}`)};
   width: 100%;
   flex: 1;
   display: flex;
@@ -25,7 +27,7 @@ const PageContainer = styled(motion.div)<{ $maxWidth?: string; $isFull?: boolean
 PageContainer.defaultProps = { theme };
 
 const HeaderContainer = styled.header`
-  margin-bottom: ${({ theme }) => theme.spacing?.['3xl']};
+  margin-bottom: ${({ theme }) => theme.spacing?.xl};
 `;
 HeaderContainer.defaultProps = { theme };
 

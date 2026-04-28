@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Breadcrumbs } from './Breadcrumbs';
-import { BrowserRouter } from 'react-router-dom';
+
 
 describe('Breadcrumbs Molecule', () => {
   const items = [
@@ -12,9 +12,9 @@ describe('Breadcrumbs Molecule', () => {
 
   it('renders breadcrumb items correctly', () => {
     render(
-      <BrowserRouter>
+      
         <Breadcrumbs items={items} />
-      </BrowserRouter>
+      
     );
     
     expect(screen.getByText('Home')).toBeInTheDocument();
@@ -24,9 +24,9 @@ describe('Breadcrumbs Molecule', () => {
 
   it('renders links for non-active items', () => {
     render(
-      <BrowserRouter>
+      
         <Breadcrumbs items={items} />
-      </BrowserRouter>
+      
     );
     
     const homeLink = screen.getByRole('link', { name: 'Home' });
@@ -38,9 +38,9 @@ describe('Breadcrumbs Molecule', () => {
 
   it('includes separators between items', () => {
     render(
-      <BrowserRouter>
+      
         <Breadcrumbs items={items} separator=">" />
-      </BrowserRouter>
+      
     );
     
     const separators = screen.getAllByText('>');
@@ -49,9 +49,9 @@ describe('Breadcrumbs Molecule', () => {
 
   it('is accessible with nav and aria-label', () => {
     render(
-      <BrowserRouter>
+      
         <Breadcrumbs items={items} />
-      </BrowserRouter>
+      
     );
     
     expect(screen.getByRole('navigation', { name: /breadcrumb/i })).toBeInTheDocument();

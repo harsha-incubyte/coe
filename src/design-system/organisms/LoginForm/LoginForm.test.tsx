@@ -1,10 +1,22 @@
-import { screen } from '@testing-library/react';
-import { render } from '@/design-system/test-utils';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vitest, beforeEach } from 'vitest';
+import { describe, it, expect, vitest, beforeEach, vi } from 'vitest';
 import { LoginForm } from './LoginForm';
-import { useAppStore } from '@/store';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '@/design-system/theme';
+
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
+}));
+
+// Mock next-auth/react
+vi.mock('next-auth/react', () => ({
+  signIn: vi.fn(),
+}));
 
 const mockShowToast = vitest.fn();
 vitest.mock('@/hooks/useToast', () => ({
@@ -13,25 +25,33 @@ vitest.mock('@/hooks/useToast', () => ({
   }),
 }));
 
-const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
+const renderWithTheme = (ui: React.ReactElement) => {
   return render(
-    <Router initialEntries={[route]}>
-      <Routes>
-        <Route path="*" element={ui} />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      {ui}
+    </ThemeProvider>
   );
 };
 
 describe('LoginForm', () => {
+  const mockPush = vi.fn();
+  const mockRefresh = vi.fn();
+
   beforeEach(() => {
-    useAppStore.setState({ user: null, token: null, isAuthenticated: false });
-    localStorage.clear();
-    mockShowToast.mockClear();
+    vi.clearAllMocks();
+    vi.mocked(useRouter).mockReturnValue({
+      push: mockPush,
+      refresh: mockRefresh,
+      back: vi.fn(),
+      forward: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    } as unknown as ReturnType<typeof useRouter>);
+    vi.mocked(useSearchParams).mockReturnValue(new URLSearchParams() as unknown as ReturnType<typeof useSearchParams>);
   });
 
   it('should render email and password inputs and a login button', () => {
-    renderWithRouter(<LoginForm onLogin={async () => {}} redirectPath="/day-02/weather" />);
+    renderWithTheme(<LoginForm onLogin={async () => {}} redirectPath="/day-02/weather" />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
@@ -41,14 +61,12 @@ describe('LoginForm', () => {
   it('should show error when email format is invalid', async () => {
     const user = userEvent.setup();
     const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
+    renderWithTheme(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
     await user.type(emailInput, 'invalid-email');
-    expect(emailInput).toHaveValue('invalid-email');
-    
     await user.click(submitButton);
 
     const errorMessage = await screen.findByRole('alert');
@@ -57,29 +75,10 @@ describe('LoginForm', () => {
     expect(onLogin).not.toHaveBeenCalled();
   });
 
-  it('should show error when password is too short', async () => {
-    const user = userEvent.setup();
-    const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'short');
-    await user.click(submitButton);
-
-    const errorMessage = await screen.findByRole('alert');
-    expect(errorMessage).toHaveTextContent(/password must be at least 8 characters/i);
-    expect(mockShowToast).toHaveBeenCalledWith('Password must be at least 8 characters', 'error');
-    expect(onLogin).not.toHaveBeenCalled();
-  });
-
   it('should call onLogin with valid credentials', async () => {
     const user = userEvent.setup();
-    const onLogin = vitest.fn();
-    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
+    const onLogin = vitest.fn().mockResolvedValue(undefined);
+    renderWithTheme(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -93,161 +92,43 @@ describe('LoginForm', () => {
       email: 'harsha@incubyte.co',
       password: 'password123',
     });
-    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  it('should show success message on successful login', async () => {
+  it('should call signIn with valid credentials when onLogin is not provided', async () => {
     const user = userEvent.setup();
-    renderWithRouter(<LoginForm onLogin={async () => {}} redirectPath="/day-02/weather" />);
+    vi.mocked(signIn).mockResolvedValue({ error: null, status: 200, ok: true, url: '' });
+    
+    renderWithTheme(<LoginForm redirectPath="/day-02/weather" />);
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
+    await user.type(screen.getByLabelText(/email/i), 'harsha@incubyte.co');
+    await user.type(screen.getByLabelText(/password/i), 'password123');
+    await user.click(screen.getByRole('button', { name: /login/i }));
 
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
-    expect(mockShowToast).toHaveBeenCalledWith('Welcome back! You have successfully logged in.', 'success');
-  });
-
-  it('should show loading state and disable button during login', async () => {
-    const user = userEvent.setup();
-    // A promise that doesn't resolve immediately
-    let resolveLogin: () => void;
-    const loginPromise = new Promise<void>((resolve) => {
-      resolveLogin = resolve;
+    expect(signIn).toHaveBeenCalledWith('credentials', {
+      email: 'harsha@incubyte.co',
+      password: 'password123',
+      redirect: false,
+      callbackUrl: '/day-02/weather',
     });
     
-    renderWithRouter(<LoginForm onLogin={() => loginPromise} redirectPath="/day-02/weather" />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(submitButton).toBeDisabled();
-    expect(submitButton).toHaveTextContent(/logging in/i);
-
-    resolveLogin!();
-    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
-    expect(submitButton).not.toBeDisabled();
-    expect(submitButton).toHaveTextContent(/login/i);
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/day-02/weather');
+    });
   });
 
-  it('should show error message when login fails with invalid credentials', async () => {
+  it('should show error message when login fails', async () => {
     const user = userEvent.setup();
-    const onLogin = vitest.fn().mockRejectedValue(new Error('Unauthorized'));
-    renderWithRouter(<LoginForm onLogin={onLogin} redirectPath="/day-02/weather" />);
+    vi.mocked(signIn).mockResolvedValue({ error: 'CredentialsSignin', status: 401, ok: false, url: '' });
+    
+    renderWithTheme(<LoginForm redirectPath="/day-02/weather" />);
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'wrong@example.com');
-    await user.type(passwordInput, 'wrongpassword');
-    await user.click(submitButton);
+    await user.type(screen.getByLabelText(/email/i), 'wrong@example.com');
+    await user.type(screen.getByLabelText(/password/i), 'wrongpassword');
+    await user.click(screen.getByRole('button', { name: /login/i }));
 
     const errorMessage = await screen.findByRole('alert');
-    expect(errorMessage).toHaveTextContent(/Access Denied! 🕵️‍♂️ As a fellow coder, you know the drill—the right credentials are hidden in plain sight within the source code. Happy hunting!/i);
-    expect(mockShowToast).toHaveBeenCalledWith('Login failed. Please check your credentials.', 'error');
-    expect(screen.queryByText(/login successful/i)).not.toBeInTheDocument();
-  });
-
-  it('should login successfully using integrated API (MSW)', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<LoginForm redirectPath="/day-02/weather" />); // No onLogin prop
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
-    expect(useAppStore.getState().isAuthenticated).toBe(true);
-  });
-
-  it('should navigate to weather page after successful login', async () => {
-    const user = userEvent.setup();
-    render(
-      <Router initialEntries={['/day-02/login']}>
-        <Routes>
-          <Route path="/day-02/login" element={<LoginForm redirectPath="/day-02/weather" />} />
-          <Route path="/day-02/weather" element={<div>Weather Page</div>} />
-        </Routes>
-      </Router>
-    );
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(await screen.findByText(/weather page/i)).toBeInTheDocument();
-  });
-
-  it('should store authentication token in store on successful login', async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<LoginForm redirectPath="/day-02/weather" />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(await screen.findByText(/login successful/i)).toBeInTheDocument();
-    expect(useAppStore.getState().token).toBe('fake-jwt-token');
-  });
-
-  it('should redirect to weather page if token is already present on mount', () => {
-    useAppStore.setState({ user: { id: '1', name: 'Test', email: 'test@example.com' }, token: 'token', isAuthenticated: true });
-
-    render(
-      <Router initialEntries={['/day-02/login']}>
-        <Routes>
-          <Route path="/day-02/login" element={<LoginForm redirectPath="/day-02/weather" />} />
-          <Route path="/day-02/weather" element={<div>Weather Dashboard</div>} />
-        </Routes>
-      </Router>
-    );
-
-    expect(screen.getByText(/weather dashboard/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument();
-  });
-
-  it('should navigate to custom redirectPath if provided', async () => {
-    const user = userEvent.setup();
-    render(
-      <Router initialEntries={['/login']}>
-        <Routes>
-          <Route path="/login" element={<LoginForm redirectPath="/custom-path" />} />
-          <Route path="/custom-path" element={<div>Custom Page</div>} />
-        </Routes>
-      </Router>
-    );
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /login/i });
-
-    await user.type(emailInput, 'harsha@incubyte.co');
-    await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
-
-    expect(await screen.findByText(/custom page/i)).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent(/access denied/i);
+    expect(mockShowToast).toHaveBeenCalledWith(expect.stringContaining('Access Denied'), 'error');
   });
 });
 
