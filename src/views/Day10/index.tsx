@@ -15,7 +15,7 @@ import { PromptTemplateSelector } from './components/PromptTemplateSelector';
 import { MEDICAL_PROMPTS, DEFAULT_PROMPT, PromptTemplate } from '@/lib/llm/prompts';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useToast } from '@/hooks/useToast';
 
@@ -53,6 +53,9 @@ const Day10: React.FC = () => {
       }
     },
     enabled: !!session?.user,
+    staleTime: 1000 * 60 * 5, // 5 minutes - keep data fresh enough but avoid constant refetching
+    gcTime: 1000 * 60 * 60, // 1 hour - keep in memory even if unused
+    refetchOnWindowFocus: false, // Don't refetch when user switches tabs
     retry: 1,
   });
 
@@ -62,6 +65,48 @@ const Day10: React.FC = () => {
       showToast('Could not load conversations. Please check your connection.', 'error');
     }
   }, [queryError, showToast]);
+
+  const queryClient = useQueryClient();
+
+  // Mutation for cache check
+  const { mutateAsync: checkCache } = useMutation({
+    mutationFn: async (content: string) => {
+      const res = await fetch('/api/chat/cache', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, { role: 'user', content }],
+          systemPrompt: selectedTemplate.systemPrompt,
+        }),
+      });
+      return res.json();
+    },
+  });
+
+  // Mutation for batch saving (used for cache hits)
+  const { mutateAsync: saveBatchMessages } = useMutation({
+    mutationFn: async ({ conversationId, userContent, assistantContent, model }: any) => {
+      const res = await fetch('/api/messages/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId,
+          messages: [
+            { role: 'user', content: userContent },
+            { role: 'assistant', content: assistantContent, model: model || 'cached' }
+          ]
+        })
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (!currentConversationId && data.conversationId) {
+        setCurrentConversationId(data.conversationId);
+      }
+      // Invalidate conversations to show the new one/messages
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+    }
+  });
 
   const currentConversation = conversations.find((c) => c.id === currentConversationId);
 
@@ -157,6 +202,46 @@ const Day10: React.FC = () => {
     try {
       if (!content.trim()) return;
       
+      // Try to get from cache first to save costs
+      try {
+        const cacheData = await checkCache(content);
+        
+        if (cacheData.cached) {
+          showToast('Aggressive Cache Hit: Saved API Costs 💰', 'success');
+          
+          // Manually add messages to UI for instant feedback
+          const userMsg = {
+            id: `temp-${Date.now()}-user`,
+            role: 'user',
+            parts: [{ type: 'text', text: content }],
+            timestamp: Date.now()
+          };
+          const assistantMsg = {
+            id: `temp-${Date.now()}-assistant`,
+            role: 'assistant',
+            parts: [{ type: 'text', text: cacheData.content }],
+            timestamp: Date.now(),
+            status: 'ready'
+          };
+          
+          setMessages(prev => [...prev, userMsg as any, assistantMsg as any]);
+          
+          // Save to DB in background
+          await saveBatchMessages({
+            conversationId: currentConversationId,
+            userContent: content,
+            assistantContent: cacheData.content,
+            model: cacheData.model
+          });
+          
+          setInput('');
+          return;
+        }
+      } catch (cacheErr) {
+        console.warn('[CACHE_CHECK_FAILED]', cacheErr);
+        // Continue to live chat if cache check fails
+      }
+
       await sendMessage({
         text: content,
       });

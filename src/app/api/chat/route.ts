@@ -121,6 +121,53 @@ export async function POST(req: Request) {
       // We continue here so the chat can still function even if DB save fails
     }
 
+    // Check for cached response first to save API costs
+    try {
+      const lastUserMessage = messages.filter(m => m.role === 'user').pop();
+      if (lastUserMessage) {
+        const lastUserContent = getMessageText(lastUserMessage);
+        
+        const cachedResponse = await prisma.message.findFirst({
+          where: {
+            role: 'assistant',
+            conversation: {
+              userId: session?.user?.id || undefined,
+              messages: {
+                some: {
+                  role: 'user',
+                  content: lastUserContent,
+                }
+              }
+            }
+          },
+          orderBy: { timestamp: 'desc' },
+        });
+
+        if (cachedResponse) {
+          console.log('[CHAT_API] Cache Hit! Reusing previous response.');
+          // Create a pseudo-stream response for the cached content
+          const encoder = new TextEncoder();
+          const stream = new ReadableStream({
+            async start(controller) {
+              controller.enqueue(encoder.encode(`0:${JSON.stringify(cachedResponse.content)}\n`));
+              controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
+              controller.close();
+            },
+          });
+
+          return new Response(stream, {
+            headers: {
+              'Content-Type': 'text/plain; charset=utf-8',
+              'x-conversation-id': conversationId || '',
+              'x-cache-hit': 'true',
+            },
+          });
+        }
+      }
+    } catch (cacheError) {
+      console.warn('[CHAT_API] Cache check error', cacheError);
+    }
+
     // The registry handles validation, health checks, and failovers automatically
     console.log('[CHAT_API] Getting LLM provider', { model });
     let provider;
@@ -172,7 +219,7 @@ export async function POST(req: Request) {
       messages: await convertToModelMessages(finalMessages.map((m: Message) => ({
         ...m,
         role: m.role as 'user' | 'assistant' | 'system',
-        parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
+        parts: (m.parts as any) ?? [{ type: 'text', text: m.content || '' }]
       }))),
       stopSequences: ['<end_of_turn>'],
       onFinish: async (completion) => {
@@ -187,8 +234,8 @@ export async function POST(req: Request) {
                 role: 'assistant',
                 content: completion.text,
                 conversationId: currentConversationId,
-                promptTokens: completion.usage.promptTokens,
-                completionTokens: completion.usage.completionTokens,
+                promptTokens: (completion.usage as any).promptTokens,
+                completionTokens: (completion.usage as any).completionTokens,
                 model: model,
               }
             });
