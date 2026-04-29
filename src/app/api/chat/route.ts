@@ -3,8 +3,14 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { getLLMProvider } from '@/lib/llm/registry';
 import prisma from '@/lib/prisma';
+import crypto from 'crypto';
 
 import { Session } from 'next-auth';
+
+function hashPrompt(systemPrompt: string | undefined | null): string | null {
+  if (!systemPrompt) return null;
+  return crypto.createHash('sha256').update(systemPrompt).digest('hex');
+}
 
 export const maxDuration = 30;
 
@@ -91,6 +97,9 @@ export async function POST(req: Request) {
       }
     }
 
+    console.log('[CHAT_API] Normalized messages count:', normalizedMessages.length, 
+      'Roles:', normalizedMessages.map(m => m.role).join(' -> '));
+
     // Optional: Save user message to DB immediately
     let currentConversationId = conversationId;
     
@@ -113,6 +122,7 @@ export async function POST(req: Request) {
             role: 'user',
             content: lastMessageContent,
             conversationId: currentConversationId,
+            systemPromptHash: hashPrompt(systemPrompt),
           }
         });
       }
@@ -126,42 +136,69 @@ export async function POST(req: Request) {
       const lastUserMessage = messages.filter(m => m.role === 'user').pop();
       if (lastUserMessage) {
         const lastUserContent = getMessageText(lastUserMessage);
+        const systemPromptHash = hashPrompt(systemPrompt);
         
-        const cachedResponse = await prisma.message.findFirst({
+        console.log('[CHAT_API] Checking cache for message:', { 
+          content: lastUserContent.substring(0, 50) + (lastUserContent.length > 50 ? '...' : ''),
+          systemPromptHash 
+        });
+
+        const previousUserMessage = await prisma.message.findFirst({
           where: {
-            role: 'assistant',
+            role: 'user',
+            content: lastUserContent,
+            systemPromptHash,
             conversation: {
-              userId: session?.user?.id || undefined,
-              messages: {
-                some: {
-                  role: 'user',
-                  content: lastUserContent,
+              userId: session?.user?.id || undefined
+            }
+          },
+          orderBy: {
+            timestamp: 'desc'
+          },
+          include: {
+            conversation: {
+              include: {
+                messages: {
+                  orderBy: {
+                    timestamp: 'asc'
+                  }
                 }
               }
             }
-          },
-          orderBy: { timestamp: 'desc' },
+          }
         });
 
-        if (cachedResponse) {
-          console.log('[CHAT_API] Cache Hit! Reusing previous response.');
-          // Create a pseudo-stream response for the cached content
-          const encoder = new TextEncoder();
-          const stream = new ReadableStream({
-            async start(controller) {
-              controller.enqueue(encoder.encode(`0:${JSON.stringify(cachedResponse.content)}\n`));
-              controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0}}\n`));
-              controller.close();
-            },
-          });
+        if (previousUserMessage) {
+          console.log('[CHAT_API] Found matching previous user message in conversation:', previousUserMessage.conversationId);
+          
+          const messagesInPrevConv = previousUserMessage.conversation.messages;
+          const userMsgIndex = messagesInPrevConv.findIndex(m => m.id === previousUserMessage.id);
+          
+          const nextMessage = messagesInPrevConv[userMsgIndex + 1];
+          if (nextMessage && nextMessage.role === 'assistant') {
+            console.log('[CHAT_API] Cache Hit! Reusing previous response from message:', nextMessage.id);
+            // Create a pseudo-stream response for the cached content
+            const encoder = new TextEncoder();
+            const stream = new ReadableStream({
+              async start(controller) {
+                controller.enqueue(encoder.encode(`0:${JSON.stringify(nextMessage.content)}\n`));
+                controller.enqueue(encoder.encode(`d:{"finishReason":"stop","usage":{"promptTokens":${nextMessage.promptTokens || 0},"completionTokens":${nextMessage.completionTokens || 0}}}\n`));
+                controller.close();
+              },
+            });
 
-          return new Response(stream, {
-            headers: {
-              'Content-Type': 'text/plain; charset=utf-8',
-              'x-conversation-id': conversationId || '',
-              'x-cache-hit': 'true',
-            },
-          });
+            return new Response(stream, {
+              headers: {
+                'Content-Type': 'text/plain; charset=utf-8',
+                'x-conversation-id': currentConversationId || '',
+                'x-cache-hit': 'true',
+              },
+            });
+          } else {
+            console.log('[CHAT_API] Cache Miss: No assistant response follows the matching user message.');
+          }
+        } else {
+          console.log('[CHAT_API] Cache Miss: No matching previous user message found.');
         }
       }
     } catch (cacheError) {
@@ -190,7 +227,17 @@ export async function POST(req: Request) {
     let finalMessages = [...normalizedMessages];
     const supportsSystem = provider.adapter.supportsSystemRole !== false;
 
+    if (!systemPrompt) {
+      console.log('[CHAT_API] No system prompt provided — using model default behaviour');
+    }
+
     if (systemPrompt) {
+      console.log('[CHAT_API] System prompt injection', {
+        strategy: supportsSystem ? 'system-role' : 'prepend-to-user',
+        model,
+        promptLength: systemPrompt.length,
+        promptPreview: systemPrompt.slice(0, 120).replace(/\n/g, ' ') + (systemPrompt.length > 120 ? '…' : ''),
+      });
       if (supportsSystem) {
         finalMessages = [{ role: 'system', content: systemPrompt } as Message, ...finalMessages];
       } else {

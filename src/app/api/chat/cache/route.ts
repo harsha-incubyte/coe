@@ -5,6 +5,11 @@ import prisma from '@/lib/prisma';
 import { Session } from 'next-auth';
 import crypto from 'crypto';
 
+function hashPrompt(systemPrompt: string | undefined | null): string | null {
+  if (!systemPrompt) return null;
+  return crypto.createHash('sha256').update(systemPrompt).digest('hex');
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions) as Session | null;
@@ -18,43 +23,29 @@ export async function POST(req: Request) {
       return new Response('Invalid messages', { status: 400 });
     }
 
-    // Create a stable hash of the input context
-    // We only care about role and content to match cache
-    const context = messages.map(m => ({
+    const systemPromptHash = hashPrompt(systemPrompt);
+
+    const context = messages.map((m: { role: string; content?: string; parts?: { text?: string }[] }) => ({
       role: m.role,
-      content: m.content || (m.parts?.[0]?.text) || ''
+      content: m.content || m.parts?.[0]?.text || ''
     }));
 
-    const inputString = JSON.stringify({
-      systemPrompt,
-      context
+    console.log('[CHAT_CACHE_CHECK]', {
+      systemPromptHash,
+      hasSystemPrompt: !!systemPrompt,
     });
 
-    const hash = crypto.createHash('sha256').update(inputString).digest('hex');
-
-    console.log('[CHAT_CACHE_CHECK] Hash:', hash);
-
-    // Look for a similar previous exchange in the database
-    // This is a "Semantic Cache" lite - looking for exact matches of history
-    // In a real app, we might use a vector DB here.
-    
-    // For now, let's just find if this EXACT context has been sent by THIS user before
-    // and if there was an assistant response immediately following it.
-    
-    // Actually, a simpler approach for the demo: 
-    // Check if the last user message + system prompt exists in ANY conversation of this user
-    // and return the following assistant message.
-    
     const lastUserMessage = context[context.length - 1];
     if (lastUserMessage.role !== 'user') {
       return NextResponse.json({ cached: false });
     }
 
-    // Find a message with the same content for this user
+    // Find a message with the same content AND same system prompt for this user
     const previousUserMessage = await prisma.message.findFirst({
       where: {
         role: 'user',
         content: lastUserMessage.content,
+        systemPromptHash,
         conversation: {
           userId: session.user.id
         }
@@ -82,7 +73,10 @@ export async function POST(req: Request) {
       
       const nextMessage = messagesInPrevConv[userMsgIndex + 1];
       if (nextMessage && nextMessage.role === 'assistant') {
-        console.log('[CHAT_CACHE_HIT] Found cached response');
+        console.log('[CHAT_CACHE_HIT] Found cached response', {
+          systemPromptHash,
+          messageId: previousUserMessage.id,
+        });
         return NextResponse.json({
           cached: true,
           content: nextMessage.content,
