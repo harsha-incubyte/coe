@@ -125,6 +125,19 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
     - **Page Transitions**: Global `PageLayout` integrating `framer-motion` for premium UX.
 - *Focus*: Scalable Atomic Design, Storybook Documentation, Performance Optimization, and robust Accessibility (WCAG 2.1 AA).
 
+### Day 09: Medical Chat UI Foundation
+- **Chat Interface Layout**: Created a premium, responsive medical chat interface featuring a conversation sidebar, message list, and chat input.
+- **Mock AI Interaction**: Developed `useMockAI` hook to simulate typing indicators, network latency, and artificial error rates for robust UI state testing.
+- **Chat State Management**: Implemented `useChatState` to handle client-side conversation history, message status transitions (sent, delivering, error), and message resending logic.
+- *Focus*: UI layout, complex state management for asynchronous message flows, and error state visualization without a real backend.
+
+### Day 10: AI/LLM Integration & Performance Optimization
+- **Real LLM Streaming**: Integrated `@ai-sdk/react` (`useChat`) with `TextStreamChatTransport` to connect to a real backend API (`/api/chat`), replacing the mock AI with true server-sent events (SSE) streaming.
+- **Caching & Cost Optimization**: Implemented aggressive caching (`/api/chat/cache`) for identical prompts to minimize redundant LLM API calls and save costs.
+- **Database Integration**: Connected the chat UI to a real backend to persist conversations and batched messages (`/api/conversations`, `/api/messages/batch`), leveraging `@tanstack/react-query` for server state synchronization.
+- **Prompt Engineering System**: Added a `PromptTemplateSelector` allowing users to switch between different system prompts (e.g., standard vs. medical persona) before starting a conversation.
+- *Focus*: Real-time SSE streaming, LLM API cost management, server state synchronization, and prompt engineering UI.
+
 ## 📝 TODOs
 
 - [ ] **Internationalization (i18n)**: Implement support for multiple languages using a framework like `react-i18next`. Ensure all static text, date formats, and accessibility labels are localized.
