@@ -41,4 +41,5 @@ model Message {
   promptTokens     Int?
   completionTokens Int?
   model            String?
+  systemPromptHash String?      // SHA-256 of the system prompt active when this user message was sent
 }
