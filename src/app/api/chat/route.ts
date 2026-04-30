@@ -2,6 +2,7 @@ import { streamText, convertToModelMessages } from 'ai';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { getLLMProvider } from '@/lib/llm/registry';
+import { retrieveContext, formatRagContext } from '@/lib/rag';
 import prisma from '@/lib/prisma';
 import crypto from 'crypto';
 
@@ -72,6 +73,30 @@ export async function POST(req: Request) {
       console.warn('[CHAT_API] Empty message content detected');
     }
 
+    // Augment systemPrompt with RAG context for clinical queries
+    let augmentedSystemPrompt = systemPrompt;
+    const isClinicalQuery = lastMessageContent.trim().split(/\s+/).length >= 4;
+    if (systemPrompt && isClinicalQuery) {
+      try {
+        const ragContext = await retrieveContext(lastMessageContent);
+        const ragBlock = formatRagContext(ragContext.results);
+        if (ragBlock) {
+          augmentedSystemPrompt = systemPrompt + ragBlock;
+          console.log('[RAG] Injected context', {
+            chunks: ragContext.results.length,
+            topScore: ragContext.results[0]?.score ?? 0,
+            blockLength: ragBlock.length,
+          });
+        } else {
+          console.log('[RAG] No matching context for query');
+        }
+      } catch {
+        console.warn('[RAG] Context retrieval skipped (error)');
+      }
+    } else {
+      console.log('[RAG] Skipped — query too short or no system prompt');
+    }
+
     // Normalize messages to ensure alternating roles (user/assistant)
     // This is required by many LLM providers (including Gemini and some local servers)
     const normalizedMessages: Message[] = [];
@@ -122,7 +147,7 @@ export async function POST(req: Request) {
             role: 'user',
             content: lastMessageContent,
             conversationId: currentConversationId,
-            systemPromptHash: hashPrompt(systemPrompt),
+            systemPromptHash: hashPrompt(augmentedSystemPrompt),
           }
         });
       }
@@ -136,9 +161,9 @@ export async function POST(req: Request) {
       const lastUserMessage = messages.filter(m => m.role === 'user').pop();
       if (lastUserMessage) {
         const lastUserContent = getMessageText(lastUserMessage);
-        const systemPromptHash = hashPrompt(systemPrompt);
-        
-        console.log('[CHAT_API] Checking cache for message:', { 
+        const systemPromptHash = hashPrompt(augmentedSystemPrompt);
+
+        console.log('[CHAT_API] Checking cache for message:', {
           content: lastUserContent.substring(0, 50) + (lastUserContent.length > 50 ? '...' : ''),
           systemPromptHash 
         });
@@ -227,27 +252,27 @@ export async function POST(req: Request) {
     let finalMessages = [...normalizedMessages];
     const supportsSystem = provider.adapter.supportsSystemRole !== false;
 
-    if (!systemPrompt) {
+    if (!augmentedSystemPrompt) {
       console.log('[CHAT_API] No system prompt provided — using model default behaviour');
     }
 
-    if (systemPrompt) {
+    if (augmentedSystemPrompt) {
       console.log('[CHAT_API] System prompt injection', {
         strategy: supportsSystem ? 'system-role' : 'prepend-to-user',
         model,
-        promptLength: systemPrompt.length,
-        promptPreview: systemPrompt.slice(0, 120).replace(/\n/g, ' ') + (systemPrompt.length > 120 ? '…' : ''),
+        promptLength: augmentedSystemPrompt.length,
+        promptPreview: augmentedSystemPrompt.slice(0, 120).replace(/\n/g, ' ') + (augmentedSystemPrompt.length > 120 ? '…' : ''),
       });
       if (supportsSystem) {
-        finalMessages = [{ role: 'system', content: systemPrompt } as Message, ...finalMessages];
+        finalMessages = [{ role: 'system', content: augmentedSystemPrompt } as Message, ...finalMessages];
       } else {
         // Prepend system prompt to the first user message
         const firstUserMsgIndex = finalMessages.findIndex(m => m.role === 'user');
         if (firstUserMsgIndex !== -1) {
           const firstUserMsg = { ...finalMessages[firstUserMsgIndex] };
           const text = getMessageText(firstUserMsg);
-          const combinedContent = `${systemPrompt}\n\n${text}`;
-          
+          const combinedContent = `${augmentedSystemPrompt}\n\n${text}`;
+
           if (firstUserMsg.parts) {
             firstUserMsg.parts = [{ type: 'text', text: combinedContent }];
           } else {
@@ -256,7 +281,7 @@ export async function POST(req: Request) {
           finalMessages[firstUserMsgIndex] = firstUserMsg;
         } else {
           // If no user message found (unlikely), add it as a user message
-          finalMessages = [{ role: 'user', content: systemPrompt } as Message, ...finalMessages];
+          finalMessages = [{ role: 'user', content: augmentedSystemPrompt } as Message, ...finalMessages];
         }
       }
     }
