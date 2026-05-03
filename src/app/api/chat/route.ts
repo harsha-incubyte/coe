@@ -15,10 +15,10 @@ function hashPrompt(systemPrompt: string | undefined | null): string | null {
 
 export const maxDuration = 30;
 
-interface MessagePart {
-  type: string;
-  text?: string;
-}
+type MessagePart = 
+  | { type: 'text'; text: string }
+  | { type: 'reasoning'; text: string }
+  | { type: 'image'; image: string };
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -45,6 +45,12 @@ export async function POST(req: Request) {
 
     const payload = await req.json() as ChatPayload;
     const { messages, model = 'local-gemma', conversationId, systemPrompt } = payload;
+    
+    console.log(`[BACKEND][${new Date().toISOString()}] Chat API - Request received`, {
+      payloadConversationId: conversationId,
+      messageCount: messages?.length,
+      model
+    });
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       console.error('[CHAT_API] Invalid messages payload', payload);
@@ -61,8 +67,8 @@ export async function POST(req: Request) {
       if (typeof msg.content === 'string') return msg.content;
       if (Array.isArray(msg.parts)) {
         return msg.parts
-          .filter((p: MessagePart) => p.type === 'text')
-          .map((p: MessagePart) => p.text || '')
+          .filter((p: MessagePart): p is { type: 'text'; text: string } => p.type === 'text')
+          .map((p) => p.text)
           .join('');
       }
       return '';
@@ -131,7 +137,7 @@ export async function POST(req: Request) {
     try {
       if (session?.user?.id) {
         if (!currentConversationId) {
-          console.log('[CHAT_API] Creating new conversation');
+          console.log(`[BACKEND][${new Date().toISOString()}] Chat API - No conversationId provided, creating new one`);
           const conversation = await prisma.conversation.create({
             data: {
               title: lastMessageContent.substring(0, 50) || 'New Conversation',
@@ -139,9 +145,20 @@ export async function POST(req: Request) {
             }
           });
           currentConversationId = conversation.id;
+          console.log(`[BACKEND][${new Date().toISOString()}] Chat API - New conversation created`, {
+            id: currentConversationId,
+            title: conversation.title
+          });
+        } else {
+          console.log(`[BACKEND][${new Date().toISOString()}] Chat API - Using existing conversationId`, {
+            id: currentConversationId
+          });
         }
 
-        console.log('[CHAT_API] Saving user message to DB', { conversationId: currentConversationId });
+        console.log(`[BACKEND][${new Date().toISOString()}] Chat API - Saving user message`, { 
+          conversationId: currentConversationId,
+          role: 'user'
+        });
         await prisma.message.create({
           data: {
             role: 'user',
@@ -289,9 +306,9 @@ export async function POST(req: Request) {
     const result = streamText({
       model: provider.model,
       messages: await convertToModelMessages(finalMessages.map((m: Message) => ({
-        ...m,
-        role: m.role as 'user' | 'assistant' | 'system',
-        parts: (m.parts as any) ?? [{ type: 'text', text: m.content || '' }]
+        role: m.role,
+        content: m.content || '',
+        parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
       }))),
       stopSequences: ['<end_of_turn>'],
       onFinish: async (completion) => {
@@ -306,8 +323,8 @@ export async function POST(req: Request) {
                 role: 'assistant',
                 content: completion.text,
                 conversationId: currentConversationId,
-                promptTokens: (completion.usage as any).promptTokens,
-                completionTokens: (completion.usage as any).completionTokens,
+                promptTokens: completion.usage.inputTokens,
+                completionTokens: completion.usage.outputTokens,
                 model: model,
               }
             });
@@ -318,6 +335,9 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log(`[BACKEND][${new Date().toISOString()}] Chat API - Returning response`, {
+      conversationId: currentConversationId
+    });
     return result.toTextStreamResponse({
       headers: {
         'x-conversation-id': currentConversationId || '',

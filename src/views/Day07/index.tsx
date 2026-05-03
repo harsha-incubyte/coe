@@ -132,7 +132,7 @@ const Day07: React.FC = () => {
         </S.ConceptCard>
         <S.ConceptCard>
           <h3>React Query Cache</h3>
-          <p>Open the devtools (bottom right) to inspect the 'tasks' query and cache behavior.</p>
+          <p>Open the devtools (bottom right) to inspect the &apos;tasks&apos; query and cache behavior.</p>
         </S.ConceptCard>
       </S.Day07Footer>
     </PageLayout>

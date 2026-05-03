@@ -15,7 +15,7 @@ const Day05: React.FC = () => {
           <S.SectionIcon aria-hidden="true">🧪</S.SectionIcon>
           <h2>Automated A11y Pipeline</h2>
           <p>
-            We've integrated <code>jest-axe</code> for unit tests and <code>cypress-axe</code> for dynamic 
+            We&apos;ve integrated <code>jest-axe</code> for unit tests and <code>cypress-axe</code> for dynamic 
             E2E flows, ensuring zero accessibility regressions.
           </p>
           <S.AuditStatus>
@@ -35,7 +35,7 @@ const Day05: React.FC = () => {
           <S.SectionIcon aria-hidden="true">🤖</S.SectionIcon>
           <h2>Pa11y Headless CI</h2>
           <p>
-            Automated command-line audits that run against production-like builds to catch issues 
+            Welcome to Day 5! Today we&apos;re building a structured data extractor. Automated command-line audits that run against production-like builds to catch issues 
             that only appear in deep page crawls.
           </p>
           <S.Pa11yReport>
@@ -58,7 +58,7 @@ const Day05: React.FC = () => {
           <S.SectionIcon aria-hidden="true">📱</S.SectionIcon>
           <h2>Mobile Ergonomics</h2>
           <p>
-            All interactive elements now follow the WCAG 2.1 AAA success criterion for a minimum 
+            Clicking &quot;Analyze&quot; will process the current data. All interactive elements now follow the WCAG 2.1 AAA success criterion for a minimum 
             <strong> 44x44px</strong> hit area.
           </p>
           <S.TouchComparison>

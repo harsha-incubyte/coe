@@ -32,6 +32,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, st
     // 2. Show nudge if streaming finishes and user is not at bottom
     if (prevStatusRef.current === 'streaming' && status === 'ready') {
       if (!atBottom) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setShowNudge(true);
       }
     }
@@ -47,6 +48,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, st
   // Hide nudge if user scrolls to bottom
   useEffect(() => {
     if (atBottom) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowNudge(false);
     }
   }, [atBottom]);

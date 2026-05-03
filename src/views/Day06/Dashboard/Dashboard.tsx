@@ -49,7 +49,7 @@ export const Dashboard: React.FC = () => {
             <S.PanelInner>
               <h3>Implementation Details</h3>
               <S.DocsList>
-                <li><strong>Compound Components:</strong> Used for the Tabs API to avoid "div soup" and props drilling.</li>
+                <li><strong>Compound Components:</strong> Used for the Tabs API to avoid &quot;div soup&quot; and props drilling.</li>
                 <li><strong>Split Context:</strong> The Wizard uses separate State and Dispatch contexts to optimize re-renders.</li>
                 <li><strong>Next.js Middleware:</strong> This entire page is protected by global authentication middleware.</li>
                 <li><strong>Code Splitting:</strong> The Telemetry chart is lazy-loaded to reduce initial bundle size.</li>

@@ -231,7 +231,7 @@ const Day08: React.FC = () => {
     >
       <Section>
         <Heading $level={2}>1. Design Tokens</Heading>
-        <p>The sub-atomic foundations of our application's visual language.</p>
+        <p>The sub-atomic foundations of our application&apos;s visual language.</p>
         
         <Heading $level={3}>Primary Palette</Heading>
         <TokenGrid>

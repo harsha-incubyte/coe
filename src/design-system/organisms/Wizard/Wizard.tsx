@@ -35,6 +35,7 @@ const NextButton = memo(() => {
     </Button>
   );
 });
+NextButton.displayName = 'NextButton';
 
 const PrevButton: React.FC = () => {
   const { isFirstStep, prev } = useWizard();

@@ -1,4 +1,4 @@
-require('cypress-plugin-tab');
+import 'cypress-plugin-tab';
 
 describe('Day 04: ARIA Patterns & Accessible Components', () => {
   beforeEach(() => {

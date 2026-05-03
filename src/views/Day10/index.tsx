@@ -12,7 +12,7 @@ import { useChat } from '@ai-sdk/react';
 import { TextStreamChatTransport } from 'ai';
 import { Message } from './components/ChatMessage';
 import { PromptTemplateSelector } from './components/PromptTemplateSelector';
-import { MEDICAL_PROMPTS, DEFAULT_PROMPT, PromptTemplate } from '@/lib/llm/prompts';
+import { DEFAULT_PROMPT, PromptTemplate } from '@/lib/llm/prompts';
 import { PageLayout } from '@/design-system/layout/PageLayout';
 import { useSession } from 'next-auth/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,6 +32,46 @@ const Day10: React.FC = () => {
   const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
   const [chatSessionId, setChatSessionId] = React.useState(() => crypto.randomUUID());
   const [selectedTemplate, setSelectedTemplate] = React.useState<PromptTemplate>(DEFAULT_PROMPT);
+
+  // Read initial conversationId from URL on mount
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('conversationId');
+      if (id) {
+        setCurrentConversationId(id);
+      }
+    }
+  }, []);
+
+  // Sync currentConversationId to URL params
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      const currentParam = url.searchParams.get('conversationId');
+      
+      if (currentConversationId !== currentParam) {
+        if (currentConversationId) {
+          url.searchParams.set('conversationId', currentConversationId);
+        } else {
+          url.searchParams.delete('conversationId');
+        }
+        window.history.pushState({}, '', url.toString());
+      }
+    }
+  }, [currentConversationId]);
+
+  // Listen for browser back/forward navigation
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handlePopState = () => {
+        const params = new URLSearchParams(window.location.search);
+        setCurrentConversationId(params.get('conversationId'));
+      };
+      window.addEventListener('popstate', handlePopState);
+      return () => window.removeEventListener('popstate', handlePopState);
+    }
+  }, []);
 
   const { 
     data: conversations = [], 
@@ -85,7 +125,7 @@ const Day10: React.FC = () => {
 
   // Mutation for batch saving (used for cache hits)
   const { mutateAsync: saveBatchMessages } = useMutation({
-    mutationFn: async ({ conversationId, userContent, assistantContent, model }: any) => {
+    mutationFn: async ({ conversationId, userContent, assistantContent, model }: { conversationId: string | null, userContent: string, assistantContent: string, model?: string }) => {
       const res = await fetch('/api/messages/batch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -124,9 +164,21 @@ const Day10: React.FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
     })),
-    onFinish: async () => {
+    onFinish: async (message) => {
+      console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Received message`, {
+        messageId: message.id,
+        role: message.role
+      });
       const { data: newConversations } = await refetchConversations();
+      console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Refetched conversations`, {
+        count: newConversations?.length,
+        topId: newConversations?.[0]?.id,
+        currentId: currentConversationId
+      });
       if (!currentConversationId && newConversations && newConversations.length > 0) {
+        console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Setting initial conversation ID`, {
+          newId: newConversations[0].id
+        });
         // The newest conversation will be at the top due to 'orderBy: { updatedAt: desc }'
         setCurrentConversationId(newConversations[0].id);
       }
@@ -147,10 +199,19 @@ const Day10: React.FC = () => {
   const isLoading = status === 'submitted' || status === 'streaming';
 
   React.useEffect(() => {
+    console.log(`[FRONTEND][${new Date().toISOString()}] useEffect [currentConversationId, status]`, {
+      currentConversationId,
+      status,
+      messagesInState: messages.length
+    });
     // Only update messages from the database if we're not currently chatting
     if (status !== 'ready') return;
 
     if (currentConversation) {
+      console.log(`[FRONTEND][${new Date().toISOString()}] useEffect - Loading messages for conversation`, {
+        id: currentConversation.id,
+        count: currentConversation.messages?.length
+      });
       setMessages((currentConversation.messages || []).map(m => ({
         ...m,
         role: m.role as 'user' | 'assistant' | 'system',
@@ -158,6 +219,7 @@ const Day10: React.FC = () => {
         parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
       })));
     } else if (currentConversationId === null) {
+      console.log(`[FRONTEND][${new Date().toISOString()}] useEffect - Clearing messages (new conversation)`);
       setMessages([]);
     }
   }, [currentConversationId, currentConversation, setMessages, status]);
@@ -199,6 +261,10 @@ const Day10: React.FC = () => {
   };
 
   const handleSendMessage = async (content: string) => {
+    console.log(`[FRONTEND][${new Date().toISOString()}] handleSendMessage - Triggered`, {
+      contentLength: content.length,
+      currentConversationId: currentConversationId
+    });
     try {
       if (!content.trim()) return;
       
@@ -224,7 +290,7 @@ const Day10: React.FC = () => {
             status: 'ready'
           };
           
-          setMessages(prev => [...prev, userMsg as any, assistantMsg as any]);
+          setMessages(prev => [...prev, userMsg as Message, assistantMsg as Message]);
           
           // Save to DB in background
           await saveBatchMessages({

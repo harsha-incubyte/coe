@@ -1,3 +1,7 @@
+import { FlatCompat } from '@eslint/eslintrc'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook";
 
@@ -8,16 +12,27 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default defineConfig([globalIgnores(['dist', '.next']), {
-  files: ['**/*.{ts,tsx}'],
-  extends: [
-    js.configs.recommended,
-    tseslint.configs.recommended,
-    reactHooks.configs.flat.recommended,
-    reactRefresh.configs.vite,
-  ],
-  languageOptions: {
-    ecmaVersion: 2020,
-    globals: globals.browser,
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+export default defineConfig([
+  globalIgnores(['dist', '.next']),
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
   },
-}, ...storybook.configs["flat/recommended"]])
+  ...storybook.configs["flat/recommended"]
+])

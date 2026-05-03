@@ -15,13 +15,14 @@ const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
-  return ({ children }: { children: React.ReactNode }) => (
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <ThemeManager>
       <LayoutProvider>
         <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </LayoutProvider>
     </ThemeManager>
   );
+  return Wrapper;
 };
 
 describe('Day07 Component', () => {
