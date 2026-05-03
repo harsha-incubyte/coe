@@ -23,9 +23,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "db:delete-conversations": "ts-node scripts/delete-conversations.ts",
-    "rag:fetch": "ts-node scripts/fetch-pubmed.ts",
-    "rag:fetch:all": "ts-node scripts/fetch-pubmed.ts --all --count 60",
-    "rag:test": "ts-node scripts/test-rag-index.ts"
+    "rag:fetch": "tsx scripts/fetch-pubmed.ts",
+    "rag:fetch:all": "tsx scripts/fetch-pubmed.ts --all --count 60",
+    "rag:test": "tsx scripts/test-rag-index.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.71",

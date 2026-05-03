@@ -23,13 +23,21 @@ let _initPromise: Promise<void> | null = null;
 async function loadAllDocuments(): Promise<PubMedDocument[]> {
   const files = await readdir(DATA_DIR);
   const jsonFiles = files.filter((f: string) => f.endsWith('.json'));
+  const seen = new Set<string>();
   const docs: PubMedDocument[] = [];
   for (const file of jsonFiles) {
     const raw = await readFile(path.join(DATA_DIR, file), 'utf-8');
     const parsed = JSON.parse(raw as string);
-    if (Array.isArray(parsed)) docs.push(...parsed);
+    if (Array.isArray(parsed)) {
+      for (const doc of parsed) {
+        if (!seen.has(doc.id)) {
+          seen.add(doc.id);
+          docs.push(doc);
+        }
+      }
+    }
   }
-  console.log(`[RAG] Loaded ${docs.length} documents from ${jsonFiles.length} topic files`);
+  console.log(`[RAG] Loaded ${docs.length} unique documents from ${jsonFiles.length} topic files`);
   return docs;
 }
 

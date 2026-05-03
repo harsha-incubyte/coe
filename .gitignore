@@ -42,4 +42,7 @@ cypress_output*.txt
 *.db-journal
 
 /scratch
+tsconfig.tsbuildinfo
+/data/pubmed
 prisma/dev.db
+.gitnexus
