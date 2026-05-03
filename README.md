@@ -62,6 +62,23 @@ We follow a strict **Red-Green-Refactor** cycle using standardized commit marker
 - **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
 - **Visual Regression (Storybook)**: Using Storybook to document and visually verify component states in isolation, ensuring consistency across the Atomic System.
 
+## 🧠 AI Code Intelligence (GitNexus)
+
+This project uses [GitNexus](https://github.com/abhigyanpatwari/GitNexus) to give Claude Code a deep knowledge graph of the codebase — 2136 symbols, 2718 relationships, 12 execution flows — so it can analyse blast radius before edits, trace call chains when debugging, and do safe multi-file renames.
+
+Everything runs **locally on this machine**. No code leaves the filesystem.
+
+### Quick setup on a new machine
+
+```bash
+npx gitnexus analyze --skills         # index repo + generate skills (run from project root)
+claude mcp add gitnexus -- npx -y gitnexus@latest mcp  # register MCP with Claude Code
+```
+
+After commits Claude Code automatically re-indexes via a PostToolUse hook (configured in `.claude/settings.json`).
+
+See [`docs/gitnexus.md`](docs/gitnexus.md) for the full reference.
+
 ## 🤖 Continuous Integration (GitHub Actions)
 
 This project uses GitHub Actions to ensure code quality on every push and pull request. The workflow includes:
