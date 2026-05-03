@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { getLLMProvider } from '@/lib/llm/registry';
 import { retrieveContext, formatRagContext } from '@/lib/rag';
+import type { ClientCitation } from '@/lib/rag';
 import prisma from '@/lib/prisma';
 import crypto from 'crypto';
 
@@ -81,6 +82,7 @@ export async function POST(req: Request) {
 
     // Augment systemPrompt with RAG context for clinical queries
     let augmentedSystemPrompt = systemPrompt;
+    let capturedCitations: ClientCitation[] = [];
     const isClinicalQuery = lastMessageContent.trim().split(/\s+/).length >= 4;
     if (systemPrompt && isClinicalQuery) {
       try {
@@ -88,6 +90,13 @@ export async function POST(req: Request) {
         const ragBlock = formatRagContext(ragContext.results);
         if (ragBlock) {
           augmentedSystemPrompt = systemPrompt + ragBlock;
+          capturedCitations = ragContext.results.map((r) => ({
+            id: r.document.id,
+            title: r.document.title,
+            authors: r.document.authors,
+            journal: r.document.journal,
+            year: r.document.year,
+          }));
           console.log('[RAG] Injected context', {
             chunks: ragContext.results.length,
             topScore: ragContext.results[0]?.score ?? 0,
@@ -326,6 +335,7 @@ export async function POST(req: Request) {
                 promptTokens: completion.usage.inputTokens,
                 completionTokens: completion.usage.outputTokens,
                 model: model,
+                citations: capturedCitations.length > 0 ? JSON.stringify(capturedCitations) : null,
               }
             });
           } catch (finishDbError) {

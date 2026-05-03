@@ -18,6 +18,7 @@ import { useSession } from 'next-auth/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useToast } from '@/hooks/useToast';
+import type { ClientCitation } from '@/app/api/chat/rag-citations/route';
 
 interface Conversation {
   id: string;
@@ -32,6 +33,9 @@ const Day10: React.FC = () => {
   const [currentConversationId, setCurrentConversationId] = React.useState<string | null>(null);
   const [chatSessionId, setChatSessionId] = React.useState(() => crypto.randomUUID());
   const [selectedTemplate, setSelectedTemplate] = React.useState<PromptTemplate>(DEFAULT_PROMPT);
+  const [messageCitations, setMessageCitations] = React.useState<Record<string, ClientCitation[]>>({});
+  // Bridge: citations fetched at send-time but keyed by message ID known only at finish-time
+  const pendingCitationsRef = React.useRef<ClientCitation[] | null>(null);
 
   // Read initial conversationId from URL on mount
   React.useEffect(() => {
@@ -125,7 +129,7 @@ const Day10: React.FC = () => {
 
   // Mutation for batch saving (used for cache hits)
   const { mutateAsync: saveBatchMessages } = useMutation({
-    mutationFn: async ({ conversationId, userContent, assistantContent, model }: { conversationId: string | null, userContent: string, assistantContent: string, model?: string }) => {
+    mutationFn: async ({ conversationId, userContent, assistantContent, model, citations }: { conversationId: string | null, userContent: string, assistantContent: string, model?: string, citations?: ClientCitation[] }) => {
       const res = await fetch('/api/messages/batch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,7 +138,8 @@ const Day10: React.FC = () => {
           messages: [
             { role: 'user', content: userContent },
             { role: 'assistant', content: assistantContent, model: model || 'cached' }
-          ]
+          ],
+          assistantCitations: citations,
         })
       });
       return res.json();
@@ -164,11 +169,21 @@ const Day10: React.FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
     })),
-    onFinish: async (message) => {
+    onFinish: async ({ message }) => {
       console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Received message`, {
         messageId: message.id,
         role: message.role
       });
+
+      // Wire pending citations to the final message ID
+      if (pendingCitationsRef.current && pendingCitationsRef.current.length > 0) {
+        setMessageCitations((prev) => ({
+          ...prev,
+          [message.id]: pendingCitationsRef.current!,
+        }));
+        pendingCitationsRef.current = null;
+      }
+
       const { data: newConversations } = await refetchConversations();
       console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Refetched conversations`, {
         count: newConversations?.length,
@@ -212,6 +227,21 @@ const Day10: React.FC = () => {
         id: currentConversation.id,
         count: currentConversation.messages?.length
       });
+
+      // Restore citations keyed by DB message ID so they survive the message list replacement
+      const restoredCitations: Record<string, ClientCitation[]> = {};
+      for (const m of currentConversation.messages || []) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const raw = (m as any).citations;
+        if (raw && typeof raw === 'string') {
+          try {
+            const parsed = JSON.parse(raw) as ClientCitation[];
+            if (parsed.length > 0) restoredCitations[m.id] = parsed;
+          } catch { /* ignore malformed JSON */ }
+        }
+      }
+      setMessageCitations(restoredCitations);
+
       setMessages((currentConversation.messages || []).map(m => ({
         ...m,
         role: m.role as 'user' | 'assistant' | 'system',
@@ -230,6 +260,8 @@ const Day10: React.FC = () => {
     setMessages([]);
     setInput('');
     setSelectedTemplate(DEFAULT_PROMPT);
+    setMessageCitations({});
+    pendingCitationsRef.current = null;
   };
 
   const handleSelectConversation = (id: string) => {
@@ -260,6 +292,21 @@ const Day10: React.FC = () => {
     }
   };
 
+  const fetchCitations = async (content: string): Promise<ClientCitation[]> => {
+    try {
+      const res = await fetch('/api/chat/rag-citations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: content, systemPrompt: selectedTemplate.systemPrompt }),
+      });
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.citations ?? [];
+    } catch {
+      return [];
+    }
+  };
+
   const handleSendMessage = async (content: string) => {
     console.log(`[FRONTEND][${new Date().toISOString()}] handleSendMessage - Triggered`, {
       contentLength: content.length,
@@ -267,14 +314,16 @@ const Day10: React.FC = () => {
     });
     try {
       if (!content.trim()) return;
-      
+
       // Try to get from cache first to save costs
       try {
         const cacheData = await checkCache(content);
-        
+
         if (cacheData.cached) {
           showToast('Aggressive Cache Hit: Saved API Costs 💰', 'success');
-          
+
+          const tempAssistantId = `temp-${Date.now()}-assistant`;
+
           // Manually add messages to UI for instant feedback
           const userMsg = {
             id: `temp-${Date.now()}-user`,
@@ -283,23 +332,30 @@ const Day10: React.FC = () => {
             timestamp: Date.now()
           };
           const assistantMsg = {
-            id: `temp-${Date.now()}-assistant`,
+            id: tempAssistantId,
             role: 'assistant',
             parts: [{ type: 'text', text: cacheData.content }],
             timestamp: Date.now(),
             status: 'ready'
           };
-          
+
           setMessages(prev => [...prev, userMsg as Message, assistantMsg as Message]);
-          
-          // Save to DB in background
+
+          // Fetch citations and persist them alongside the batch save
+          const citations = await fetchCitations(content);
+          if (citations.length > 0) {
+            setMessageCitations((prev) => ({ ...prev, [tempAssistantId]: citations }));
+          }
+
+          // Save to DB (including citations so they survive page reload)
           await saveBatchMessages({
             conversationId: currentConversationId,
             userContent: content,
             assistantContent: cacheData.content,
-            model: cacheData.model
+            model: cacheData.model,
+            citations,
           });
-          
+
           setInput('');
           return;
         }
@@ -307,6 +363,11 @@ const Day10: React.FC = () => {
         console.warn('[CACHE_CHECK_FAILED]', cacheErr);
         // Continue to live chat if cache check fails
       }
+
+      // Fetch citations in parallel with the LLM call; store in ref so onFinish can key them
+      fetchCitations(content).then((citations) => {
+        pendingCitationsRef.current = citations.length > 0 ? citations : null;
+      });
 
       await sendMessage({
         text: content,
@@ -373,11 +434,12 @@ const Day10: React.FC = () => {
             />
           )}
 
-          <MessageList 
-            messages={displayMessages} 
-            isTyping={status === 'submitted'} 
+          <MessageList
+            messages={displayMessages}
+            isTyping={status === 'submitted'}
             status={status}
-            onResend={() => regenerate()} 
+            onResend={() => regenerate()}
+            citationsByMessageId={messageCitations}
           />
 
           <ChatInput 

@@ -9,6 +9,14 @@ export interface PubMedDocument {
   meshTerms: string[];
 }
 
+export interface ClientCitation {
+  id: string;
+  title: string;
+  authors: string;
+  journal: string;
+  year: number;
+}
+
 export interface RagSearchResult {
   document: PubMedDocument;
   score: number;

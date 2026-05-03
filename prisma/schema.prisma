@@ -42,4 +42,5 @@ model Message {
   completionTokens Int?
   model            String?
   systemPromptHash String?      // SHA-256 of the system prompt active when this user message was sent
+  citations        String?      // JSON array of ClientCitation objects retrieved by RAG for this response
 }

@@ -4,15 +4,17 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 import { MessageListContainer, ScrollNudge } from '../Day10.styles';
 import { ChatMessage, type Message } from './ChatMessage';
 import { TypingIndicator } from './TypingIndicator';
+import type { ClientCitation } from '@/app/api/chat/rag-citations/route';
 
 interface MessageListProps {
   messages: Message[];
   isTyping: boolean;
   status: 'ready' | 'submitted' | 'streaming' | 'error';
   onResend: (messageId: string) => void;
+  citationsByMessageId: Record<string, ClientCitation[]>;
 }
 
-export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, status, onResend }) => {
+export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, status, onResend, citationsByMessageId }) => {
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const [atBottom, setAtBottom] = useState(true);
   const [showNudge, setShowNudge] = useState(false);
@@ -73,7 +75,11 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, st
         atBottomStateChange={setAtBottom}
         itemContent={(_index, message) => (
           <div style={{ paddingBottom: '8px' }}>
-            <ChatMessage message={message} onResend={onResend} />
+            <ChatMessage
+              message={message}
+              onResend={onResend}
+              citations={citationsByMessageId[message.id]}
+            />
           </div>
         )}
         components={{

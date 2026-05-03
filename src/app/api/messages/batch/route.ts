@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const { conversationId, messages } = await req.json();
+    const { conversationId, messages, assistantCitations } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
       return new Response('Invalid messages', { status: 400 });
@@ -35,12 +35,16 @@ export async function POST(req: Request) {
 
     // Save all messages
     await prisma.message.createMany({
-      data: messages.map(m => ({
+      data: messages.map((m: { role: string; content: string; model?: string }) => ({
         role: m.role,
         content: m.content,
         conversationId: targetConversationId,
         model: m.model || 'cached',
-        status: 'sent'
+        status: 'sent',
+        citations:
+          m.role === 'assistant' && Array.isArray(assistantCitations) && assistantCitations.length > 0
+            ? JSON.stringify(assistantCitations)
+            : null,
       }))
     });
 

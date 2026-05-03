@@ -2,8 +2,10 @@ import React from 'react';
 import { MessageWrapper, MessageBubble, MessageMeta, ResendButton, CostBadge } from '../Day10.styles';
 import { AIResponseRenderer } from './AIResponseRenderer';
 import { calculateCost, formatCost } from '@/utils/token-cost';
+import { MessageSources } from './MessageSources';
 
 import { UIMessage } from 'ai';
+import type { ClientCitation } from '@/app/api/chat/rag-citations/route';
 
 export interface Message extends UIMessage {
   status?: string;
@@ -18,9 +20,10 @@ export interface Message extends UIMessage {
 interface ChatMessageProps {
   message: Message;
   onResend?: (messageId: string) => void;
+  citations?: ClientCitation[];
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend, citations }) => {
   const isUser = message.role === 'user';
   const isError = message.status === 'error';
 
@@ -62,13 +65,13 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
         <span aria-hidden="true">{timeString}</span>
         {/* Visually hidden but accessible time */}
         <span className="sr-only">Sent at {timeString}</span>
-        
+
         {!isUser && message.promptTokens !== undefined && (
           <CostBadge>
             {formatCost(calculateCost(message.promptTokens, message.completionTokens, message.model))}
           </CostBadge>
         )}
-        
+
         {isUser && message.status === 'delivering' && <span>Sending...</span>}
         {isError && (
           <>
@@ -81,6 +84,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
           </>
         )}
       </MessageMeta>
+      {!isUser && citations && citations.length > 0 && (
+        <MessageSources citations={citations} />
+      )}
     </MessageWrapper>
   );
 };

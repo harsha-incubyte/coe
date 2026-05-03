@@ -510,3 +510,56 @@ export const CostBadge = styled.span`
   text-transform: uppercase;
   margin-left: ${spacing.xs};
 `;
+
+export const SourcesPanel = styled.div`
+  margin-top: ${spacing.sm};
+  max-width: 80%;
+`;
+
+export const SourcesToggle = styled.button`
+  background: none;
+  border: none;
+  color: ${colors.textMuted};
+  font-size: ${typography.fontSize.xs};
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: ${spacing.xs};
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${colors.textSecondary};
+  }
+`;
+
+export const SourcesList = styled.ol`
+  list-style: none;
+  padding: 0;
+  margin: ${spacing.xs} 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.xs};
+  border-left: 2px solid ${colors.border};
+  padding-left: ${spacing.md};
+`;
+
+export const SourceItem = styled.li`
+  font-size: ${typography.fontSize.xs};
+  line-height: 1.5;
+`;
+
+export const SourceLink = styled.a`
+  color: ${colors.primary[400]};
+  text-decoration: none;
+  font-weight: ${typography.fontWeight.semibold};
+
+  &:hover {
+    text-decoration: underline;
+    color: ${colors.primary[300]};
+  }
+`;
+
+export const SourceMeta = styled.span`
+  color: ${colors.textMuted};
+`;
