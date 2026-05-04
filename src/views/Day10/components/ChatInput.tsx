@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { InputAreaContainer, InputWrapper, StyledTextarea, SendButton, TokenInfo } from '../Day10.styles';
+import { InputAreaContainer, InputWrapper, StyledTextarea, SendButton, TokenInfo, InputErrorText } from '../Day10.styles';
 import { estimateTokens } from '@/utils/token-cost';
 
 interface ChatInputProps {
@@ -92,17 +92,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <span>➔</span>
         </SendButton>
       </InputWrapper>
-      {message.trim() && (
-        <TokenInfo>
-          <span style={{ color: 'var(--colors-semantic-error)', fontSize: '11px' }}>{error || ''}</span>
+      <TokenInfo>
+        <InputErrorText id="chat-input-error">{error || ''}</InputErrorText>
+        {message.trim() && (
           <span style={{ fontSize: '11px', opacity: 0.5 }}>Estimated tokens: {estimateTokens(message)}</span>
-        </TokenInfo>
-      )}
-      {error && !message.trim() && (
-        <span id="chat-input-error" style={{ color: 'var(--colors-semantic-error)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-          {error}
-        </span>
-      )}
+        )}
+      </TokenInfo>
     </InputAreaContainer>
   );
 };

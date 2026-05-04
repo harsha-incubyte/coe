@@ -490,12 +490,18 @@ export const TemplateDescription = styled.p`
   line-height: 1.4;
 `;
 
+export const InputErrorText = styled.span`
+  font-size: 11px;
+  color: ${colors.error};
+`;
+
 export const TokenInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: ${spacing.xs};
   width: 100%;
+  min-height: 16.5px;
 `;
 
 export const CostBadge = styled.span`
