@@ -34,8 +34,28 @@ const Day10: React.FC = () => {
   const [chatSessionId, setChatSessionId] = React.useState(() => crypto.randomUUID());
   const [selectedTemplate, setSelectedTemplate] = React.useState<PromptTemplate>(DEFAULT_PROMPT);
   const [messageCitations, setMessageCitations] = React.useState<Record<string, ClientCitation[]>>({});
-  // Bridge: citations fetched at send-time but keyed by message ID known only at finish-time
-  const pendingCitationsRef = React.useRef<ClientCitation[] | null>(null);
+  // Bridge: citations fetched at send-time but keyed by message ID known only at finish-time.
+  // Stores the Promise (not the resolved value) so onFinish can await it, handling fast
+  // server-side cache-hit responses where the LLM returns before fetchCitations resolves.
+  const pendingCitationsRef = React.useRef<Promise<ClientCitation[]> | null>(null);
+
+  // Refs to keep transport body up-to-date without stale closures (Bug 2 fix)
+  const currentConversationIdRef = React.useRef<string | null>(null);
+  const selectedTemplateRef = React.useRef<PromptTemplate>(DEFAULT_PROMPT);
+
+  // Captures x-conversation-id header from each response (Bug 1 fix - avoids blocking refetch)
+  const latestResponseConversationIdRef = React.useRef<string | null>(null);
+
+  // Suppresses setMessages DB reload immediately after streaming (Bug 1 fix - prevents jump)
+  const justStreamedConversationIdRef = React.useRef<string | null>(null);
+
+  // Stable fetch wrapper that captures x-conversation-id from response headers
+  const capturingFetchRef = React.useRef<typeof fetch>(async (url, init) => {
+    const response = await window.fetch(url as string, init);
+    const convId = response.headers.get('x-conversation-id');
+    if (convId) latestResponseConversationIdRef.current = convId;
+    return response;
+  });
 
   // Read initial conversationId from URL on mount
   React.useEffect(() => {
@@ -47,6 +67,10 @@ const Day10: React.FC = () => {
       }
     }
   }, []);
+
+  // Keep refs in sync with state so the transport body function always reads current values
+  React.useEffect(() => { currentConversationIdRef.current = currentConversationId; }, [currentConversationId]);
+  React.useEffect(() => { selectedTemplateRef.current = selectedTemplate; }, [selectedTemplate]);
 
   // Sync currentConversationId to URL params
   React.useEffect(() => {
@@ -70,7 +94,12 @@ const Day10: React.FC = () => {
     if (typeof window !== 'undefined') {
       const handlePopState = () => {
         const params = new URLSearchParams(window.location.search);
-        setCurrentConversationId(params.get('conversationId'));
+        const id = params.get('conversationId');
+        setCurrentConversationId(id);
+        if (!id) {
+          justStreamedConversationIdRef.current = null;
+          setChatSessionId(crypto.randomUUID());
+        }
       };
       window.addEventListener('popstate', handlePopState);
       return () => window.removeEventListener('popstate', handlePopState);
@@ -146,9 +175,12 @@ const Day10: React.FC = () => {
     },
     onSuccess: (data) => {
       if (!currentConversationId && data.conversationId) {
+        justStreamedConversationIdRef.current = data.conversationId;
+        currentConversationIdRef.current = data.conversationId;
         setCurrentConversationId(data.conversationId);
+      } else if (currentConversationId) {
+        justStreamedConversationIdRef.current = currentConversationId;
       }
-      // Invalidate conversations to show the new one/messages
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     }
   });
@@ -176,27 +208,42 @@ const Day10: React.FC = () => {
       });
 
       // Wire pending citations to the final message ID
-      if (pendingCitationsRef.current && pendingCitationsRef.current.length > 0) {
-        setMessageCitations((prev) => ({
-          ...prev,
-          [message.id]: pendingCitationsRef.current!,
-        }));
-        pendingCitationsRef.current = null;
+      if (pendingCitationsRef.current) {
+        try {
+          const citations = await pendingCitationsRef.current;
+          if (citations.length > 0) {
+            setMessageCitations((prev) => ({
+              ...prev,
+              [message.id]: citations,
+            }));
+          }
+        } catch (err) {
+          console.warn('[CITATIONS_AWAIT_FAILED]', err);
+        } finally {
+          pendingCitationsRef.current = null;
+        }
       }
 
-      const { data: newConversations } = await refetchConversations();
-      console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Refetched conversations`, {
-        count: newConversations?.length,
-        topId: newConversations?.[0]?.id,
-        currentId: currentConversationId
-      });
-      if (!currentConversationId && newConversations && newConversations.length > 0) {
-        console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Setting initial conversation ID`, {
-          newId: newConversations[0].id
-        });
-        // The newest conversation will be at the top due to 'orderBy: { updatedAt: desc }'
-        setCurrentConversationId(newConversations[0].id);
+      // Read conversation ID from response header (captured by capturingFetchRef)
+      const newConvId = latestResponseConversationIdRef.current;
+      latestResponseConversationIdRef.current = null;
+
+      // Mark this conversation as "just streamed" so the useEffect skips the DB reload
+      const convIdForThisStream = newConvId ?? currentConversationIdRef.current;
+      if (convIdForThisStream) {
+        justStreamedConversationIdRef.current = convIdForThisStream;
       }
+
+      if (!currentConversationIdRef.current && newConvId) {
+        console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Setting initial conversation ID`, {
+          newId: newConvId
+        });
+        currentConversationIdRef.current = newConvId; // immediate sync for next send
+        setCurrentConversationId(newConvId);
+      }
+
+      // Background update — no await, no blocking
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
     onError: (err) => {
       console.error('[CHAT_ERROR]', err);
@@ -204,10 +251,11 @@ const Day10: React.FC = () => {
     },
     transport: new TextStreamChatTransport({
       api: '/api/chat',
-      body: {
-        conversationId: currentConversationId,
-        systemPrompt: selectedTemplate.systemPrompt,
-      },
+      body: () => ({
+        conversationId: currentConversationIdRef.current,
+        systemPrompt: selectedTemplateRef.current.systemPrompt,
+      }),
+      fetch: capturingFetchRef.current,
     }),
   });
 
@@ -223,6 +271,12 @@ const Day10: React.FC = () => {
     if (status !== 'ready') return;
 
     if (currentConversation) {
+      // Skip DB reload if we just finished streaming to this conversation — streaming
+      // messages are already correct, and replacing them causes a visible jump.
+      if (justStreamedConversationIdRef.current === currentConversationId) {
+        return;
+      }
+
       console.log(`[FRONTEND][${new Date().toISOString()}] useEffect - Loading messages for conversation`, {
         id: currentConversation.id,
         count: currentConversation.messages?.length
@@ -248,13 +302,11 @@ const Day10: React.FC = () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
       })));
-    } else if (currentConversationId === null) {
-      console.log(`[FRONTEND][${new Date().toISOString()}] useEffect - Clearing messages (new conversation)`);
-      setMessages([]);
     }
   }, [currentConversationId, currentConversation, setMessages, status]);
 
   const handleNewConversation = () => {
+    justStreamedConversationIdRef.current = null;
     setCurrentConversationId(null);
     setChatSessionId(crypto.randomUUID());
     setMessages([]);
@@ -265,6 +317,7 @@ const Day10: React.FC = () => {
   };
 
   const handleSelectConversation = (id: string) => {
+    justStreamedConversationIdRef.current = null;
     setCurrentConversationId(id);
     setChatSessionId(crypto.randomUUID());
   };
@@ -365,9 +418,7 @@ const Day10: React.FC = () => {
       }
 
       // Fetch citations in parallel with the LLM call; store in ref so onFinish can key them
-      fetchCitations(content).then((citations) => {
-        pendingCitationsRef.current = citations.length > 0 ? citations : null;
-      });
+      pendingCitationsRef.current = fetchCitations(content);
 
       await sendMessage({
         text: content,
