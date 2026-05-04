@@ -19,7 +19,8 @@ export const maxDuration = 30;
 type MessagePart = 
   | { type: 'text'; text: string }
   | { type: 'reasoning'; text: string }
-  | { type: 'image'; image: string };
+  | { type: 'image'; image: string }
+  | { type: 'file'; mediaType: string; url: string };
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -287,7 +288,7 @@ export async function POST(req: Request) {
         strategy: supportsSystem ? 'system-role' : 'prepend-to-user',
         model,
         promptLength: augmentedSystemPrompt.length,
-        promptPreview: augmentedSystemPrompt.slice(0, 120).replace(/\n/g, ' ') + (augmentedSystemPrompt.length > 120 ? '…' : ''),
+        promptPreview: augmentedSystemPrompt.slice(0, 500).replace(/\n/g, ' ') + (augmentedSystemPrompt.length > 500 ? '…' : ''),
       });
       if (supportsSystem) {
         finalMessages = [{ role: 'system', content: augmentedSystemPrompt } as Message, ...finalMessages];
@@ -314,11 +315,25 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: provider.model,
-      messages: await convertToModelMessages(finalMessages.map((m: Message) => ({
-        role: m.role,
-        content: m.content || '',
-        parts: m.parts ?? [{ type: 'text', text: m.content || '' }]
-      }))),
+      messages: await convertToModelMessages(finalMessages.map((m: Message) => {
+        const parts = (m.parts ?? [{ type: 'text', text: m.content || '' }]).map(part => {
+          if (part.type === 'image') {
+            return {
+              type: 'file',
+              mediaType: part.image.startsWith('data:') 
+                ? part.image.split(';')[0].split(':')[1] 
+                : 'image/png',
+              url: part.image
+            };
+          }
+          return part;
+        });
+        
+        return {
+          role: m.role,
+          parts: parts as any // Cast to any to avoid strict union matching issues with custom MessagePart
+        };
+      })),
       stopSequences: ['<end_of_turn>'],
       onFinish: async (completion) => {
         if (session?.user?.id && currentConversationId) {
