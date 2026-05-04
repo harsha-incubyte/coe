@@ -77,6 +77,13 @@ claude mcp add gitnexus -- npx -y gitnexus@latest mcp  # register MCP with Claud
 
 After commits Claude Code automatically re-indexes via a PostToolUse hook (configured in `.claude/settings.json`).
 
+### Safe Development Workflow
+
+To maintain codebase integrity, we follow these GitNexus-driven rules:
+- **Impact Analysis**: Before modifying any symbol (function, class, method), we run `npx gitnexus impact <symbol>` to assess the blast radius.
+- **Change Detection**: Before every commit, we run `npx gitnexus detect-changes` to verify that our edits only affect the intended symbols and execution flows.
+- **Visual Validation**: We use the knowledge graph to trace execution paths for complex features like SSE streaming and RAG pipelines.
+
 See [`docs/gitnexus.md`](docs/gitnexus.md) for the full reference.
 
 ## 🤖 Continuous Integration (GitHub Actions)
@@ -149,11 +156,14 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 - *Focus*: UI layout, complex state management for asynchronous message flows, and error state visualization without a real backend.
 
 ### Day 10: AI/LLM Integration & Performance Optimization
-- **Real LLM Streaming**: Integrated `@ai-sdk/react` (`useChat`) with `TextStreamChatTransport` to connect to a real backend API (`/api/chat`), replacing the mock AI with true server-sent events (SSE) streaming.
-- **Caching & Cost Optimization**: Implemented aggressive caching (`/api/chat/cache`) for identical prompts to minimize redundant LLM API calls and save costs.
-- **Database Integration**: Connected the chat UI to a real backend to persist conversations and batched messages (`/api/conversations`, `/api/messages/batch`), leveraging `@tanstack/react-query` for server state synchronization.
+- **Real LLM Streaming**: Integrated `@ai-sdk/react` (`useChat`) with `TextStreamChatTransport` to connect to a real backend API (`/api/chat`), featuring true server-sent events (SSE) streaming.
+- **Streaming Stability**: Fixed race conditions, flickering, and stale closures in the `useChat` implementation to ensure a smooth, uninterrupted streaming experience.
+- **Citation System**: Implemented a parallel citation fetching system that links LLM responses to verified medical sources (PubMed/RAG) in real-time.
+- **Caching & Cost Optimization**: Implemented aggressive caching (`/api/chat/cache`) for identical prompts to minimize redundant LLM API calls and reduce operational costs.
+- **Database Integration**: Connected the chat UI to a real backend to persist conversations and batched messages (`/api/conversations`, `/api/messages/batch`), leveraging `@tanstack/react-query` for synchronization.
 - **Prompt Engineering System**: Added a `PromptTemplateSelector` allowing users to switch between different system prompts (e.g., standard vs. medical persona) before starting a conversation.
-- *Focus*: Real-time SSE streaming, LLM API cost management, server state synchronization, and prompt engineering UI.
+- **Architectural Visibility**: Created detailed user flow diagrams documenting the SSE streaming architecture and state synchronization logic.
+- *Focus*: Real-time SSE streaming, LLM API cost management, citation integration, and architectural documentation.
 
 ## 📝 TODOs
 
