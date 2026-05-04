@@ -1,0 +1,170 @@
+flowchart TD
+    %% ─────────────────────────────────────────
+    %% PAGE LOAD
+    %% ─────────────────────────────────────────
+    START([User navigates to /day-10]) --> AUTH{Authenticated?}
+    AUTH -- No --> LOGIN[Redirect to login page]
+    AUTH -- Yes --> LOAD[Load page & fetch conversations\nGET /api/conversations]
+
+    LOAD --> URLINIT{URL has\nconversationId?}
+    URLINIT -- Yes --> SETID[Set currentConversationId from URL]
+    URLINIT -- No --> NEWSTATE[New conversation state\ncurrentConversationId = null]
+
+    LOAD --> FETCHERR{Fetch\nsucceeded?}
+    FETCHERR -- Error --> ERRTST[Show error toast:\nCould not load conversations]
+    FETCHERR -- OK --> SIDEBAR[Render ConversationSidebar\nwith conversation list]
+
+    SETID --> SIDEBAR   
+    NEWSTATE --> SIDEBAR
+
+    %% ─────────────────────────────────────────
+    %% SIDEBAR INTERACTIONS
+    %% ─────────────────────────────────────────
+    subgraph SIDEBAR_AREA["Sidebar"]
+        SIDEBAR --> SEARCH[/User types in search box/]
+        SEARCH --> FILTERLIVE[Filter by title & message content\nin real-time]
+        FILTERLIVE --> SRES{Any\nresults?}
+        SRES -- Yes --> SHOWLIST[Show filtered conversation list]
+        SRES -- No --> EMPTY[Show 'No conversations found']
+
+        SIDEBAR --> NEWBTN[/User clicks + New/]
+        NEWBTN --> NC1[Clear messages\nReset template to default\nSet conversationId = null]
+        NC1 --> NC2[New chatSessionId\nURL: remove conversationId param]
+
+        SIDEBAR --> SELCONV[/User clicks a conversation/]
+        SELCONV --> SC1[Set currentConversationId\nNew chatSessionId\nURL: ?conversationId=X]
+        SC1 --> SC2[Load messages from React Query\nRestore citations from DB]
+
+        SIDEBAR --> DELBTN[/User clicks delete icon/]
+        DELBTN --> DELCONFIRM{Confirm dialog:\nAre you sure?}
+        DELCONFIRM -- Cancel --> SIDEBAR
+        DELCONFIRM -- OK --> DELAPI[DELETE /api/conversations/:id]
+        DELAPI --> DELRES{Success?}
+        DELRES -- Error --> DELTST[Show error toast]
+        DELRES -- OK --> DELTST2[Show success toast]
+        DELTST2 --> WASACTIVE{Was the active\nconversation?}
+        WASACTIVE -- Yes --> NC1
+        WASACTIVE -- No --> RELOADLIST[Refetch conversation list]
+    end
+
+    %% ─────────────────────────────────────────
+    %% MAIN CHAT AREA
+    %% ─────────────────────────────────────────
+    NC2 --> CHATAREA
+    SC2 --> CHATAREA
+    SIDEBAR --> CHATAREA
+
+    subgraph CHATAREA["Main Chat Area"]
+
+        CHATAREA_START([Chat area rendered]) --> MSGEMPTY{No messages\nin conversation?}
+        MSGEMPTY -- Yes --> TPLSEL[Show PromptTemplateSelector]
+        MSGEMPTY -- No --> MSGLIST[Show MessageList]
+
+        %% Template selector
+        TPLSEL --> TPLCLICK[/User selects a template card/]
+        TPLCLICK --> TPLSET[Set system prompt\nHighlight selected card]
+        TPLSET --> TPLSEL
+
+        %% Message list scroll behaviour
+        MSGLIST --> SCROLLUP[/User scrolls up while streaming/]
+        SCROLLUP --> NUDGE[Show ScrollNudge button]
+        NUDGE --> NUDGECL[/User clicks ScrollNudge/]
+        NUDGECL --> SCROLLBOT[Smooth-scroll to latest message]
+    end
+
+    CHATAREA_START --> INPUT
+
+    %% ─────────────────────────────────────────
+    %% CHAT INPUT
+    %% ─────────────────────────────────────────
+    subgraph INPUT_AREA["ChatInput"]
+        INPUT([ChatInput]) --> TYPING[/User types message/]
+        TYPING --> AUTORESIZE[Textarea auto-resizes\nToken count shown]
+
+        INPUT --> SHIFTENTER[/User presses Shift+Enter/]
+        SHIFTENTER --> NEWLINE[Insert newline]
+
+        INPUT --> SENDEVT[/User presses Enter\nor clicks Send button/]
+        SENDEVT --> EMPTYCHECK{Message\nempty?}
+        EMPTYCHECK -- Yes --> VALERR[Show inline validation error\nARIA live region announced]
+        EMPTYCHECK -- No --> SEND
+    end
+
+    %% ─────────────────────────────────────────
+    %% SEND FLOW
+    %% ─────────────────────────────────────────
+    subgraph SEND_FLOW["Send Flow"]
+        SEND([handleSendMessage]) --> CACHE[POST /api/chat/cache\nCache check]
+
+        CACHE --> CACHEHIT{Cache\nhit?}
+
+        %% Cache hit path
+        CACHEHIT -- Yes --> CH1[Show toast: Cache Hit - Saved API Costs]
+        CH1 --> CH2[Inject user + assistant messages\ninto UI immediately]
+        CH2 --> CH3[POST /api/chat/rag-citations\nFetch citations]
+        CH3 --> CH4{Citations\nfound?}
+        CH4 -- Yes --> CH5[Store citations keyed by tempAssistantId]
+        CH4 -- No --> CH6
+        CH5 --> CH6[POST /api/messages/batch\nPersist messages + citations to DB]
+        CH6 --> CH7[Invalidate conversations query\nRefresh sidebar list]
+        CH7 --> DONE
+
+        %% Cache miss → LLM streaming path
+        CACHEHIT -- No --> LLM1[POST /api/chat/rag-citations\nin parallel with LLM call]
+        LLM1 --> LLM2[sendMessage via\nTextStreamChatTransport]
+        LLM2 --> LLM3[POST /api/chat\nSSE streaming starts]
+
+        LLM3 --> LLMERR{LLM\navailable?}
+        LLMERR -- Error --> ERRT[Show error toast:\nAI model unavailable]
+        ERRT --> ERRBUB[Show error bubble in chat]
+
+        LLMERR -- OK --> SUBMITTED[Status: submitted\nShow TypingIndicator]
+        SUBMITTED --> STREAMING[Status: streaming\nRender markdown token by token]
+        STREAMING --> ONFINISH[onFinish: Wire citations\nto final message ID]
+        ONFINISH --> STATUSREADY[Status: ready]
+        STATUSREADY --> REFETCH[Refetch GET /api/conversations]
+        REFETCH --> NEWCONV{Was new\nconversation?}
+        NEWCONV -- Yes --> SETCONV[Set currentConversationId\nfrom newest conversation\nUpdate URL]
+        NEWCONV -- No --> DONE
+        SETCONV --> DONE
+
+        DONE([Exchange complete])
+    end
+
+    %% ─────────────────────────────────────────
+    %% MESSAGE DISPLAY & INTERACTIONS
+    %% ─────────────────────────────────────────
+    subgraph MSG_DISPLAY["Per-Message Interactions"]
+        MSGBUBBLE([ChatMessage rendered]) --> USERCHECK{User\nmessage?}
+
+        USERCHECK -- Yes --> USERBUB[Show plain-text bubble\nwith timestamp]
+        USERCHECK -- No --> AIBUB[Show markdown-rendered bubble\nvia AIResponseRenderer\nwith timestamp + cost badge]
+
+        AIBUB --> HASERR{Status\n= error?}
+        HASERR -- Yes --> RESENDBTN[Show Resend button]
+        RESENDBTN --> RESENDCL[/User clicks Resend/]
+        RESENDCL --> SEND
+
+        AIBUB --> HASCIT{Has\ncitations?}
+        HASCIT -- No --> NOCIT[No sources panel]
+        HASCIT -- Yes --> CITPANEL[Show sources panel\nwith toggle chevron]
+        CITPANEL --> CITTOG[/User clicks toggle/]
+        CITTOG --> CITOPEN{Panel\nopen?}
+        CITOPEN -- No --> OPENLIST[Expand citation list\nshow PubMed entries]
+        CITOPEN -- Yes --> CLOSELIST[Collapse citation list]
+        OPENLIST --> PUBLINK[/User clicks a PubMed link/]
+        PUBLINK --> PUBTAB[Open PubMed article\nin new tab]
+    end
+
+    %% ─────────────────────────────────────────
+    %% BROWSER NAVIGATION
+    %% ─────────────────────────────────────────
+    subgraph BROWSER_NAV["Browser Navigation"]
+        BFNAV([Browser Back/Forward]) --> POPSTATE[popstate event fires]
+        POPSTATE --> READURL[Read conversationId from URL]
+        READURL --> SC1
+    end
+
+    %% Cross-subgraph connections
+    DONE --> MSGBUBBLE
+    ERRBUB --> RESENDBTN
