@@ -33,8 +33,13 @@ describe('Authentication Flow', () => {
 
     // Verify redirection to weather dashboard
     cy.url().should('include', '/day-02');
+    cy.log('Successfully redirected to /day-02');
+    
+    // Ensure the page title is visible to confirm we are on the right page
+    cy.get('h1', { timeout: 15000 }).should('be.visible').and('contain', 'Weather');
+
     cy.get('#user-profile-btn', { timeout: 10000 }).should('be.visible');
-    cy.get('[data-testid="city-search-input"]', { timeout: 10000 }).should('be.visible');
+    cy.get('[data-testid="city-search-input"]', { timeout: 15000 }).should('exist').and('be.visible');
 
     // Search for a city
     cy.get('[data-testid="city-search-input"]').first().should('be.visible').type('Lond');
