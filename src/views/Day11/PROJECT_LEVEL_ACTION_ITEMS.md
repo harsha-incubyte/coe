@@ -10,9 +10,9 @@
 - [x] **Performance Budgets in CI:** Configure the pipeline to track and assert performance budgets (e.g., bundle sizes, component render times) to prevent performance regressions.
 
 ## 2. Tooling Integration & Environment
-- [ ] **Accessibility (a11y) Testing:** Integrate `jest-axe` into the unit/integration testing environments to automatically flag ARIA and contrast violations.
-- [ ] **Global API Mocking:** Fully configure Mock Service Worker (MSW) across the project for reliable, isolated integration testing without real network requests.
-- [ ] **Visual Regression Setup:** Integrate Storybook with Chromatic (or Playwright's visual comparisons) to catch unintended UI layout changes.
+- [x] **Accessibility (a11y) Testing:** Integrate `jest-axe` into the unit/integration testing environments to automatically flag ARIA and contrast violations.
+- [x] **Global API Mocking:** Fully configure Mock Service Worker (MSW) across the project for reliable, isolated integration testing without real network requests.
+- [x] **Visual Regression Setup:** Integrate Storybook with Chromatic (or Playwright's visual comparisons) to catch unintended UI layout changes.
     - [ ] Establish a workflow for baseline screenshot generation and approval.
     - [ ] Configure the environment to freeze or mock dynamic content (dates, IDs, animations) to avoid visual test flakiness.
 - [ ] **E2E Tooling Configuration:** Standardize Playwright as the primary E2E testing tool.

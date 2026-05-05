@@ -29,7 +29,8 @@
     "rag:fetch:all": "tsx scripts/fetch-pubmed.ts --all --count 60",
     "rag:test": "tsx scripts/test-rag-index.ts",
     "prepare": "husky",
-    "test:size": "size-limit"
+    "test:size": "size-limit",
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.71",
