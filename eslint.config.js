@@ -34,5 +34,11 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-  ...storybook.configs["flat/recommended"]
+  ...storybook.configs["flat/recommended"].map(config => ({
+    ...config,
+    rules: {
+      ...config.rules,
+      'storybook/no-renderer-packages': 'off',
+    }
+  }))
 ])
