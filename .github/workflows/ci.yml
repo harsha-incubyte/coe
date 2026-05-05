@@ -10,6 +10,11 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "file:./dev.db"
+      NEXTAUTH_SECRET: "dummy_secret_for_ci"
+      NEXTAUTH_URL: "http://localhost:3000"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,16 +26,38 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
+
+      - name: Setup Database
+        run: |
+          npx prisma generate
+          npx prisma db push
 
       - name: Run Lint
         run: npm run lint
 
-      - name: Run Unit Tests
-        run: npm run test -- --run
+      - name: Build Project
+        run: npm run build
 
-      - name: Run E2E Tests
-        run: npm run cy:run
+      - name: Run Unit Tests
+        run: npm run test:run
+
+      - name: Run E2E Tests (Cypress)
+        run: npm run cy:run:ci
 
       - name: Run Accessibility Tests (Pa11y)
         run: npm run test:a11y:ci
+
+      - name: Upload Cypress Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload Cypress Videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
