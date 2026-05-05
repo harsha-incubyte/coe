@@ -6,8 +6,8 @@
 ## 1. CI/CD & Git Workflow Setup
 - [x] **Pre-commit Hooks:** Install and configure `husky` and `lint-staged` to automatically run linters and fast unit tests on staged files before commit.
 - [x] **Pull Request CI Checks:** Set up GitHub Actions (or equivalent CI pipeline) to execute the complete test suite (Unit, Integration, E2E) on every Pull Request.
-- [ ] **Branch Protection:** Enforce rules to block merging into the `main` branch unless all automated CI checks pass successfully.
-- [ ] **Performance Budgets in CI:** Configure the pipeline to track and assert performance budgets (e.g., bundle sizes, component render times) to prevent performance regressions.
+- [x] **Branch Protection:** Enforce rules to block merging into the `main` branch unless all automated CI checks pass successfully.
+- [x] **Performance Budgets in CI:** Configure the pipeline to track and assert performance budgets (e.g., bundle sizes, component render times) to prevent performance regressions.
 
 ## 2. Tooling Integration & Environment
 - [ ] **Accessibility (a11y) Testing:** Integrate `jest-axe` into the unit/integration testing environments to automatically flag ARIA and contrast violations.
