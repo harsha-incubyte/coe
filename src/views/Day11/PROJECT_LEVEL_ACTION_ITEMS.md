@@ -15,7 +15,7 @@
 - [x] **Visual Regression Setup:** Integrate Storybook with Chromatic (or Playwright's visual comparisons) to catch unintended UI layout changes.
     - [ ] Establish a workflow for baseline screenshot generation and approval.
     - [ ] Configure the environment to freeze or mock dynamic content (dates, IDs, animations) to avoid visual test flakiness.
-- [ ] **E2E Tooling Configuration:** Standardize Playwright as the primary E2E testing tool.
+- [x] **E2E Tooling Configuration:** Standardize Playwright as the primary E2E testing tool.
     - [ ] Enable parallel execution in the Playwright config to minimize CI build times.
     - [ ] Implement a predictable test data management strategy (database seeding or API mocking) for E2E runs.
 
