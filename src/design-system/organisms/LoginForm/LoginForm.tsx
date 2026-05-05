@@ -28,7 +28,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [isLoading, { setTrue: startLoading, setFalse: stopLoading }] = useBoolean(false);
 
   const { showToast } = useToast();
@@ -41,7 +40,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
     
     if (!validateEmail(email)) {
       setError('Invalid email format');
@@ -71,13 +69,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           throw new Error(result.error);
         }
 
-        setSuccess('Login successful');
-        showToast('Welcome back! You have successfully logged in.', 'success');
-        
-        setTimeout(() => {
-          router.push(callbackUrl);
-          router.refresh();
-        }, 500);
+        router.refresh();
+        router.push(callbackUrl);
       }
     } catch (err: unknown) {
       const errorMessage = (err instanceof Error && err.message === 'CredentialsSignin')
@@ -92,16 +85,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <S.LoginBox>
-      {error && (
-        <S.Message $variant="error" role="alert">
-          {error}
-        </S.Message>
-      )}
-      {success && (
-        <S.Message $variant="success">
-          {success}
-        </S.Message>
-      )}
+        {error && (
+          <S.Message $variant="error" role="alert">
+            {error}
+          </S.Message>
+        )}
       <S.LoginFormContainer onSubmit={handleSubmit} noValidate>
         <Input
           id="email"
