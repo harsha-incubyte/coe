@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { StatBlock } from './StatBlock';
 
 const meta: Meta<typeof StatBlock> = {

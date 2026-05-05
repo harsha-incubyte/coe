@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { TypingIndicator } from './TypingIndicator';
 
 const meta: Meta<typeof TypingIndicator> = {
