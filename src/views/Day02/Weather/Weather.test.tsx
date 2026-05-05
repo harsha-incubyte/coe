@@ -55,7 +55,7 @@ describe('Weather Component', () => {
     await user.click(suggestions[0]);
 
     expect(await screen.findByRole('heading', { name: /london/i })).toBeInTheDocument();
-    expect(screen.getByText(/15/i)).toBeInTheDocument();
+    expect(screen.getByText('15', { selector: 'span' })).toBeInTheDocument();
     expect(screen.getByText(/mainly clear/i)).toBeInTheDocument();
   });
 
