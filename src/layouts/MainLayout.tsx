@@ -20,16 +20,16 @@ const MainLayoutContent: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <LayoutContainer $fullWidth={isFullWidth}>
-      {isDesktop && (
-        <DesktopIndicator>
-          Desktop Optimized
-        </DesktopIndicator>
-      )}
       <SkipLink href="#main-content">
         Skip to content
       </SkipLink>
       <Navbar />
       <ContentContainer id="main-content" tabIndex={-1} $fullWidth={isFullWidth}>
+        {isDesktop && (
+          <DesktopIndicator aria-hidden="true" data-testid="desktop-indicator">
+            Desktop Optimized
+          </DesktopIndicator>
+        )}
         {children}
       </ContentContainer>
     </LayoutContainer>

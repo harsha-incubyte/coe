@@ -16,12 +16,12 @@
     - [ ] Establish a workflow for baseline screenshot generation and approval.
     - [ ] Configure the environment to freeze or mock dynamic content (dates, IDs, animations) to avoid visual test flakiness.
 - [x] **E2E Tooling Configuration:** Standardize Playwright as the primary E2E testing tool.
-    - [ ] Enable parallel execution in the Playwright config to minimize CI build times.
+    - [x] Enable parallel execution in the Playwright config to minimize CI build times.
     - [ ] Implement a predictable test data management strategy (database seeding or API mocking) for E2E runs.
 
 ## 3. Codebase Migrations & Immediate Fixes
 - [x] **Fix Failing Tests:** Audit and resolve all currently failing tests (e.g., `Weather.test.tsx`) to establish a green baseline before enforcing branch protection.
-- [ ] **Migrate E2E Tests:** Execute a phased migration of all existing Cypress E2E tests (e.g., `cypress/e2e/auth_flow.cy.js`, `day04.cy.js`) to Playwright.
+- [x] **Migrate E2E Tests:** Execute a phased migration of all existing Cypress E2E tests (e.g., `cypress/e2e/auth_flow.cy.js`, `day04.cy.js`) to Playwright.
 - [ ] **API Route Testing:** Implement comprehensive integration tests for Next.js API routes (e.g., `src/app/api/chat/route.ts`) using MSW or in-memory databases.
 
 ## 4. Test Architecture & Code Quality Standards
