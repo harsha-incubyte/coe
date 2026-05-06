@@ -29,42 +29,50 @@ This project is a collection of React + TypeScript Katas, developed following st
 
 ## 🛠 Project Architecture
 
-The application is designed to showcase daily progress. Each "Day" is isolated within its own directory under `src/pages/`, containing its components, styles, and tests.
+The application is a **Next.js 16 App Router** project. Each "Day" is isolated as a self-contained view under `src/views/`, containing its components, styles, and tests. The `src/app/` layer holds only thin routing shells and the full-stack API routes.
 
-Recently, the codebase completed a **Phase 2 Refactoring (Atomic Design Migration)**, successfully transitioning all legacy vanilla CSS and duplicate UI components across all Katas into a strict `styled-components` design system.
+The codebase completed two major refactoring phases:
+- **Phase 2 (Atomic Design Migration):** All legacy vanilla CSS and duplicate UI components across all Katas were migrated to a strict `styled-components` design system.
+- **Phase 3 (Next.js Migration):** Vite + React SPA was migrated to Next.js 16 App Router, adding SSR, API routes, Prisma database integration, and NextAuth authentication.
 
 ### Directory Structure
 ```text
 src/
-├── design-system/  # Atomic Design implementation (Atoms, Molecules, Organisms)
+├── app/            # Next.js App Router — routing shells & API routes
+│   ├── day-01/ … day-10/page.tsx  # Thin routing shells
+│   ├── login/      # Login page
+│   └── api/        # Full-stack API (auth, chat/LLM, conversations, messages)
+├── views/          # Daily Kata implementations (Day01 - Day10)
+├── design-system/  # Atomic Design System (Atoms, Molecules, Organisms)
 │   ├── atoms/      # Basic blocks (Button, Input, Heading)
 │   ├── molecules/  # Compound components (SearchBar, Modal, Tabs)
+│   ├── organisms/  # Complex sections (Wizard, LoginForm, Navbar)
 │   └── theme/      # Design tokens and Global Styles
 ├── hooks/          # Domain-agnostic utility hooks
-├── layouts/        # Page layouts (e.g., MainLayout with Navbar)
-├── lib/            # External library configurations (MSW, etc.)
-├── pages/          # Daily Kata challenges (Day01 - Day08)
-├── setupTests.ts   # Vitest setup
-└── main.tsx        # Application entry point with MSW init
+├── layouts/        # Page layouts (MainLayout with Navbar)
+├── lib/            # Auth, Prisma, React Query, MSW, LLM registry, RAG pipeline
+├── store/          # Zustand global client state (persisted to localStorage)
+└── setupTests.ts   # Vitest & jest-dom configuration
 ```
 
 ## 🧪 Testing Strategy (TDD)
 
 We follow a strict **Red-Green-Refactor** cycle using standardized commit markers (🔴, 🟢, ♻️, ⚙️, 🎨). Our testing stack includes:
 
-- **Unit Testing (Vitest + React Testing Library)**: For isolated component logic and DOM state verification.
-- **End-to-End Testing (Cypress)**: For verifying critical user journeys (e.g., Auth flow, Weather search).
-- **API Mocking (Mock Service Worker)**: To intercept and mock network requests in both unit and E2E environments.
+- **Unit Testing (Vitest + React Testing Library)**: For isolated component logic and DOM state verification. A custom `test-utils.tsx` pre-wires all providers (Theme, React Query, Layout) so every test renders with the full context.
+- **End-to-End Testing (Playwright)**: Primary E2E framework — covers 5 browser/device profiles (Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari) including auth flows, keyboard interaction, performance budgets, and visual regression snapshots. Cypress tests are retained for backward compatibility.
+- **API Mocking (Mock Service Worker)**: Intercepts network requests in unit tests. Playwright uses `page.route()` for per-test API interception in E2E.
+- **Performance Budgets**: `size-limit` enforces a 600 KB JS bundle cap in CI. `performance.spec.ts` asserts Core Web Vitals (LCP < 2500ms, CLS < 0.1) via `PerformanceObserver`.
 - **Automated Accessibility Auditing**:
-  - **`jest-axe`**: Integrated into component unit tests to catch structural A11y issues early.
-  - **`cypress-axe`**: Dynamic E2E auditing to catch regressions during interaction (e.g., expanded dropdowns).
-  - **`Pa11y`**: Global, URL-based accessibility auditing against WCAG 2.1 AA standards, integrated into the CI pipeline.
+  - **`jest-axe`**: Globally registered in `setupTests.ts` — available in every unit test via `toHaveNoViolations()`.
+  - **`axe-core/playwright`**: `AxeBuilder` scoped scans in E2E tests (e.g., `day05.spec.ts`) for dynamic A11y verification.
+  - **`Pa11y`**: Global, URL-based auditing against WCAG 2.1 AA standards, integrated into the CI pipeline.
 - **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
-- **Visual Regression (Storybook)**: Using Storybook to document and visually verify component states in isolation, ensuring consistency across the Atomic System.
+- **Visual Regression (Chromatic + Storybook)**: Storybook documents all 25 component states. Chromatic runs in a dedicated CI job for automated visual diffing across every PR.
 
 ## 🧠 AI Code Intelligence (GitNexus)
 
-This project uses [GitNexus](https://github.com/abhigyanpatwari/GitNexus) to give Claude Code a deep knowledge graph of the codebase — 2136 symbols, 2718 relationships, 12 execution flows — so it can analyse blast radius before edits, trace call chains when debugging, and do safe multi-file renames.
+This project uses [GitNexus](https://github.com/abhigyanpatwari/GitNexus) to give Claude Code a deep knowledge graph of the codebase — 2,291 symbols, 2,896 relationships, 14 execution flows — so it can analyse blast radius before edits, trace call chains when debugging, and do safe multi-file renames.
 
 Everything runs **locally on this machine**. No code leaves the filesystem.
 
@@ -88,12 +96,19 @@ See [`docs/gitnexus.md`](docs/gitnexus.md) for the full reference.
 
 ## 🤖 Continuous Integration (GitHub Actions)
 
-This project uses GitHub Actions to ensure code quality on every push and pull request. The workflow includes:
-- **Build**: Verifies that the application compiles correctly.
+This project uses GitHub Actions to ensure code quality on every push and pull request. The workflow runs two parallel jobs:
+
+**`build-and-test`**
 - **Lint**: Ensures code follows ESLint standards.
-- **Test**: Runs all unit tests with Vitest.
-- **E2E**: Executes Cypress end-to-end tests.
-- **A11y**: Performs a full site accessibility audit using Pa11y.
+- **Build**: Verifies that the application compiles correctly (Next.js production build).
+- **Performance Budgets**: `size-limit` enforces a 600 KB JS bundle cap.
+- **Unit Tests**: Runs all Vitest tests.
+- **E2E (Cypress)**: Executes legacy Cypress end-to-end tests.
+- **E2E (Playwright)**: Runs the full Playwright suite across Chromium, Firefox, and WebKit.
+- **A11y**: Performs a WCAG 2.1 AA accessibility audit using Pa11y.
+
+**`visual-regression`**
+- **Chromatic**: Publishes Storybook to Chromatic and runs automated visual diffing against the baseline.
 
 ## 📅 Daily Progress
 
