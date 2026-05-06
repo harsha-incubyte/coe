@@ -477,11 +477,9 @@ These are observations for improvement — not blockers for a portfolio submissi
 
 `"strict": false` in `tsconfig.json` disables `noImplicitAny`, `strictFunctionTypes`, `strictBindCallApply`, and `strictPropertyInitialization`. Only `strictNullChecks` is enabled via an explicit override. For a project demonstrating production-readiness, enabling full strict mode would close this gap.
 
-### 12.2 Pa11y Coverage Incomplete
+### 12.2 ~~Pa11y Coverage Incomplete~~ — Fixed
 
-`.pa11yci` scans only Days 01–05. Days 06–10 — including the modal-heavy Day 06, the task board Day 07, and the medical chat Day 10 — have no headless accessibility scan. Given that Day 10 involves a complex UI with dynamic content (streaming responses, citations panel, conversation sidebar), this is the most impactful coverage gap.
-
-**Fix:** Add Days 06–10 to `.pa11yci`. Note that Days 09/10 require auth — use the `actions` field to log in first.
+`.pa11yci` now scans all 10 days. Days 06, 08, and 09 are plain URLs (no auth required). Days 07 and 10 use pa11y `actions` to log in via `callbackUrl` before the scan, so the full authenticated UI is audited.
 
 ### 12.3 `jest-axe` Underutilized in Unit Tests
 
