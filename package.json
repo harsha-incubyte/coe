@@ -32,7 +32,10 @@
     "rag:test": "tsx scripts/test-rag-index.ts",
     "prepare": "husky",
     "test:size": "size-limit",
-    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
+    "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "ci:status": "gh run list --limit 5",
+    "ci:watch": "gh run watch",
+    "ci:logs": "gh run view --log"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.71",
