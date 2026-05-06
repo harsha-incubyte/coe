@@ -9,7 +9,7 @@ const meta: Meta<typeof MessageList> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ height: '500px', maxWidth: '600px', margin: '20px auto', border: '1px solid #333' }}>
+      <div style={{ height: '500px', maxWidth: '600px', margin: '20px auto', border: '1px solid #333', display: 'flex', flexDirection: 'column' }}>
         <Story />
       </div>
     ),
