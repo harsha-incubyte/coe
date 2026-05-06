@@ -110,6 +110,14 @@ This project uses GitHub Actions to ensure code quality on every push and pull r
 **`visual-regression`**
 - **Chromatic**: Publishes Storybook to Chromatic and runs automated visual diffing against the baseline.
 
+### 🖥️ Local CI Monitoring
+You can monitor the status of these GitHub Actions directly from your terminal using the official **GitHub CLI (`gh`)**:
+
+1. **Setup**: Install via `brew install gh` and authenticate with `gh auth login`.
+2. **Watch live pipeline**: `npm run ci:watch`
+3. **View recent runs**: `npm run ci:status`
+4. **Debug logs**: `npm run ci:logs` (Dumps the latest run's logs to your terminal)
+
 ## 📅 Daily Progress
 
 ### Day 01: The Basics
