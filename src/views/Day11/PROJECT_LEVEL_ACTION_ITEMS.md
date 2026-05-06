@@ -25,7 +25,7 @@
 - [x] **API Route Testing:** Implement comprehensive integration tests for Next.js API routes (e.g., `src/app/api/chat/route.ts`) using MSW or in-memory databases.
 
 ## 4. Test Architecture & Code Quality Standards
-- [ ] **Custom Test Renderers:** Implement global utility wrappers (e.g., `renderWithProviders`) for Theme, Redux, or React Query contexts to reduce boilerplate.
+- [x] **Custom Test Renderers:** Implement global utility wrappers (e.g., `renderWithProviders`) for Theme, Redux, or React Query contexts to reduce boilerplate.
 - [ ] **AAA Pattern Formatting:** Standardize the Given-When-Then (Arrange-Act-Assert) structure for all test files through conventions or linting rules.
 - [x] **Flaky Test Eradication:** Audit the codebase to replace fixed timeouts (`setTimeout`) with appropriate polling/wait utilities (e.g., RTL's `waitFor`).
 - [x] **State Isolation:** Ensure global state, mocks, cookies, and local storage are predictably cleared between every test run (`jest.resetAllMocks()`).
