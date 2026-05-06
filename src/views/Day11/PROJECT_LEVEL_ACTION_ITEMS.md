@@ -13,11 +13,11 @@
 - [x] **Accessibility (a11y) Testing:** Integrate `jest-axe` into the unit/integration testing environments to automatically flag ARIA and contrast violations.
 - [x] **Global API Mocking:** Fully configure Mock Service Worker (MSW) across the project for reliable, isolated integration testing without real network requests.
 - [x] **Visual Regression Setup:** Integrate Storybook with Chromatic (or Playwright's visual comparisons) to catch unintended UI layout changes.
-    - [ ] Establish a workflow for baseline screenshot generation and approval.
-    - [ ] Configure the environment to freeze or mock dynamic content (dates, IDs, animations) to avoid visual test flakiness.
+    - [x] Establish a workflow for baseline screenshot generation and approval.
+    - [x] Configure the environment to freeze or mock dynamic content (dates, IDs, animations) to avoid visual test flakiness.
 - [x] **E2E Tooling Configuration:** Standardize Playwright as the primary E2E testing tool.
     - [x] Enable parallel execution in the Playwright config to minimize CI build times.
-    - [ ] Implement a predictable test data management strategy (database seeding or API mocking) for E2E runs.
+    - [x] Implement a predictable test data management strategy (database seeding or API mocking) for E2E runs.
 
 ## 3. Codebase Migrations & Immediate Fixes
 - [x] **Fix Failing Tests:** Audit and resolve all currently failing tests (e.g., `Weather.test.tsx`) to establish a green baseline before enforcing branch protection.
@@ -26,12 +26,12 @@
 
 ## 4. Test Architecture & Code Quality Standards
 - [x] **Custom Test Renderers:** Implement global utility wrappers (e.g., `renderWithProviders`) for Theme, Redux, or React Query contexts to reduce boilerplate.
-- [ ] **AAA Pattern Formatting:** Standardize the Given-When-Then (Arrange-Act-Assert) structure for all test files through conventions or linting rules.
+- [x] **AAA Pattern Formatting:** Standardize the Given-When-Then (Arrange-Act-Assert) structure for all test files through conventions or linting rules.
 - [x] **Flaky Test Eradication:** Audit the codebase to replace fixed timeouts (`setTimeout`) with appropriate polling/wait utilities (e.g., RTL's `waitFor`).
 - [x] **State Isolation:** Ensure global state, mocks, cookies, and local storage are predictably cleared between every test run (`jest.resetAllMocks()`).
-- [ ] **Core Web Vitals:** Add assertions in E2E tests to validate performance metrics like LCP, FID, and CLS.
+- [x] **Core Web Vitals:** Add assertions in E2E tests to validate performance metrics like LCP, FID, and CLS.
 
 ## 5. Ongoing Maintenance Procedures
-- [ ] **Test Health Reviews:** Schedule and perform periodic reviews of test execution times and coverage reports to find brittle or slow tests.
-- [ ] **Refactoring Synchronization:** Establish a documented procedure that tests must be refactored alongside production code changes to prevent testing implementation details.
-- [ ] **Coverage Quality Audits:** Periodically audit tests to ensure they provide "Critical Path Coverage" and "Branch Coverage" rather than just pursuing 100% line coverage.
+- [x] **Test Health Reviews:** Schedule and perform periodic reviews of test execution times and coverage reports to find brittle or slow tests.
+- [x] **Refactoring Synchronization:** Establish a documented procedure that tests must be refactored alongside production code changes to prevent testing implementation details.
+- [x] **Coverage Quality Audits:** Periodically audit tests to ensure they provide "Critical Path Coverage" and "Branch Coverage" rather than just pursuing 100% line coverage.

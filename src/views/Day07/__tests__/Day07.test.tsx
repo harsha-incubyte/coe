@@ -17,15 +17,20 @@ describe('Day07 Component', () => {
   });
 
   it('should render personalized welcome message from Zustand store', () => {
+    // Arrange
     render(<Day07 />);
+
+    // Act & Assert
     const welcome = screen.getByText(/Welcome back,/i);
     expect(welcome).toBeInTheDocument();
     expect(welcome).toHaveTextContent(/Harsha/i);
   });
 
   it('should display tasks fetched by React Query', async () => {
+    // Arrange
     render(<Day07 />);
     
+    // Act & Assert
     expect(screen.getByText(/Fetching your tasks/i)).toBeInTheDocument();
 
     await waitFor(() => {
@@ -34,27 +39,36 @@ describe('Day07 Component', () => {
   });
 
   it('should handle task completion toggle', async () => {
+    // Arrange
     render(<Day07 />);
 
     await waitFor(() => {
       expect(screen.getByText(/Setup Day 07 Route/i)).toBeInTheDocument();
     });
 
+    // Act
     const checkboxes = screen.getAllByRole('checkbox');
     fireEvent.click(checkboxes[0]);
 
+    // Assert
     expect(checkboxes[0]).toBeInTheDocument();
   });
 
   it('should have the correct data-testid on tasks-list-container', async () => {
+    // Arrange
     render(<Day07 />);
+
+    // Act & Assert
     await waitFor(() => {
       expect(screen.getByTestId('tasks-list-container')).toBeInTheDocument();
     });
   });
 
   it('should have a task board heading', () => {
+    // Arrange
     render(<Day07 />);
+
+    // Act & Assert
     expect(screen.getByRole('heading', { name: /Task Board/i })).toBeInTheDocument();
   });
 });

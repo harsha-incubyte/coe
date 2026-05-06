@@ -52,18 +52,23 @@ describe('Chat API Route', () => {
   });
 
   it('returns 400 if messages are missing', async () => {
+    // Arrange
     const req = new Request('http://localhost/api/chat', {
       method: 'POST',
       body: JSON.stringify({}),
     });
 
+    // Act
     const res = await POST(req);
+
+    // Assert
     expect(res.status).toBe(400);
     const data = await res.json();
     expect(data.error).toBe('Messages are required and must be a non-empty array');
   });
 
   it('returns 503 if LLM provider is unavailable', async () => {
+    // Arrange
     vi.mocked(getLLMProvider).mockRejectedValue(new Error('Model not found'));
 
     const req = new Request('http://localhost/api/chat', {
@@ -71,13 +76,17 @@ describe('Chat API Route', () => {
       body: JSON.stringify({ messages: [{ role: 'user', content: 'hello' }] }),
     });
 
+    // Act
     const res = await POST(req);
+
+    // Assert
     expect(res.status).toBe(503);
     const data = await res.json();
     expect(data.error).toBe('The requested AI model is currently unavailable');
   });
 
   it('successfully streams a response and saves to DB if session exists', async () => {
+    // Arrange
     const mockSession = { user: { id: 'user-1' } };
     vi.mocked(getServerSession).mockResolvedValue(mockSession);
     vi.mocked(getLLMProvider).mockResolvedValue({
@@ -109,7 +118,10 @@ describe('Chat API Route', () => {
       }),
     });
 
+    // Act
     const res = await POST(req);
+
+    // Assert
     expect(res.status).toBe(200);
     expect(res.headers.get('x-conversation-id')).toBe('conv-1');
     
@@ -125,6 +137,7 @@ describe('Chat API Route', () => {
   });
 
   it('injects RAG context for clinical queries', async () => {
+    // Arrange
     vi.mocked(retrieveContext).mockResolvedValue({ 
       results: [{ document: { id: 'doc-1', title: 'Clinical Study' }, score: 0.9 }] 
     } as any);
@@ -148,8 +161,10 @@ describe('Chat API Route', () => {
       }),
     });
 
+    // Act
     await POST(req);
     
+    // Assert
     expect(retrieveContext).toHaveBeenCalledWith('What are the symptoms of hypertension?');
     
     const streamArgs = vi.mocked(streamText).mock.calls[0][0];
@@ -164,6 +179,7 @@ describe('Chat API Route', () => {
   });
 
   it('returns cached response if matching message exists', async () => {
+    // Arrange
     vi.mocked(getServerSession).mockResolvedValue({ user: { id: 'user-1' } });
     
     const mockCachedMessage = {
@@ -211,7 +227,10 @@ describe('Chat API Route', () => {
       }),
     });
 
+    // Act
     const res = await POST(req);
+
+    // Assert
     expect(res.status).toBe(200);
     expect(res.headers.get('x-cache-hit')).toBe('true');
     
@@ -220,12 +239,16 @@ describe('Chat API Route', () => {
   });
 
   it('handles empty messages gracefully', async () => {
+     // Arrange
      const req = new Request('http://localhost/api/chat', {
       method: 'POST',
       body: JSON.stringify({ messages: [] }),
     });
 
+    // Act
     const res = await POST(req);
+
+    // Assert
     expect(res.status).toBe(400);
   });
 });
