@@ -2,9 +2,6 @@ import { FlatCompat } from '@eslint/eslintrc'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -34,11 +31,4 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-  ...storybook.configs["flat/recommended"].map(config => ({
-    ...config,
-    rules: {
-      ...config.rules,
-      'storybook/no-renderer-packages': 'off',
-    }
-  }))
 ])
