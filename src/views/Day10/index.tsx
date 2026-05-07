@@ -197,7 +197,7 @@ const Day10: React.FC = () => {
     role: m.role as 'user' | 'assistant' | 'system',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
-  })), [currentConversation?.id, currentConversation?.messages]);
+  })), [currentConversation?.messages]);
 
   const { messages, status, setMessages, sendMessage, regenerate, error: chatError } = useChat({
     id: chatSessionId,
