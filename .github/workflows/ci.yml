@@ -58,7 +58,7 @@ jobs:
 
       - name: Run E2E Tests (Playwright)
         id: playwright
-        run: npx playwright test
+        run: npx playwright test --update-snapshots missing
         continue-on-error: true
 
       - name: Commit new Playwright baselines

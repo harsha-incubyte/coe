@@ -44,7 +44,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Generate Playwright Snapshots
-        run: npx playwright test --update-snapshots
+        run: npx playwright test --update-snapshots missing
         continue-on-error: true
 
       - name: Commit and push snapshots
