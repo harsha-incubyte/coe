@@ -1,0 +1,61 @@
+name: Update Playwright Snapshots
+
+# Manually triggered to regenerate Linux baselines and commit them back.
+# Run this after any intentional UI change, then merge the resulting commit.
+on:
+  workflow_dispatch:
+
+jobs:
+  update-snapshots:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: "file:./dev.db"
+      NEXTAUTH_SECRET: "dummy_secret_for_ci"
+      NEXTAUTH_URL: "http://localhost:3000"
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Push back to the triggering branch
+          ref: ${{ github.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Setup Database
+        run: |
+          npx prisma generate
+          npx prisma db push
+          npx prisma db seed
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Regenerate Playwright snapshots (Linux)
+        run: npx playwright test --update-snapshots
+
+      - name: Commit updated snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/e2e/visual.spec.ts-snapshots/ tests/e2e/smoke.spec.ts-snapshots/
+          if git diff --cached --quiet; then
+            echo "No snapshot changes to commit."
+          else
+            git commit -m "⚙️ chore: update Playwright Linux baseline snapshots [skip ci]"
+            git push
+          fi
