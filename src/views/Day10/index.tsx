@@ -192,15 +192,17 @@ const Day10: React.FC = () => {
     setInput(e.target.value);
   };
 
+  const initialMessages = React.useMemo(() => (currentConversation?.messages || []).map(m => ({
+    ...m,
+    role: m.role as 'user' | 'assistant' | 'system',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
+  })), [currentConversation?.messages]);
+
   const { messages, status, setMessages, sendMessage, regenerate, error: chatError } = useChat({
     id: chatSessionId,
     experimental_throttle: 50,
-    messages: (currentConversation?.messages || []).map(m => ({
-      ...m,
-      role: m.role as 'user' | 'assistant' | 'system',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
-    })),
+    messages: initialMessages,
     onFinish: async ({ message }) => {
       console.log(`[FRONTEND][${new Date().toISOString()}] useChat onFinish - Received message`, {
         messageId: message.id,
@@ -303,7 +305,7 @@ const Day10: React.FC = () => {
         parts: (m as any).parts || [{ type: 'text', text: (m as any).content || '' }],
       })));
     }
-  }, [currentConversationId, currentConversation, setMessages, status]);
+  }, [currentConversationId, currentConversation, setMessages, status, messages.length]);
 
   const handleNewConversation = () => {
     justStreamedConversationIdRef.current = null;

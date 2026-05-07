@@ -38,7 +38,7 @@ export const SectionFooter = styled.footer`
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text};
   font-size: 0.875rem;
   display: flex;
   justify-content: space-between;
@@ -51,11 +51,12 @@ export const LoadingPill = styled.div`
   padding: 0.4rem 1rem;
   border-radius: 100px;
   font-weight: 700;
-  background: ${({ theme }) => `${theme.colors.primary[500]}30`};
-  color: ${({ theme }) => theme.colors.primary[300]};
-  border: 1px solid ${({ theme }) => `${theme.colors.primary[500]}60`};
+  background: ${({ theme }) => `${theme.colors.primary[600]}40`};
+  color: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => `${theme.colors.primary[500]}80`};
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 `;
 LoadingPill.defaultProps = { theme };
 
@@ -104,7 +105,7 @@ export const TaskHeader = styled.header`
 
 export const TaskFooter = styled.footer`
   padding: 0.75rem 1.25rem;
-  background: ${({ theme }) => `${theme.colors.black}20`};
+  background: ${({ theme }) => `${theme.colors.surfaceLight}`};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
   justify-content: flex-end;

@@ -197,16 +197,19 @@ export const ChatHeader = styled.header`
 
 export const MessageListContainer = styled.div`
   flex: 1;
-  overflow-y: auto;
-  padding: ${spacing.xl} 0;
+  position: relative;
+  overflow: hidden;
   
+  /* Remove scrollbar from container as Virtuoso handles it */
   &::-webkit-scrollbar {
-    width: 6px;
+    display: none;
   }
-  &::-webkit-scrollbar-thumb {
-    background: ${colors.border};
-    border-radius: 10px;
-  }
+`;
+
+export const ErrorText = styled.span`
+  color: ${colors.error};
+  font-size: ${typography.fontSize.xs};
+  font-weight: ${typography.fontWeight.medium};
 `;
 
 export const MessageWrapper = styled.div<{ $isUser: boolean }>`

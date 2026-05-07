@@ -20,6 +20,31 @@
     {
       "url": "http://localhost:3000/day-05",
       "hideElements": ".axe-ignore"
+    },
+    "http://localhost:3000/day-06",
+    {
+      "url": "http://localhost:3000/login?callbackUrl=%2Fday-07",
+      "timeout": 90000,
+      "actions": [
+        "wait for element #email to be visible",
+        "set field #email to doctor@example.com",
+        "set field #password to password123",
+        "click element button[type='submit']",
+        "wait for path to be /day-07"
+      ]
+    },
+    "http://localhost:3000/day-08",
+    "http://localhost:3000/day-09",
+    {
+      "url": "http://localhost:3000/login?callbackUrl=%2Fday-10",
+      "timeout": 90000,
+      "actions": [
+        "wait for element #email to be visible",
+        "set field #email to doctor@example.com",
+        "set field #password to password123",
+        "click element button[type='submit']",
+        "wait for path to be /day-10"
+      ]
     }
   ]
 }

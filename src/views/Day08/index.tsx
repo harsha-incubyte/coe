@@ -41,8 +41,8 @@ const MediaQueryDemo = () => {
       padding: '0.5rem 1rem', 
       borderRadius: '20px', 
       display: 'inline-block',
-      background: isMobile ? '#f43f5e' : '#10b981',
-      color: 'white',
+      background: isMobile ? '#fb7185' : '#34d399',
+      color: '#020617',
       fontSize: '0.8rem',
       fontWeight: 'bold'
     }}>

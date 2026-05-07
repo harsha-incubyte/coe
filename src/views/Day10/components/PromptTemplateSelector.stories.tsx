@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { PromptTemplateSelector } from './PromptTemplateSelector';
 import { MEDICAL_PROMPTS } from '@/lib/llm/prompts';
 import { ThemeProvider } from 'styled-components';

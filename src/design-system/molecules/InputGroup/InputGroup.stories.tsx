@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { InputGroup } from './InputGroup';
 import { Input } from '@/design-system/atoms/Input';
 

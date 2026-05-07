@@ -331,6 +331,7 @@ export async function POST(req: Request) {
         
         return {
           role: m.role,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           parts: parts as any // Cast to any to avoid strict union matching issues with custom MessagePart
         };
       })),

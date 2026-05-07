@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { Dropdown } from './Dropdown';
 import { Button } from '@/design-system/atoms';
 import { fn } from '@storybook/test';

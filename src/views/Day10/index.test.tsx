@@ -6,38 +6,44 @@ import { theme } from '@/design-system/theme';
 import Day10 from './index';
 
 // Mock dependencies
+const MOCK_SESSION = { data: { user: { name: 'Test User' } } };
 vi.mock('next-auth/react', () => ({
-  useSession: vi.fn(() => ({ data: { user: { name: 'Test User' } } })),
+  useSession: vi.fn(() => MOCK_SESSION),
 }));
+
+const MOCK_CONVERSATIONS = [
+  { id: '1', title: 'Conversation 1', messages: [], updatedAt: 1714800000000 },
+  { id: '2', title: 'Conversation 2', messages: [], updatedAt: 1714800000000 },
+];
 
 vi.mock('@tanstack/react-query', () => ({
   useQuery: vi.fn(() => ({
-    data: [
-      { id: '1', title: 'Conversation 1', messages: [], updatedAt: Date.now() },
-      { id: '2', title: 'Conversation 2', messages: [], updatedAt: Date.now() },
-    ],
+    data: MOCK_CONVERSATIONS,
     refetch: vi.fn(),
   })),
   useMutation: vi.fn(() => ({ mutateAsync: vi.fn() })),
   useQueryClient: vi.fn(() => ({ invalidateQueries: vi.fn() })),
 }));
 
+const MOCK_CHAT = {
+  messages: [],
+  status: 'ready',
+  setMessages: vi.fn(),
+  sendMessage: vi.fn(),
+  regenerate: vi.fn(),
+};
+
 vi.mock('@ai-sdk/react', () => ({
-  useChat: vi.fn(() => ({
-    messages: [],
-    status: 'ready',
-    setMessages: vi.fn(),
-    sendMessage: vi.fn(),
-    regenerate: vi.fn(),
-  })),
+  useChat: vi.fn(() => MOCK_CHAT),
 }));
 
 vi.mock('ai', () => ({
   TextStreamChatTransport: vi.fn(),
 }));
 
+const MOCK_TOAST = { showToast: vi.fn() };
 vi.mock('@/hooks/useToast', () => ({
-  useToast: vi.fn(() => ({ showToast: vi.fn() })),
+  useToast: vi.fn(() => MOCK_TOAST),
 }));
 
 vi.mock('@/design-system/layout/PageLayout', () => ({

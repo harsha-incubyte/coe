@@ -22,14 +22,15 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, on
         ref={virtuosoRef}
         data={messages}
         style={{ height: '100%' }}
-        followOutput="smooth"
-        initialTopMostItemIndex={messages.length - 1}
+        followOutput={true}
+        initialTopMostItemIndex={messages.length > 0 ? messages.length - 1 : 0}
         itemContent={(_index, message) => (
           <div style={{ paddingBottom: '8px' }}>
             <ChatMessage message={message} onResend={onResend} />
           </div>
         )}
         components={{
+          Header: () => <div style={{ height: '32px' }} />,
           Footer: () => {
             if (!isTyping) return <div style={{ height: '16px' }} />;
             return (

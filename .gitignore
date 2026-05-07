@@ -45,4 +45,10 @@ cypress_output*.txt
 tsconfig.tsbuildinfo
 /data/pubmed
 prisma/dev.db
+# Playwright
+playwright-report
+test-results
+blob-report
+playwright/.cache
+
 .gitnexus

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageWrapper, MessageBubble, MessageMeta, ResendButton } from '../Day09.styles';
+import { MessageWrapper, MessageBubble, MessageMeta, ResendButton, ErrorText } from '../Day09.styles';
 import type { Message } from '../hooks/useChatState';
 
 interface ChatMessageProps {
@@ -34,7 +34,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend }) =
         {isUser && message.status === 'delivering' && <span>Sending...</span>}
         {isError && (
           <>
-            <span style={{ color: 'var(--colors-semantic-error)' }}>Failed to send</span>
+            <ErrorText>Failed to send</ErrorText>
             {onResend && (
               <ResendButton onClick={() => onResend(message.id)} aria-label="Resend message">
                 Resend

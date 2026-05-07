@@ -219,13 +219,14 @@ export const Button = <T extends ElementType = 'button'>({
       disabled={isLoading || (props as { disabled?: boolean }).disabled}
       aria-busy={isLoading}
       aria-live={isLoading ? 'polite' : undefined}
+      aria-label={isLoading && !loadingText ? 'Loading' : undefined}
       {...props}
     >
       {!isLoading && leftIcon && <IconWrapper>{leftIcon}</IconWrapper>}
       <span className="btn-content">
         {isLoading ? (
           loadingText || (
-            <LoadingDots aria-label="Loading">
+            <LoadingDots aria-label="LoadingDots">
               <span />
               <span />
               <span />

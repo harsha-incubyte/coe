@@ -14,7 +14,7 @@ interface MessageListProps {
   citationsByMessageId: Record<string, ClientCitation[]>;
 }
 
-export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, status, onResend, citationsByMessageId }) => {
+export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, status, onResend, citationsByMessageId = {} }) => {
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const [atBottom, setAtBottom] = useState(true);
   const [showNudge, setShowNudge] = useState(false);
@@ -83,6 +83,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, isTyping, st
           </div>
         )}
         components={{
+          Header: () => <div style={{ height: '32px' }} />,
           Footer: () => {
             if (!isTyping) return <div style={{ height: '16px' }} />;
             return (

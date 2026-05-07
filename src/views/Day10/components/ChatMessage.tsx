@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageWrapper, MessageBubble, MessageMeta, ResendButton, CostBadge } from '../Day10.styles';
+import { MessageWrapper, MessageBubble, MessageMeta, ResendButton, CostBadge, ErrorText } from '../Day10.styles';
 import { AIResponseRenderer } from './AIResponseRenderer';
 import { calculateCost, formatCost } from '@/utils/token-cost';
 import { MessageSources } from './MessageSources';
@@ -75,7 +75,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, onResend, cit
         {isUser && message.status === 'delivering' && <span>Sending...</span>}
         {isError && (
           <>
-            <span style={{ color: 'var(--colors-semantic-error)' }}>Failed to send</span>
+            <ErrorText>Failed to send</ErrorText>
             {onResend && (
               <ResendButton onClick={() => onResend(message.id)} aria-label="Resend message">
                 Resend

@@ -121,7 +121,7 @@ LOCAL_LLM_URL=http://localhost:8080/v1  # for local Gemma
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **coe** (2136 symbols, 2718 relationships, 12 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **coe** (2365 symbols, 2970 relationships, 14 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -159,15 +159,5 @@ This project is indexed by GitNexus as **coe** (2136 symbols, 2718 relationships
 | Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
 | Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
-| Work in the Day10 area (13 symbols) | `.claude/skills/generated/day10/SKILL.md` |
-| Work in the Components area (9 symbols) | `.claude/skills/generated/components/SKILL.md` |
-| Work in the Scripts area (7 symbols) | `.claude/skills/generated/scripts/SKILL.md` |
-| Work in the Public area (7 symbols) | `.claude/skills/generated/public/SKILL.md` |
-| Work in the Rag area (5 symbols) | `.claude/skills/generated/rag/SKILL.md` |
-| Work in the Chat area (5 symbols) | `.claude/skills/generated/chat/SKILL.md` |
-| Work in the Toast area (5 symbols) | `.claude/skills/generated/toast/SKILL.md` |
-| Work in the Weather area (4 symbols) | `.claude/skills/generated/weather/SKILL.md` |
-| Work in the FizzBuzz area (3 symbols) | `.claude/skills/generated/fizzbuzz/SKILL.md` |
-| Work in the Tabs area (3 symbols) | `.claude/skills/generated/tabs/SKILL.md` |
 
 <!-- gitnexus:end -->

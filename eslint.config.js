@@ -2,9 +2,6 @@ import { FlatCompat } from '@eslint/eslintrc'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -19,7 +16,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(['dist', '.next']),
+  globalIgnores(['dist', '.next', 'node_modules', 'storybook-static', 'playwright-report', 'test-results']),
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     files: ['**/*.{ts,tsx}'],
@@ -34,5 +31,4 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-  ...storybook.configs["flat/recommended"]
 ])

@@ -112,6 +112,7 @@ describe('LoginForm', () => {
     });
     
     await waitFor(() => {
+      expect(mockRefresh).toHaveBeenCalled();
       expect(mockPush).toHaveBeenCalledWith('/day-02/weather');
     });
   });
