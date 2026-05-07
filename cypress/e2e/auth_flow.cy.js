@@ -32,7 +32,7 @@ describe('Authentication Flow', () => {
     cy.get('button[type="submit"]').click();
     
     // Verify redirection to weather dashboard
-    cy.url({ timeout: 20000 }).should('include', '/day-02');
+    cy.location('pathname', { timeout: 20000 }).should('eq', '/day-02');
     
     // Ensure the page title is visible to confirm we are on the right page
     cy.get('h1', { timeout: 15000 }).should('be.visible').and('contain', 'Weather');
