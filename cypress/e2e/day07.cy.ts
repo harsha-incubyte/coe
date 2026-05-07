@@ -33,7 +33,7 @@ describe('Day 07: Task Board & Atomic Refactor', () => {
     cy.get('[data-testid="tasks-list-container"]').should('be.visible');
     // Ensure the footer/concept cards are also visible and stable
     cy.contains('React Query Cache').should('be.visible');
-    cy.wait(500); // Give motion animations a moment to settle
+    cy.wait(2000); // Give motion animations a moment to settle and ensure theme is applied
     
     // Audit the full page
     cy.checkA11y(undefined, {

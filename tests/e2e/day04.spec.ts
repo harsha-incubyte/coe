@@ -46,7 +46,8 @@ test.describe('Day 04: ARIA Patterns & Accessible Components', () => {
       await expect(closeButton).toBeVisible();
       await closeButton.click();
       
-      // Modal should be gone
+      // Wait for modal and overlay to be completely gone
+      await page.getByTestId('modal-overlay').waitFor({ state: 'hidden' });
       await expect(page.getByRole('dialog')).toHaveCount(0);
       
       // Focus should be restored
