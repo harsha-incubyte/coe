@@ -62,7 +62,7 @@ const StepCircle = styled.div<{ $status: 'pending' | 'active' | 'completed' }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme, $status }) => ($status === 'active' || $status === 'completed' ? 'white' : theme.colors.textSecondary)};
+  color: ${({ theme, $status }) => ($status === 'active' || $status === 'completed' ? theme.colors.background : theme.colors.textSecondary)};
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   transition: all 0.3s ease-in-out;
 `;

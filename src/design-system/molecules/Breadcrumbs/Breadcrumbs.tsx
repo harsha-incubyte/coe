@@ -49,7 +49,7 @@ BreadcrumbLink.defaultProps = { theme };
 
 const BreadcrumbSeparator = styled.span`
   margin: 0 ${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.neutral[500]};
+  color: ${({ theme }) => theme.colors.textMuted};
   user-select: none;
 `;
 BreadcrumbSeparator.defaultProps = { theme };

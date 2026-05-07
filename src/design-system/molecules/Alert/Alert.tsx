@@ -43,7 +43,7 @@ const IconContainer = styled.div<{ $variant: AlertVariant }>`
   height: 1.5rem;
   border-radius: ${({ theme }) => theme.borderRadius.full};
   background-color: ${({ theme, $variant }) => theme.colors[$variant]};
-  color: white;
+  color: ${({ theme }) => theme.colors.background};
   font-size: 0.75rem;
   font-weight: bold;
   flex-shrink: 0;

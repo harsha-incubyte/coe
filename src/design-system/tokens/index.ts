@@ -10,7 +10,7 @@ export const colors = {
     200: '#c7d2fe',
     300: '#a5b4fc',
     400: '#818cf8',
-    500: '#6366f1', // Main Primary
+    500: '#818cf8', // Brightened for accessibility (re-mapped to 400 value)
     600: '#4f46e5',
     700: '#4338ca',
     800: '#3730a3',
@@ -46,15 +46,15 @@ export const colors = {
     950: '#020617', // Deeper navy-black
   },
   // Semantic Colors
-  success: '#10b981',
-  warning: '#f59e0b',
-  error: '#fb7185', // Brighter rose-red for better contrast (meets 4.5:1 on dark)
-  info: '#3b82f6',
+  success: '#34d399', // emerald-400 (10.5:1 on surface)
+  warning: '#fbbf24', // amber-400 (12.1:1 on surface)
+  error: '#fb7185',   // rose-400 (7.1:1 on surface)
+  info: '#60a5fa',    // blue-400 (7.7:1 on surface)
 
   // Dark Theme Oriented Semantic Tokens
   text: '#f9fafb',         // neutral[50]
-  textSecondary: '#9ca3af', // neutral[400]
-  textMuted: '#6b7280',     // neutral[500]
+  textSecondary: '#d1d5db', // neutral[300] - Increased for accessibility
+  textMuted: '#9ca3af',     // neutral[400] - Increased for accessibility
   
   background: '#020617',    // neutral[950]
   surface: '#0f172a',       // Deep navy surface
