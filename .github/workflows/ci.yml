@@ -50,6 +50,9 @@ jobs:
       - name: Run E2E Tests (Cypress)
         run: npm run cy:run:ci
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - name: Run E2E Tests (Playwright)
         run: npx playwright test
 
