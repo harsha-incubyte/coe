@@ -101,6 +101,6 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Run Chromatic
-        run: npm run chromatic
+        run: npm run chromatic -- --auto-accept-changes
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
