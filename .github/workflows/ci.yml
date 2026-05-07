@@ -11,6 +11,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     env:
       DATABASE_URL: "file:./dev.db"
       NEXTAUTH_SECRET: "dummy_secret_for_ci"
@@ -54,17 +57,26 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run E2E Tests (Playwright)
+        id: playwright
         run: npx playwright test
+        continue-on-error: true
 
-      - name: Upload Playwright Snapshots
+      - name: Commit new Playwright baselines
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-snapshots
-          path: |
-            tests/e2e/visual.spec.ts-snapshots/
-            tests/e2e/smoke.spec.ts-snapshots/
-          if-no-files-found: ignore
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/e2e/visual.spec.ts-snapshots/ tests/e2e/smoke.spec.ts-snapshots/
+          if git diff --staged --quiet; then
+            echo "No new snapshots to commit"
+          else
+            git commit -m "⚙️ chore: update Playwright visual snapshots [linux]"
+            git push
+          fi
+
+      - name: Fail if Playwright tests failed
+        if: steps.playwright.outcome == 'failure'
+        run: exit 1
 
       - name: Run Accessibility Tests (Pa11y)
         run: npm run test:a11y:ci
