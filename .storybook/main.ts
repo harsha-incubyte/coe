@@ -1,7 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import path from 'path';
-
-
+import babel from 'vite-plugin-babel';
 
 const config: StorybookConfig = {
   "stories": [
@@ -17,9 +16,9 @@ const config: StorybookConfig = {
   "framework": "@storybook/react-vite",
   async viteFinal(config) {
     const srcPath = path.resolve(process.cwd(), 'src');
-    
+
     if (!config.resolve) config.resolve = {};
-    
+
     if (Array.isArray(config.resolve.alias)) {
       config.resolve.alias.push({ find: '@', replacement: srcPath });
       config.resolve.alias.push({ find: '@/', replacement: srcPath + '/' });
@@ -30,7 +29,22 @@ const config: StorybookConfig = {
         '@/': srcPath + '/',
       };
     }
-    
+
+    // Inject babel-plugin-styled-components so class names are derived from
+    // file path + display name (same as Next.js SWC transform) rather than a
+    // runtime counter that shifts whenever import order changes.
+    if (!config.plugins) config.plugins = [];
+    config.plugins.push(
+      babel({
+        filter: /\.[jt]sx?$/,
+        babelConfig: {
+          plugins: [
+            ['babel-plugin-styled-components', { displayName: true, fileName: true, pure: true }],
+          ],
+        },
+      })
+    );
+
     return config;
   },
 };
