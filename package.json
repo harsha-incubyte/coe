@@ -66,7 +66,6 @@
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@chromatic-com/storybook": "^3.2.7",
-    "chromatic": "^16.8.0",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.4",
     "@playwright/test": "^1.59.1",
@@ -90,6 +89,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "axe-core": "^4.11.3",
     "babel-plugin-styled-components": "^2.1.4",
+    "chromatic": "^16.8.0",
     "cypress": "^15.13.1",
     "cypress-axe": "^1.7.0",
     "cypress-plugin-tab": "^2.0.0",
@@ -110,6 +110,7 @@
     "start-server-and-test": "^3.0.2",
     "storybook": "8.6.18",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
     "vite": "^6.0.0",
@@ -122,7 +123,7 @@
     ]
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
