@@ -33,11 +33,18 @@ const config: StorybookConfig = {
     // Inject babel-plugin-styled-components so class names are derived from
     // file path + display name (same as Next.js SWC transform) rather than a
     // runtime counter that shifts whenever import order changes.
+    // TypeScript and React presets are required because vite-plugin-babel
+    // intercepts .tsx files before esbuild, so Babel must handle the full parse.
     if (!config.plugins) config.plugins = [];
     config.plugins.push(
       babel({
         filter: /\.[jt]sx?$/,
+        exclude: /node_modules/,
         babelConfig: {
+          presets: [
+            '@babel/preset-typescript',
+            ['@babel/preset-react', { runtime: 'automatic' }],
+          ],
           plugins: [
             ['babel-plugin-styled-components', { displayName: true, fileName: true, pure: true }],
           ],
