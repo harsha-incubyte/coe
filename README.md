@@ -60,14 +60,14 @@ src/
 We follow a strict **Red-Green-Refactor** cycle using standardized commit markers (🔴, 🟢, ♻️, ⚙️, 🎨). Our testing stack includes:
 
 - **Unit Testing (Vitest + React Testing Library)**: For isolated component logic and DOM state verification. A custom `test-utils.tsx` pre-wires all providers (Theme, React Query, Layout) so every test renders with the full context.
-- **End-to-End Testing (Playwright)**: Primary E2E framework — covers 5 browser/device profiles (Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari) including auth flows, keyboard interaction, performance budgets, and visual regression snapshots. Cypress tests are retained for backward compatibility.
+- **End-to-End Testing (Playwright)**: Primary E2E framework — covers 3 desktop browser profiles (Chromium, Firefox, WebKit) including auth flows, keyboard interaction, performance budgets, and visual regression snapshots. Cypress tests are retained for backward compatibility.
 - **API Mocking (Mock Service Worker)**: Intercepts network requests in unit tests. Playwright uses `page.route()` for per-test API interception in E2E.
 - **Performance Budgets**: `size-limit` enforces a 600 KB JS bundle cap in CI. `performance.spec.ts` asserts Core Web Vitals (LCP < 2500ms, CLS < 0.1) via `PerformanceObserver`.
 - **Automated Accessibility Auditing**:
   - **`jest-axe`**: Globally registered in `setupTests.ts` — available in every unit test via `toHaveNoViolations()`.
   - **`axe-core/playwright`**: `AxeBuilder` scoped scans in E2E tests (e.g., `day05.spec.ts`) for dynamic A11y verification.
   - **`Pa11y`**: Global, URL-based auditing against WCAG 2.1 AA standards, integrated into the CI pipeline.
-- **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio) and Mobile Touch Targets (min 44x44px hit area).
+- **Manual Sanity Checks**: Verification of WCAG AA Contrast (4.5:1 ratio).
 - **Visual Regression (Chromatic + Storybook)**: Storybook documents all 25 component states. Chromatic runs in a dedicated CI job for automated visual diffing across every PR.
 
 ## 🧠 AI Code Intelligence (GitNexus)
